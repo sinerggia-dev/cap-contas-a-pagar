@@ -1301,17 +1301,17 @@
 "values": [
 [
 57,
-"30/06/2026 19:06",
-"30/06/2026 19:07",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"18/09/2026",
+46285,
 "",
 "Cartão Ivanilda Mercado Pago",
 "Cartão de Crédito",
 "A Vencer",
 3,
-"3.000,00",
+3000,
 "",
 "",
 "",
@@ -1517,20 +1517,20 @@
 "values": [
 [
 69,
-"30/06/2026 19:17",
-"30/06/2026 19:17",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"15/09/2026",
-"",
+46280,
+46273,
 "Aluguel Apto 301",
 "Aluguel",
 "A Vencer",
 3,
-"4.000,00",
+4000,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-69-1788892791702.jpeg",
 "",
 "Lançamento Projetado - Setembro"
 ]
@@ -3353,7 +3353,7 @@
 "",
 589.47,
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-148-1788892191872.png",
 "",
 "",
 ""
@@ -4602,6 +4602,150 @@
 218.11,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-209-1788877823886.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 192,
+"values": [
+[
+210,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46280,
+"",
+"Cartão Novo Atacarejo - Parcela 2/4",
+"Cartão de Crédito",
+"A Vencer",
+"",
+368.41,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-210-1788894174915.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 193,
+"values": [
+[
+211,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46291,
+"",
+"Cartão Nubank",
+"Cartão de Crédito",
+"A Vencer",
+"",
+861.3,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 194,
+"values": [
+[
+212,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46321,
+"",
+"Cartão Nubank",
+"Cartão de Crédito",
+"A Vencer",
+"",
+488.38,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 195,
+"values": [
+[
+213,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46352,
+"",
+"Cartão Nubank",
+"Cartão de Crédito",
+"A Vencer",
+"",
+421.39,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 196,
+"values": [
+[
+214,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46382,
+"",
+"Cartão Nubank",
+"Cartão de Crédito",
+"A Vencer",
+"",
+231.35,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 197,
+"values": [
+[
+215,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46288,
+"",
+"Cartão Midway Riachuelo",
+"Cartão de Crédito",
+"A Vencer",
+"",
+89.9,
+"",
+"",
 "",
 "",
 ""
