@@ -2175,7 +2175,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-1744.5,
+1750.49,
 "",
 "",
 "",
@@ -2343,7 +2343,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-205.68,
+417.97,
 "",
 "",
 "",
@@ -4162,15 +4162,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46270,
-"",
+46270,
 "Faxineira Cláudia Gravata",
 "Serviços Domésticos",
 "A Vencer",
 "",
-650,
+740,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-189-1788876645208.jpeg",
 "",
 ""
 ]
@@ -4306,15 +4306,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46272,
-"",
+46270,
 "Condomínio Prive Serra Florada",
 "Condomínio",
 "A Vencer",
 "",
-1700,
+1600,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-195-1787170781805.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-195-1788876573487.jpeg",
 "",
 ""
 ]
@@ -4506,6 +4506,102 @@
 113.94,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-203-1788556010689.jpg",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 188,
+"values": [
+[
+204,
+"",
+"",
+"Felipe Hozana",
+"Envio de Boleto",
+46276,
+"",
+"Neoenergia Apto 201",
+"Energia",
+"A Vencer",
+"",
+210.82,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-204-1788875768778.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 189,
+"values": [
+[
+205,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46276,
+"",
+"Neoenergia Apto 102",
+"Energia",
+"A Vencer",
+"",
+318.22,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-205-1788875879142.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 190,
+"values": [
+[
+207,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46276,
+"",
+"Neoenergia Gravtá 21",
+"Energia",
+"A Vencer",
+"",
+336.52,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-207-1788876271577.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 191,
+"values": [
+[
+209,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46277,
+"",
+"Cartão Bradesco 2049",
+"Cartão de Crédito",
+"A Vencer",
+"",
+218.11,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-209-1788877823886.pdf",
 "",
 "",
 ""
