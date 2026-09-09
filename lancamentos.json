@@ -538,7 +538,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46275,
-"",
+46274,
 "IPTU Apto 102 - Parcela 8/10",
 "IPTU",
 "A Vencer",
@@ -546,7 +546,7 @@
 166.38,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-24-1786650661407.png",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-24-1788992974607.jpeg",
 "",
 ""
 ]
@@ -610,15 +610,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46244,
-"",
+46244,
 "Condomínio Apto 102",
 "Condomínio",
-"A Vencer",
+"Pago",
 "07790.00116 10075.848639 00788.830172 1 14730000103882",
 1038.82,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-27-1786118686603.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-27-1788993827815.jpeg",
 "",
 ""
 ]
@@ -2554,7 +2554,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46274,
-"",
+46274,
 "IPTU Apto 102 - Parcela 7/10",
 "IPTU",
 "A Vencer",
@@ -2562,7 +2562,7 @@
 185.63,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-113-1786650539948.png",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-113-1788992897691.jpeg",
 "",
 ""
 ]
@@ -3775,10 +3775,10 @@
 170,
 "",
 "",
-"Result Vision - 56.282.210/0001-74",
+"Result Vision",
 "Envio de Boleto",
 46269,
-"",
+46269,
 "Parcelamento Result - Ivanilda - Parcela 3/3",
 "Parcelamento ",
 "A Vencer",
@@ -4747,6 +4747,30 @@
 "",
 "",
 "",
+"",
+""
+]
+]
+},
+{
+"index": 198,
+"values": [
+[
+216,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46275,
+"",
+"Condomínio Apto 102",
+"Condomínio",
+"A Vencer",
+"",
+1038.82,
+"",
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-216-1788993711676.pdf",
 "",
 ""
 ]
