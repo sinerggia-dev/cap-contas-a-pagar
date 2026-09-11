@@ -1003,6 +1003,20 @@
         <span class="rank-legend-item"><span class="rank-swatch rank-swatch-avencer"></span>A vencer</span>
       </div>
     </div>
+
+    <div class="panel full">
+      <div class="panel-head">
+        <h2>Total por Mês/Ano</h2>
+        <span class="count" id="mesRankCount"></span>
+      </div>
+      <div class="rank-body" id="mesRankBody"></div>
+      <div class="rank-legend">
+        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-pago"></span>Pago</span>
+        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-vencido"></span>Em atraso</span>
+        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-hoje"></span>Vence hoje</span>
+        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-avencer"></span>A vencer</span>
+      </div>
+    </div>
   </div>
 
 
@@ -2641,6 +2655,47 @@ function renderRanking(rows){
   }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
 }
 
+/* Mesma leitura do "Total por Despesa de:", só que agrupando por mês de
+   vencimento: a ideia é bater o olho e ver quanto de cada mês já foi pago e
+   quanto ainda vence. Ordena cronologicamente (não pelo maior valor), porque
+   aqui a sequência dos meses é o que importa. */
+function renderMesRanking(rows){
+  var byMes = {};
+  rows.forEach(function(r){
+    if (!byMes[r._mesano]) byMes[r._mesano] = {total:0, pago:0, vencido:0, hoje:0, avencer:0, ord:r.vencDate.getFullYear()*12 + r.vencDate.getMonth()};
+    var b = byMes[r._mesano];
+    b.total += r.valor;
+    if (r.status === 'pago') b.pago += r.valor;
+    else if (r.status === 'vencido') b.vencido += r.valor;
+    else if (r.status === 'hoje') b.hoje += r.valor;
+    else b.avencer += r.valor;
+  });
+  var entries = Object.keys(byMes).map(function(k){
+    var b = byMes[k];
+    return {mes:k, ord:b.ord, total:b.total, pago:b.pago, vencido:b.vencido, hoje:b.hoje, avencer:b.avencer};
+  }).sort(function(a,b){ return a.ord - b.ord; });
+  document.getElementById('mesRankCount').textContent = entries.length + (entries.length===1 ? ' mês' : ' meses');
+  var STATUS_LBL = {pago:'Pago', vencido:'Em atraso', hoje:'Vence hoje', avencer:'A vencer'};
+  var mesAtivo = Array.isArray(state._mesano) ? state._mesano : null;
+  var statusAtivoMes = Array.isArray(state.status) ? state.status : null;
+  document.getElementById('mesRankBody').innerHTML = entries.length ? '<div class="rank-cols">' + entries.map(function(e){
+    var mesAttr = e.mes.replace(/"/g,'&quot;');
+    var mesSelecionado = !!(mesAtivo && mesAtivo.indexOf(e.mes) !== -1);
+    var itens = ['pago','vencido','hoje','avencer'].filter(function(k){ return e[k] > 0; }).map(function(k){
+      var itemAtivo = mesSelecionado && !!(statusAtivoMes && statusAtivoMes.indexOf(k) !== -1);
+      return '<div class="rank-col-item'+(itemAtivo?' active':'')+'" data-mes="'+mesAttr+'" data-status="'+k+'" title="Clique para filtrar">'+
+        '<span class="rank-swatch rank-swatch-'+k+'"></span>'+
+        '<span class="rank-col-item-lbl">'+STATUS_LBL[k]+'</span>'+
+        '<span class="rank-col-item-val">'+brl(e[k])+'</span></div>';
+    }).join('');
+    return '<div class="rank-col'+(mesSelecionado?' active':'')+'">'+
+      '<span class="rank-col-name'+(mesSelecionado?' active':'')+'" data-mes="'+mesAttr+'" title="Clique para filtrar por '+mesAttr+'">'+e.mes+'</span>'+
+      '<span class="rank-col-total">Total: '+brl(e.total)+'</span>'+
+      '<div class="rank-col-list">'+itens+'</div>'+
+      '</div>';
+  }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
+}
+
 function render(){
   var rows = filtered();
   renderKpis(rows);
@@ -2648,6 +2703,7 @@ function render(){
   renderTable(rows);
   renderDescRanking(filtered());
   renderRanking(filtered(['nome','status']));
+  renderMesRanking(filtered(['_mesano','status']));
 }
 
 document.getElementById('rankBody').addEventListener('click', function(ev){
@@ -2665,6 +2721,29 @@ document.getElementById('rankBody').addEventListener('click', function(ev){
     var jaSelecionado2 = Array.isArray(state.nome) && state.nome.length===1 && state.nome[0]===nome2 && state.status === 'todos';
     if (jaSelecionado2) { state.nome = 'todos'; }
     else { state.nome = [nome2]; state.status = 'todos'; }
+  } else {
+    return;
+  }
+  buildFilters();
+  updateClearButton();
+  render();
+});
+
+document.getElementById('mesRankBody').addEventListener('click', function(ev){
+  var itemMes = ev.target.closest('.rank-col-item[data-mes]');
+  var nomeMes = ev.target.closest('.rank-col-name[data-mes]');
+  if (itemMes) {
+    var mes1 = itemMes.getAttribute('data-mes');
+    var stMes = itemMes.getAttribute('data-status');
+    var jaMes1 = Array.isArray(state._mesano) && state._mesano.length===1 && state._mesano[0]===mes1 &&
+      Array.isArray(state.status) && state.status.length===1 && state.status[0]===stMes;
+    if (jaMes1) { state._mesano = 'todos'; state.status = 'todos'; }
+    else { state._mesano = [mes1]; state.status = [stMes]; }
+  } else if (nomeMes) {
+    var mes2 = nomeMes.getAttribute('data-mes');
+    var jaMes2 = Array.isArray(state._mesano) && state._mesano.length===1 && state._mesano[0]===mes2 && state.status === 'todos';
+    if (jaMes2) { state._mesano = 'todos'; }
+    else { state._mesano = [mes2]; state.status = 'todos'; }
   } else {
     return;
   }
