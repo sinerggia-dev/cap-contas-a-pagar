@@ -14,16 +14,20 @@
        Mesma familia escura de antes, um degrau mais funda e mais fria, com o
        azul como acao e os semanticos dessaturados. Os 12 pares foram medidos:
        todos passam em WCAG AA. Refaca a conta antes de trocar qualquer tom. */
-    --bg:#07080a;
-    --surface:#101114;
-    --surface-2:#141619;
-    --surface-3:#17191c;
-    --border:#1c1e22;
-    --border-strong:#2c2f34;
+    /* O chao e um degrade preto -> cinza (ver body). As superficies subiram um
+       degrau junto: com o cartao no #101114 de antes, a base do degrade ficava MAIS
+       CLARA que ele, e os quadros passariam a parecer afundados em vez de elevados. */
+    --bg:#000000;
+    --bg-base:#14171c;
+    --surface:#1c1f24;
+    --surface-2:#23262c;
+    --surface-3:#2a2e35;
+    --border:#2e333b;
+    --border-strong:#3b414a;
     --ink:#e9eaec;
     --ink-soft:#b6bac1;
-    --ink-muted:#787d85;
-    --ink-faint:#5f646b;
+    --ink-muted:#91969e;
+    --ink-faint:#6b7077;
     --critical:#f26d7d;
     --critical-dim:#47181f;
     /* "Em atraso" e "Vence hoje" ficam lado a lado na pilha do grafico de meses, e
@@ -60,7 +64,11 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:#000;
+    /* O degrade vai no body e a folha o deixa passar: assim a moldura de 22px e as
+       frestas entre os quadros mostram UMA lavagem continua do preto ao cinza, em vez
+       de um degrade preso na folha com uma moldura preta chapada em volta.
+       'fixed' prende a lavagem a janela, senao ela se estica com a rolagem e some. */
+    background:linear-gradient(160deg,var(--bg) 0%,var(--bg-base) 100%) fixed;
     color:var(--ink);
     font-family:var(--sans);
     /* Base explicita para o texto sem regra propria acompanhar a escala. */
@@ -77,7 +85,7 @@
   ::-webkit-scrollbar-thumb:hover{background:var(--border-strong);}
 
   .report{
-    background:var(--bg);
+    background:transparent;
     border:1px solid var(--border);
     border-radius:16px;
     /* Sem teto de largura, a pedido: em 2540px o limite de 1440 deixava ~550px de
