@@ -305,21 +305,28 @@
     position:relative;overflow:hidden;
     background:linear-gradient(155deg,var(--surface-2),var(--surface));
     border:1px solid var(--border);border-radius:12px;
-    padding:14px 16px;min-height:74px;
+    padding:18px 20px;min-height:96px;
     display:flex;flex-direction:column;justify-content:center;
   }
   .kpi .icon{
     position:absolute;right:10px;top:50%;transform:translateY(-50%);
-    width:34px;height:34px;border-radius:50%;
+    width:42px;height:42px;border-radius:50%;
     border:1.5px solid rgba(255,255,255,.14);
     display:flex;align-items:center;justify-content:center;
     color:rgba(255,255,255,.18);
     font:700 13.4px var(--mono);
   }
-  .kpi .icon svg{width:16px;height:16px;opacity:.35;}
+  .kpi .icon svg{width:19px;height:19px;opacity:.35;}
   /* O valor do KPI e o numero mais lido da tela: Sora com digito de largura fixa. */
-  .kpi .v{font:600 21.3px var(--num);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
-  .kpi .l{font-size:12.9px;color:var(--ink-soft);margin-top:2px;display:flex;align-items:center;gap:6px;}
+  /* `clamp` em vez de tamanho fixo: em 30px o valor chegava a passar por baixo do
+     disco do icone nas larguras menores. Assim ele fica grande onde ha espaco e
+     encolhe sozinho onde nao ha, e o padding reserva a faixa do icone. */
+  .kpi .v{
+    font:600 clamp(21px, 1.7vw, 30px) var(--num);
+    letter-spacing:-.022em;font-variant-numeric:tabular-nums;line-height:1.08;
+    padding-right:48px;
+  }
+  .kpi .l{font-size:14px;color:var(--ink-soft);margin-top:5px;display:flex;align-items:center;gap:6px;}
   .kpi .l b{color:var(--ink);font-weight:600;}
   .kpi.k-critical .v{color:var(--atrasado);}
   .kpi.k-warning .v{color:var(--warning);}
@@ -852,9 +859,9 @@
     .brand p{font-size:12.9px;}
     .head-row{gap:10px;margin-bottom:12px;}
     .kpis{gap:8px;margin-bottom:12px;}
-    .kpi{padding:11px 12px;min-height:64px;}
-    .kpi .v{font-size:16.8px;}
-    .kpi .icon{width:28px;height:28px;}
+    .kpi{padding:13px 14px;min-height:76px;}
+    .kpi .v{font-size:22px;}
+    .kpi .icon{width:32px;height:32px;}
     .panel-head{flex-wrap:wrap;gap:8px;}
     .table-scroll{-webkit-overflow-scrolling:touch;}
     .entry-grid{grid-template-columns:1fr !important;}
