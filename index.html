@@ -19,6 +19,10 @@
        CLARA que ele, e os quadros passariam a parecer afundados em vez de elevados. */
     --bg:#000000;
     --bg-base:#14171c;
+    /* Pontas da tarja do topo. Viram token para trocarem junto com o fundo. */
+    --tarja-a:#23262c;
+    --tarja-b:#16181d;
+    --tarja-c:#0a0c0f;
     --surface:#1c1f24;
     --surface-2:#23262c;
     --surface-3:#2a2e35;
@@ -61,6 +65,21 @@
     --num:'Sora',ui-monospace,"Cascadia Code",Consolas,monospace;
     --mono:ui-monospace,"Cascadia Code","SFMono-Regular",Consolas,"Liberation Mono",monospace;
   }
+  /* Os outros dois fundos. Medidos: em qualquer um deles o cartao (--surface
+     #1c1f24) continua MAIS CLARO que as duas pontas do degrade — se o chao passar
+     dele, os quadros deixam de parecer elevados e passam a parecer afundados.
+     E por isso que as tres opcoes terminam todas na mesma faixa de claridade:
+     o que muda entre elas e o ponto de partida e o matiz, nao o teto.
+     html[data-fundo] ganha do :root por especificidade, entao basta redeclarar. */
+  html[data-fundo="grafite"]{
+    --bg:#0f1114; --bg-base:#14171b;
+    --tarja-a:#25282e; --tarja-b:#1a1d21; --tarja-c:#101215;
+  }
+  html[data-fundo="azul"]{
+    --bg:#00040e; --bg-base:#0f1624;
+    --tarja-a:#1b2130; --tarja-b:#121826; --tarja-c:#080c15;
+  }
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -103,15 +122,15 @@
   /* ---- header + filters ---- */
   /* Tarja do topo: cinza atras da marca, escurecendo ate o canto direito, onde ficam
      o chip e os botoes — eles sao --surface e precisam continuar parecendo elevados,
-     o que so vale enquanto a tarja termina abaixo desse tom (por isso a ponta direita
-     para em #0a0c0f, bem abaixo do #1c1f24 deles).
+     o que so vale enquanto a tarja termina abaixo desse tom (por isso --tarja-c fica
+     bem abaixo do #1c1f24 deles em todos os tres fundos).
      As margens negativas sangram os 22px/24px de recuo da folha para a tarja ir de
      ponta a ponta; o raio de 15px e o da folha (16px) menos a borda de 1px. */
   .head-row{
     display:flex;justify-content:space-between;align-items:flex-start;
     gap:16px;flex-wrap:wrap;
     flex:none;
-    background:linear-gradient(90deg,#23262c 0%,#16181d 34%,#0a0c0f 100%);
+    background:linear-gradient(90deg,var(--tarja-a) 0%,var(--tarja-b) 34%,var(--tarja-c) 100%);
     border-bottom:1px solid var(--border);
     border-radius:15px 15px 0 0;
     margin:-22px -24px 14px;
@@ -166,6 +185,30 @@
   .actions-drawer-body .clear-btn, .actions-drawer-body .add-btn{width:100%;justify-content:center;height:auto;padding:10px 14px;}
   .actions-drawer-body .filters-manage-wrap{width:100%;}
   .actions-drawer-body .filters-manage-btn{width:100%;justify-content:center;height:auto;padding:10px 14px;}
+  .fundo-wrap{border-top:1px solid var(--border);padding-top:12px;margin-top:2px;}
+  .fundo-lbl{
+    font-size:10.6px;color:var(--ink-muted);text-transform:uppercase;
+    letter-spacing:.05em;margin-bottom:8px;
+  }
+  .fundo-opts{display:flex;gap:6px;}
+  .fundo-opt{
+    flex:1 1 0;min-width:0;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
+    color:var(--ink-soft);font:600 11.8px var(--sans);padding:8px 6px;cursor:pointer;
+    transition:border-color .12s ease, color .12s ease;
+  }
+  .fundo-opt:hover{border-color:var(--border-strong);color:var(--ink);}
+  .fundo-opt.active{border-color:var(--chart);color:var(--ink);}
+  /* A amostra mostra o degrade daquela opcao, entao os tons ficam fixos aqui: se
+     usassem os tokens, as tres amostras mudariam junto com o tema escolhido e
+     todas ficariam iguais. */
+  .fundo-amostra{
+    width:100%;height:24px;border-radius:5px;border:1px solid var(--border-strong);
+  }
+  .amostra-preto{background:linear-gradient(135deg,#000000,#14171c);}
+  .amostra-grafite{background:linear-gradient(135deg,#0f1114,#14171b);}
+  .amostra-azul{background:linear-gradient(135deg,#00040e,#0f1624);}
   @media (max-width:640px){
     .actions-drawer{width:92vw;max-width:none;}
   }
@@ -954,6 +997,17 @@
   }
 </style>
 
+<script>
+  /* Roda antes do corpo ser pintado: se ficasse no fim do arquivo, quem escolheu
+     Grafite ou Azul veria um piscar no Preto a cada recarga. */
+  (function(){
+    try {
+      var f = localStorage.getItem('cap_fundo_v1');
+      if (f === 'grafite' || f === 'azul') document.documentElement.setAttribute('data-fundo', f);
+    } catch(e){}
+  })();
+</script>
+
 <div class="report">
   <div class="head-row">
     <div class="brand">
@@ -1019,6 +1073,20 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Emissão de Documentos
       </button>
+      <div class="fundo-wrap">
+        <div class="fundo-lbl">Fundo da tela</div>
+        <div class="fundo-opts" id="fundoOpts">
+          <button type="button" class="fundo-opt" data-fundo-opt="preto" aria-pressed="false">
+            <span class="fundo-amostra amostra-preto"></span>Preto
+          </button>
+          <button type="button" class="fundo-opt" data-fundo-opt="grafite" aria-pressed="false">
+            <span class="fundo-amostra amostra-grafite"></span>Grafite
+          </button>
+          <button type="button" class="fundo-opt" data-fundo-opt="azul" aria-pressed="false">
+            <span class="fundo-amostra amostra-azul"></span>Azul-noite
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   </div>
@@ -2037,6 +2105,38 @@ document.getElementById('actionsDrawerCloseBtn').addEventListener('click', funct
   ev.stopPropagation();
   fecharGavetaAcoes();
 });
+var FUNDOS = ['preto', 'grafite', 'azul'];
+function fundoSalvo(){
+  try {
+    var v = localStorage.getItem('cap_fundo_v1');
+    return FUNDOS.indexOf(v) >= 0 ? v : 'preto';
+  } catch(e){ return 'preto'; }
+}
+function marcarFundo(v){
+  var opts = document.querySelectorAll('[data-fundo-opt]');
+  for (var i = 0; i < opts.length; i++){
+    var ligado = opts[i].getAttribute('data-fundo-opt') === v;
+    opts[i].classList.toggle('active', ligado);
+    opts[i].setAttribute('aria-pressed', ligado ? 'true' : 'false');
+  }
+}
+function aplicarFundo(v){
+  if (FUNDOS.indexOf(v) < 0) v = 'preto';
+  /* 'preto' e o padrao do :root: tirar o atributo evita deixar um estado a mais
+     para dar errado se algum dia os tokens do :root mudarem. */
+  if (v === 'preto') document.documentElement.removeAttribute('data-fundo');
+  else document.documentElement.setAttribute('data-fundo', v);
+  try { localStorage.setItem('cap_fundo_v1', v); } catch(e){}
+  marcarFundo(v);
+}
+document.getElementById('fundoOpts').addEventListener('click', function(ev){
+  var alvo = ev.target.closest ? ev.target.closest('[data-fundo-opt]') : null;
+  if (!alvo) return;
+  ev.stopPropagation();
+  aplicarFundo(alvo.getAttribute('data-fundo-opt'));
+});
+marcarFundo(fundoSalvo());
+
 document.getElementById('filtersManageBtn').addEventListener('click', function(ev){
   ev.stopPropagation();
   var wrap = document.getElementById('filtersManageWrap');
