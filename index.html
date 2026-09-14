@@ -656,18 +656,6 @@
     background:var(--surface-3);color:var(--ink);border-radius:999px;
     padding:1px 7px;margin-left:2px;
   }
-  /* "Vence hoje" e o unico prazo que nao da para adiar: ganha a cor propria e peso,
-     em vez de ficar igual aos outros seis. */
-  .rank-legend-item.forte{
-    color:var(--warning);font-weight:700;
-    border-color:var(--warning);background:var(--warning-dim);
-  }
-  .rank-legend-item.forte .chip-n{background:rgba(0,0,0,.25);color:var(--warning);}
-  .rank-legend-item.forte:hover{color:var(--warning);border-color:var(--warning);}
-  .rank-legend-item.forte.active{
-    background:var(--warning);color:#1a1205;border-color:var(--warning);
-  }
-  .rank-legend-item.forte.active .chip-n{background:rgba(0,0,0,.22);color:#1a1205;}
   .rank-swatch{width:10px;height:10px;border-radius:2px;flex:none;}
   .rank-swatch-pago, .seg-pago{background:var(--positive);}
   .rank-swatch-vencido, .seg-vencido{background:var(--atrasado);}
@@ -3042,8 +3030,8 @@ function renderMesRanking(rows){
 var LEGENDA = [
   {v:'pago',    cls:'pago',    lbl:'Pago'},
   {v:'vencido', cls:'vencido', lbl:'Em atraso'},
-  {v:'hoje',    cls:'hoje',    lbl:'Vence hoje', urgente:true},
-  {v:'d1',      cls:'hoje',    lbl:'1 dia',      urgente:true},
+  {v:'hoje',    cls:'hoje',    lbl:'Vence hoje'},
+  {v:'d1',      cls:'hoje',    lbl:'1 dia'},
   {v:'d2',      cls:'hoje',    lbl:'2 dias'},
   {v:'d3',      cls:'hoje',    lbl:'3 dias'},
   {v:'avencer', cls:'avencer', lbl:'A vencer'}
@@ -3059,12 +3047,10 @@ function renderLegendas(rows){
   var html = LEGENDA.map(function(item){
     var n = contaStatus(rows, item.v);
     var on = ativos.indexOf(item.v) !== -1;
-    /* O realce e alerta, nao enfeite: so acende quando ha algo vencendo hoje ou
-       amanha. Ligado o tempo todo, com zero titulos, ele deixa de chamar atencao
-       justamente no dia em que houver algo. */
-    var forte = item.urgente && n > 0;
+    /* Todos os chips iguais, a pedido: quem diz a urgencia e a cor da bolinha e a
+       contagem ao lado, nao um realce permanente no botao. */
     return '<button type="button" class="rank-legend-item'+(on?' active':'')+
-      (forte?' forte':'')+'" data-status-chip="'+item.v+'"'+
+      '" data-status-chip="'+item.v+'"'+
       ' title="Clique para filtrar por '+item.lbl+'">'+
       '<span class="rank-swatch rank-swatch-'+item.cls+'"></span>'+
       item.lbl+'<span class="chip-n">'+n+'</span></button>';
