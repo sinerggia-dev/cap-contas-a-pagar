@@ -638,17 +638,17 @@
     /* Deixou de ser rotulo e virou botao: precisa parecer clicavel e mostrar quando
      esta ligado. O contorno some no estado normal para nao competir com os dados. */
   .rank-legend-item{
-    display:flex;align-items:center;gap:7px;font-size:15px;
+    display:flex;align-items:center;gap:6px;font-size:13px;
     color:var(--ink-soft);font-family:var(--sans);
     background:var(--surface-2);border:1px solid var(--border);
-    border-radius:999px;padding:6px 13px;cursor:pointer;
+    border-radius:999px;padding:5px 11px;cursor:pointer;
   }
   .rank-legend-item:hover{border-color:var(--border-strong);color:var(--ink);}
   .rank-legend-item.active{background:var(--select);color:var(--select-ink);border-color:var(--select);}
   .rank-legend-item.active .chip-n{background:rgba(0,0,0,.18);color:var(--select-ink);}
   /* A contagem responde "quantos titulos", que era a primeira pergunta depois da cor. */
   .chip-n{
-    font:700 13.4px var(--num);font-variant-numeric:tabular-nums;
+    font:700 12px var(--num);font-variant-numeric:tabular-nums;
     background:var(--surface-3);color:var(--ink);border-radius:999px;
     padding:1px 7px;margin-left:2px;
   }
@@ -1204,7 +1204,6 @@
         <span class="count" id="mesRankCount"></span>
       </div>
       <div class="rank-body" id="mesRankBody"></div>
-      <div class="rank-legend" data-legenda></div>
     </div>
   </div>
 
@@ -2935,17 +2934,25 @@ function renderRanking(rows){
   var STATUS_LBL = {pago:'Pago', vencido:'Em atraso', hoje:'Vence hoje', avencer:'A vencer'};
   var nomeAtivo = Array.isArray(state.nome) ? state.nome : null;
   var statusAtivo = Array.isArray(state.status) ? state.status : null;
+  /* O painel agrupa por status, nao por prazo: 1, 2 e 3 dias sao fatias de "a vencer",
+     entao para efeito de destaque eles apontam para a mesma linha. */
+  var destaque = (statusAtivo || []).map(function(v){ return /^d[123]$/.test(v) ? 'avencer' : v; });
+  var temDestaque = destaque.length > 0;
   document.getElementById('rankBody').innerHTML = top.length ? '<div class="rank-cols">' + top.map(function(e){
     var nomeAttr = e.nome.replace(/"/g,'&quot;');
     var nomeSelecionado = !!(nomeAtivo && nomeAtivo.indexOf(e.nome) !== -1);
+    /* Com um status ligado na barra, quem TEM aquela despesa se acende e o resto
+       esmaece — responde "quem tem conta vencendo hoje?" sem ler os cinco cartoes. */
+    var temStatus = temDestaque && destaque.some(function(k){ return e[k] > 0; });
+    var colAtiva = nomeSelecionado || temStatus;
     var itens = ['pago','vencido','hoje','avencer'].filter(function(k){ return e[k] > 0; }).map(function(k){
-      var itemAtivo = nomeSelecionado && !!(statusAtivo && statusAtivo.indexOf(k) !== -1);
+      var itemAtivo = (nomeSelecionado || temDestaque) && destaque.indexOf(k) !== -1;
       return '<div class="rank-col-item'+(itemAtivo?' active':'')+'" data-nome="'+nomeAttr+'" data-status="'+k+'" title="Clique para filtrar">'+
         '<span class="rank-swatch rank-swatch-'+k+'"></span>'+
         '<span class="rank-col-item-lbl">'+STATUS_LBL[k]+'</span>'+
         '<span class="rank-col-item-val">'+brl(e[k])+'</span></div>';
     }).join('');
-    return '<div class="rank-col'+(nomeSelecionado?' active':'')+'">'+
+    return '<div class="rank-col'+(colAtiva?' active':'')+'">'+
       '<span class="rank-col-name'+(nomeSelecionado?' active':'')+'" data-nome="'+nomeAttr+'" title="Clique para filtrar por '+nomeAttr+'">'+e.nome+'</span>'+
       '<span class="rank-col-total">Total: '+brl(e.total)+'</span>'+
       '<div class="rank-col-list">'+itens+'</div>'+
@@ -3059,7 +3066,9 @@ document.addEventListener('click', function(ev){
 function render(){
   var rows = filtered();
   renderKpis(rows);
-  renderLegendas(rows);
+  // Sem o proprio status no calculo: senao ligar um chip zera todos os outros,
+  // e a barra deixa de servir justamente para trocar de recorte.
+  renderLegendas(filtered(['status']));
   renderDesempenho(rows);
   renderTable(rows);
   renderDescRanking(filtered());
