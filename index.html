@@ -297,7 +297,7 @@
 
   /* ---- kpi cards ---- */
   .kpis{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px;
     flex:none;
   }
   @media (max-width:900px){ .kpis{grid-template-columns:repeat(2,1fr);} }
@@ -331,6 +331,10 @@
   .kpi.k-critical .v{color:var(--atrasado);}
   .kpi.k-warning .v{color:var(--warning);}
   .kpi.k-positive .v{color:var(--positive);}
+  /* Mesma cor que a legenda da a cada status. "A Vencer" estava de laranja, que e a
+     cor de "Vence hoje" — duas coisas diferentes com a mesma cor na mesma tela. */
+  .kpi.k-hoje .v{color:var(--warning);}
+  .kpi.k-neutro .v{color:var(--ink-soft);}
 
   /* ---- middle: table + status ---- */
   /* A zona e a linha [gaveta | corpo]. A gaveta estica pela altura toda porque o flex
@@ -2408,14 +2412,17 @@ function renderKpis(rows){
   var pg = sum(rows, function(r){return pago(r);});
   var venc = rows.filter(function(r){return r.status==='vencido';});
   var vencSum = sum(venc, function(r){return r.valor;});
+  var hoje = rows.filter(function(r){return r.status==='hoje';});
+  var hojeSum = sum(hoje, function(r){return r.valor;});
   var aVencer = rows.filter(function(r){return r.status==='avencer';});
   var aVencerSum = sum(aVencer, function(r){return r.valor;});
 
   var pagos = rows.filter(function(r){return r.status==='pago';});
   var cards = [
     {lbl:'Despesas', v:brl(total), sub:rows.length+' títulos', icon:'$', cls:''},
-    {lbl:'A Vencer', v:brl(aVencerSum), sub:aVencer.length+' títulos', icon:'$', cls:'k-warning'},
+    {lbl:'A Vencer', v:brl(aVencerSum), sub:aVencer.length+' títulos', icon:'$', cls:'k-neutro'},
     {lbl:'Pago', v:brl(pg), sub:pagos.length+' títulos', icon:'$', cls:'k-positive'},
+    {lbl:'Vence hoje', v:brl(hojeSum), sub:hoje.length+' títulos', icon:'$', cls:'k-hoje'},
     {lbl:'Vencido', v:brl(vencSum), sub:venc.length+' títulos', icon:'$', cls:'k-critical'}
   ];
   var root = document.getElementById('kpis');
@@ -2934,19 +2941,31 @@ function renderRanking(rows){
   var STATUS_LBL = {pago:'Pago', vencido:'Em atraso', hoje:'Vence hoje', avencer:'A vencer'};
   var nomeAtivo = Array.isArray(state.nome) ? state.nome : null;
   var statusAtivo = Array.isArray(state.status) ? state.status : null;
-  /* O painel agrupa por status, nao por prazo: 1, 2 e 3 dias sao fatias de "a vencer",
-     entao para efeito de destaque eles apontam para a mesma linha. */
+  var temDestaque = !!(statusAtivo && statusAtivo.length);
+  /* Quem casa com o filtro ligado, apurado LINHA A LINHA pela mesma funcao que o
+     filtro usa. Mapear "1 dia" para "a vencer" e olhar o total agregado, como estava
+     antes, acendia todo mundo que tem algo a vencer — e nao quem tem algo a vencer
+     amanha. Sao coisas diferentes e o agregado nao sabe distinguir. */
+  var casaFiltro = {};
+  if (temDestaque) {
+    var campoStatus = {key:'status'};
+    rows.forEach(function(r){
+      if (statusAtivo.some(function(v){ return rowMatchesFilterValue(r, campoStatus, v); })) {
+        casaFiltro[r.nome] = true;
+      }
+    });
+  }
+  /* Na linha do painel, o recorte por prazo mora dentro de "a vencer". */
   var destaque = (statusAtivo || []).map(function(v){ return /^d[123]$/.test(v) ? 'avencer' : v; });
-  var temDestaque = destaque.length > 0;
   document.getElementById('rankBody').innerHTML = top.length ? '<div class="rank-cols">' + top.map(function(e){
     var nomeAttr = e.nome.replace(/"/g,'&quot;');
     var nomeSelecionado = !!(nomeAtivo && nomeAtivo.indexOf(e.nome) !== -1);
     /* Com um status ligado na barra, quem TEM aquela despesa se acende e o resto
        esmaece — responde "quem tem conta vencendo hoje?" sem ler os cinco cartoes. */
-    var temStatus = temDestaque && destaque.some(function(k){ return e[k] > 0; });
+    var temStatus = temDestaque && casaFiltro[e.nome] === true;
     var colAtiva = nomeSelecionado || temStatus;
     var itens = ['pago','vencido','hoje','avencer'].filter(function(k){ return e[k] > 0; }).map(function(k){
-      var itemAtivo = (nomeSelecionado || temDestaque) && destaque.indexOf(k) !== -1;
+      var itemAtivo = (nomeSelecionado || temStatus) && destaque.indexOf(k) !== -1;
       return '<div class="rank-col-item'+(itemAtivo?' active':'')+'" data-nome="'+nomeAttr+'" data-status="'+k+'" title="Clique para filtrar">'+
         '<span class="rank-swatch rank-swatch-'+k+'"></span>'+
         '<span class="rank-col-item-lbl">'+STATUS_LBL[k]+'</span>'+
