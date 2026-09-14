@@ -330,11 +330,11 @@
      disco do icone nas larguras menores. Assim ele fica grande onde ha espaco e
      encolhe sozinho onde nao ha, e o padding reserva a faixa do icone. */
   .kpi .v{
-    font:600 clamp(21px, 1.7vw, 30px) var(--num);
+    font:600 clamp(19px, 1.53vw, 27px) var(--num);
     letter-spacing:-.022em;font-variant-numeric:tabular-nums;line-height:1.08;
     padding-right:48px;
   }
-  .kpi .l{font-size:14px;color:var(--ink-soft);margin-top:5px;display:flex;align-items:center;gap:6px;}
+  .kpi .l{font-size:12.8px;color:var(--ink-soft);margin-top:5px;display:flex;align-items:center;gap:6px;}
   .kpi .l b{color:var(--ink);font-weight:600;}
   .kpi.k-critical .v{color:var(--atrasado);}
   .kpi.k-warning .v{color:var(--warning);}
@@ -932,7 +932,7 @@
     .head-row{gap:10px;margin-bottom:12px;}
     .kpis{gap:8px;margin-bottom:12px;}
     .kpi{padding:13px 14px;min-height:76px;}
-    .kpi .v{font-size:22px;}
+    .kpi .v{font-size:20px;}
     .kpi .icon{width:32px;height:32px;}
     .panel-head{flex-wrap:wrap;gap:8px;}
     .table-scroll{-webkit-overflow-scrolling:touch;}
@@ -2454,8 +2454,8 @@ function renderKpis(rows){
     {lbl:'Despesas', v:brl(total), sub:rows.length+' títulos', icon:'$', cls:''},
     {lbl:'A Vencer', v:brl(aVencerSum), sub:aVencer.length+' títulos', icon:'$', cls:'k-neutro'},
     {lbl:'Pago', v:brl(pg), sub:pagos.length+' títulos', icon:'$', cls:'k-positive'},
-    {lbl:'Vence hoje', v:brl(hojeSum), sub:hoje.length+' títulos', icon:'$', cls:'k-hoje'},
-    {lbl:'Vencido', v:brl(vencSum), sub:venc.length+' títulos', icon:'$', cls:'k-critical'}
+    {lbl:'Vencido', v:brl(vencSum), sub:venc.length+' títulos', icon:'$', cls:'k-critical'},
+    {lbl:'Vence hoje', v:brl(hojeSum), sub:hoje.length+' títulos', icon:'$', cls:'k-hoje'}
   ];
   var root = document.getElementById('kpis');
   root.innerHTML = '';
