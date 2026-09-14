@@ -3076,11 +3076,12 @@ document.addEventListener('click', function(ev){
   var chip = ev.target.closest('[data-status-chip]');
   if (!chip) return;
   var v = chip.getAttribute('data-status-chip');
-  var atuais = Array.isArray(state.status) ? state.status.slice() : [];
-  var i = atuais.indexOf(v);
-  // Clicar de novo tira o filtro; sem isso so daria para sair pelo Limpar.
-  if (i !== -1) atuais.splice(i, 1); else atuais.push(v);
-  state.status = atuais.length ? atuais : 'todos';
+  /* Um recorte por vez: clicar em outro troca, em vez de somar. Somados, "Pago" e
+     "Vencido" juntos devolvem um conjunto que nao responde a pergunta de nenhum dos
+     dois, e a barra deixa de ser um seletor para virar uma soma de caixinhas.
+     Clicar no que ja esta ligado desliga — senao so o botao Limpar tiraria. */
+  var jaLigado = Array.isArray(state.status) && state.status.length === 1 && state.status[0] === v;
+  state.status = jaLigado ? 'todos' : [v];
   buildFilters();
   updateClearButton();
   render();
