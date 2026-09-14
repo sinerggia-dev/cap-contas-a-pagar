@@ -318,9 +318,15 @@
   .kpi.k-positive .v{color:var(--positive);}
 
   /* ---- middle: table + status ---- */
+  /* A zona e a linha [gaveta | corpo]. A gaveta estica pela altura toda porque o flex
+     alinha por stretch; o corpo empilha a tabela e o Desempenho dentro dela. Antes a
+     gaveta vivia dentro do .middle e parava na altura da tabela. */
+  .zona{display:flex;flex-direction:row;align-items:stretch;flex:1 1 auto;min-height:0;}
+  .zona-corpo{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;}
+  /* O .middle deixou de hospedar a gaveta: agora e so a faixa da tabela. */
   .middle{margin-bottom:14px;flex:1 1 auto;min-height:230px;max-height:330px;display:flex;flex-direction:row;}
   .middle .panel{flex:1;display:flex;flex-direction:column;min-height:0;min-width:0;}
-  @media (max-width:760px){ .middle{flex-direction:column;} .table-scroll{max-height:195px;} }
+  @media (max-width:760px){ .zona{flex-direction:column;} .middle{flex-direction:column;} .table-scroll{max-height:195px;} }
 
   .panel{
     background:var(--surface);border:1px solid var(--border);border-radius:12px;
@@ -1091,66 +1097,73 @@
   </div>
 
 
-  <div class="middle">
+  <!-- A gaveta de filtros e uma COLUNA da zona inteira: desce ao lado da tabela e do
+       Desempenho. Antes ela vivia dentro do .middle e parava na altura da tabela,
+       cortando os campos a partir do Status. -->
+  <div class="zona">
     <div class="filters-drawer" id="filtersDrawer">
-      <div class="filters-drawer-head">
-        <h2>Filtros</h2>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button type="button" class="ebtn ghost" id="filtersDrawerCloseBtn">Fechar</button>
+        <div class="filters-drawer-head">
+          <h2>Filtros</h2>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="ebtn ghost" id="filtersDrawerCloseBtn">Fechar</button>
+          </div>
+        </div>
+        <div class="filters-drawer-body">
+          <div class="filters" id="filters"></div>
         </div>
       </div>
-      <div class="filters-drawer-body">
-        <div class="filters" id="filters"></div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-head">
-        <h2>Lançamentos</h2>
-        <div class="busca-wrap" id="buscaWrap">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="buscaGeral" autocomplete="off" spellcheck="false"
-                 placeholder="Buscar em tudo: pessoa, descrição, tipo, documento, valor, data…"
-                 aria-label="Buscar em todos os campos dos lançamentos">
-          <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
+    <div class="zona-corpo">
+      <div class="middle">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Lançamentos</h2>
+            <div class="busca-wrap" id="buscaWrap">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input type="text" id="buscaGeral" autocomplete="off" spellcheck="false"
+                     placeholder="Buscar em tudo: pessoa, descrição, tipo, documento, valor, data…"
+                     aria-label="Buscar em todos os campos dos lançamentos">
+              <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                Mês Atual
+              </button>
+              <button class="clear-btn" id="filtersIconBtn" type="button" title="Filtros">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                Filtros
+              </button>
+              <button class="clear-btn" id="clearBtn" type="button" title="Limpar todos os filtros">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M20 20H8l-6-6a2 2 0 0 1 0-2.83l8-8a2 2 0 0 1 2.83 0l7 7a2 2 0 0 1 0 2.83L13 20" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.5 8.5 18 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                Limpar
+              </button>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="cap" id="capTable">
+              <colgroup id="tableColgroup"></colgroup>
+              <thead>
+                <tr id="tableHeadRow"></tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+              <tfoot>
+                <tr id="tableFootRow"></tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            Mês Atual
-          </button>
-          <button class="clear-btn" id="filtersIconBtn" type="button" title="Filtros">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Filtros
-          </button>
-          <button class="clear-btn" id="clearBtn" type="button" title="Limpar todos os filtros">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M20 20H8l-6-6a2 2 0 0 1 0-2.83l8-8a2 2 0 0 1 2.83 0l7 7a2 2 0 0 1 0 2.83L13 20" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.5 8.5 18 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            Limpar
-          </button>
+      </div>
+      <div class="bottom">
+        <div class="panel full">
+          <div class="panel-head">
+            <h2>Desempenho</h2>
+            <span class="count" id="perfCount"></span>
+          </div>
+          <div class="perf-body" id="perfBody"></div>
         </div>
-      </div>
-      <div class="table-scroll">
-        <table class="cap" id="capTable">
-          <colgroup id="tableColgroup"></colgroup>
-          <thead>
-            <tr id="tableHeadRow"></tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-          <tfoot>
-            <tr id="tableFootRow"></tr>
-          </tfoot>
-        </table>
-      </div>
     </div>
   </div>
 
-  <div class="bottom">
-    <div class="panel full">
-      <div class="panel-head">
-        <h2>Desempenho</h2>
-        <span class="count" id="perfCount"></span>
-      </div>
-      <div class="perf-body" id="perfBody"></div>
-    </div>
   </div>
 </div>
 
