@@ -3042,8 +3042,8 @@ function renderMesRanking(rows){
 var LEGENDA = [
   {v:'pago',    cls:'pago',    lbl:'Pago'},
   {v:'vencido', cls:'vencido', lbl:'Em atraso'},
-  {v:'hoje',    cls:'hoje',    lbl:'Vence hoje', forte:true},
-  {v:'d1',      cls:'hoje',    lbl:'1 dia'},
+  {v:'hoje',    cls:'hoje',    lbl:'Vence hoje', urgente:true},
+  {v:'d1',      cls:'hoje',    lbl:'1 dia',      urgente:true},
   {v:'d2',      cls:'hoje',    lbl:'2 dias'},
   {v:'d3',      cls:'hoje',    lbl:'3 dias'},
   {v:'avencer', cls:'avencer', lbl:'A vencer'}
@@ -3059,8 +3059,12 @@ function renderLegendas(rows){
   var html = LEGENDA.map(function(item){
     var n = contaStatus(rows, item.v);
     var on = ativos.indexOf(item.v) !== -1;
+    /* O realce e alerta, nao enfeite: so acende quando ha algo vencendo hoje ou
+       amanha. Ligado o tempo todo, com zero titulos, ele deixa de chamar atencao
+       justamente no dia em que houver algo. */
+    var forte = item.urgente && n > 0;
     return '<button type="button" class="rank-legend-item'+(on?' active':'')+
-      (item.forte?' forte':'')+'" data-status-chip="'+item.v+'"'+
+      (forte?' forte':'')+'" data-status-chip="'+item.v+'"'+
       ' title="Clique para filtrar por '+item.lbl+'">'+
       '<span class="rank-swatch rank-swatch-'+item.cls+'"></span>'+
       item.lbl+'<span class="chip-n">'+n+'</span></button>';
