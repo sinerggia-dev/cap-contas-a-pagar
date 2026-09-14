@@ -647,6 +647,11 @@
   .zona > .panel .rank-group-sel{font-size:14.6px;padding:4px 8px;}
   #descRankBody .rank-row{padding:6px 8px;gap:12px;}
   #descRankBody .rank-row .name{flex:0 0 186px;font-size:14.6px;color:var(--ink);}
+  /* O seletor acima tem id e por isso vence `.rank-row.active .name`, que e so de
+     classe: sem esta regra o texto continua claro sobre o fundo claro do
+     selecionado, e a descricao some. Ao escopar por id, repita o estado. */
+  #descRankBody .rank-row.active .name,
+  #descRankBody .rank-row.active .amt{color:var(--select-ink);}
   #descRankBody .rank-row .track{height:7px;}
   #descRankBody .rank-row .amt{flex:0 0 112px;font-size:14.6px;}
 
