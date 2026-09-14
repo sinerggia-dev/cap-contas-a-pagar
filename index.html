@@ -634,8 +634,36 @@
   .rank-col-item .rank-col-item-lbl{color:var(--ink-muted);flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;}
   .rank-col-item .rank-col-item-val{flex:none;font:600 14.6px var(--num);font-variant-numeric:tabular-nums;color:var(--ink);}
 
-  .rank-legend{display:flex;flex-wrap:wrap;gap:12px;padding:0 16px 12px;flex:none;}
-  .rank-legend-item{display:flex;align-items:center;gap:6px;font-size:13.4px;color:var(--ink-muted);}
+  .rank-legend{display:flex;flex-wrap:wrap;gap:8px;padding:2px 16px 14px;flex:none;}
+    /* Deixou de ser rotulo e virou botao: precisa parecer clicavel e mostrar quando
+     esta ligado. O contorno some no estado normal para nao competir com os dados. */
+  .rank-legend-item{
+    display:flex;align-items:center;gap:7px;font-size:15px;
+    color:var(--ink-soft);font-family:var(--sans);
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:999px;padding:6px 13px;cursor:pointer;
+  }
+  .rank-legend-item:hover{border-color:var(--border-strong);color:var(--ink);}
+  .rank-legend-item.active{background:var(--select);color:var(--select-ink);border-color:var(--select);}
+  .rank-legend-item.active .chip-n{background:rgba(0,0,0,.18);color:var(--select-ink);}
+  /* A contagem responde "quantos titulos", que era a primeira pergunta depois da cor. */
+  .chip-n{
+    font:700 13.4px var(--num);font-variant-numeric:tabular-nums;
+    background:var(--surface-3);color:var(--ink);border-radius:999px;
+    padding:1px 7px;margin-left:2px;
+  }
+  /* "Vence hoje" e o unico prazo que nao da para adiar: ganha a cor propria e peso,
+     em vez de ficar igual aos outros seis. */
+  .rank-legend-item.forte{
+    color:var(--warning);font-weight:700;
+    border-color:var(--warning);background:var(--warning-dim);
+  }
+  .rank-legend-item.forte .chip-n{background:rgba(0,0,0,.25);color:var(--warning);}
+  .rank-legend-item.forte:hover{color:var(--warning);border-color:var(--warning);}
+  .rank-legend-item.forte.active{
+    background:var(--warning);color:#1a1205;border-color:var(--warning);
+  }
+  .rank-legend-item.forte.active .chip-n{background:rgba(0,0,0,.22);color:#1a1205;}
   .rank-swatch{width:10px;height:10px;border-radius:2px;flex:none;}
   .rank-swatch-pago, .seg-pago{background:var(--positive);}
   .rank-swatch-vencido, .seg-vencido{background:var(--atrasado);}
@@ -1167,12 +1195,7 @@
         <span class="count" id="rankCount"></span>
       </div>
       <div class="rank-body" id="rankBody"></div>
-      <div class="rank-legend">
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-pago"></span>Pago</span>
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-vencido"></span>Em atraso</span>
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-hoje"></span>Vence hoje</span>
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-avencer"></span>A vencer</span>
-      </div>
+      <div class="rank-legend" data-legenda></div>
     </div>
 
     <div class="panel full">
@@ -1181,12 +1204,7 @@
         <span class="count" id="mesRankCount"></span>
       </div>
       <div class="rank-body" id="mesRankBody"></div>
-      <div class="rank-legend">
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-pago"></span>Pago</span>
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-vencido"></span>Em atraso</span>
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-hoje"></span>Vence hoje</span>
-        <span class="rank-legend-item"><span class="rank-swatch rank-swatch-avencer"></span>A vencer</span>
-      </div>
+      <div class="rank-legend" data-legenda></div>
     </div>
   </div>
 
@@ -1883,7 +1901,9 @@ function parseBRL(str){
 }
 
 var FIELDS = [
-  {key:'status', label:'Status', opts:[['vencido','Vencido'],['hoje','Vence Hoje'],['avencer','A Vencer'],['pago','Pago']]},
+  {key:'status', label:'Status', opts:[['vencido','Vencido'],['hoje','Vence Hoje'],
+    ['d1','Vence em 1 dia'],['d2','Vence em 2 dias'],['d3','Vence em 3 dias'],
+    ['avencer','A Vencer'],['pago','Pago']]},
   {key:'desc', label:'Descrição'},
   {key:'tipo', label:'Tipo de Despesa'},
   {key:'nome', label:'Despesa de:'},
@@ -2344,6 +2364,11 @@ document.getElementById('atualizarBtn').addEventListener('click', function(){
 
 function rowMatchesFilterValue(r, f, v){
   if (f.key === 'pag' && v === 'sem') return !r.pag;
+  /* d1/d2/d3 nao sao status guardados na linha: sao recortes de 'avencer' pelo
+     numero de dias que falta, que o calculo de status ja deixou em r.dias. */
+  if (f.key === 'status' && /^d[123]$/.test(String(v))) {
+    return r.status === 'avencer' && r.dias === Number(String(v).charAt(1));
+  }
   return String(r[f.key]) === String(v);
 }
 function filtered(excluirChaves){
@@ -2982,9 +3007,59 @@ function renderMesRanking(rows){
   }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
 }
 
+/* ---- legenda que filtra ----
+   Era so uma lista de cores. Virou a barra de atalho do status: cada chip mostra
+   quantos titulos ha naquele recorte e filtra ao clique. Os recortes por prazo
+   (1, 2 e 3 dias) sao fatias de "a vencer" pelo r.dias, entao aparecem aqui e no
+   menu de Filtros pela mesma definicao — nao ha duas verdades sobre o que e
+   "vence em 2 dias". */
+var LEGENDA = [
+  {v:'pago',    cls:'pago',    lbl:'Pago'},
+  {v:'vencido', cls:'vencido', lbl:'Em atraso'},
+  {v:'hoje',    cls:'hoje',    lbl:'Vence hoje', forte:true},
+  {v:'d1',      cls:'hoje',    lbl:'1 dia'},
+  {v:'d2',      cls:'hoje',    lbl:'2 dias'},
+  {v:'d3',      cls:'hoje',    lbl:'3 dias'},
+  {v:'avencer', cls:'avencer', lbl:'A vencer'}
+];
+
+function contaStatus(rows, v){
+  var f = {key:'status'};
+  return rows.filter(function(r){ return rowMatchesFilterValue(r, f, v); }).length;
+}
+
+function renderLegendas(rows){
+  var ativos = Array.isArray(state.status) ? state.status : [];
+  var html = LEGENDA.map(function(item){
+    var n = contaStatus(rows, item.v);
+    var on = ativos.indexOf(item.v) !== -1;
+    return '<button type="button" class="rank-legend-item'+(on?' active':'')+
+      (item.forte?' forte':'')+'" data-status-chip="'+item.v+'"'+
+      ' title="Clique para filtrar por '+item.lbl+'">'+
+      '<span class="rank-swatch rank-swatch-'+item.cls+'"></span>'+
+      item.lbl+'<span class="chip-n">'+n+'</span></button>';
+  }).join('');
+  document.querySelectorAll('[data-legenda]').forEach(function(el){ el.innerHTML = html; });
+}
+
+document.addEventListener('click', function(ev){
+  var chip = ev.target.closest('[data-status-chip]');
+  if (!chip) return;
+  var v = chip.getAttribute('data-status-chip');
+  var atuais = Array.isArray(state.status) ? state.status.slice() : [];
+  var i = atuais.indexOf(v);
+  // Clicar de novo tira o filtro; sem isso so daria para sair pelo Limpar.
+  if (i !== -1) atuais.splice(i, 1); else atuais.push(v);
+  state.status = atuais.length ? atuais : 'todos';
+  buildFilters();
+  updateClearButton();
+  render();
+});
+
 function render(){
   var rows = filtered();
   renderKpis(rows);
+  renderLegendas(rows);
   renderDesempenho(rows);
   renderTable(rows);
   renderDescRanking(filtered());
