@@ -26,10 +26,15 @@
     --ink-faint:#5f646b;
     --critical:#f26d7d;
     --critical-dim:#47181f;
-    --atrasado:#f5b301;
+    /* "Em atraso" e "Vence hoje" ficam lado a lado na pilha do grafico de meses, e
+       ao aplicar a paleta do redesenho os dois viraram o MESMO ambar — a fatia
+       virava um bloco so. Agora separam por claridade, nao so por matiz: 2,17:1
+       entre eles, contra 1,30 do app original e 1,00 do que estava aqui.
+       Como texto de etiqueta dao 8,92:1 e 4,60:1 sobre os proprios fundos. */
+    --atrasado:#ffd257;
     --atrasado-dim:#3b3117;
-    --warning:#f5b301;
-    --warning-dim:#3b3117;
+    --warning:#e07524;
+    --warning-dim:#3d2419;
     --positive:#7fb69a;
     --positive-dim:#24382f;
     --neutral-dim:#2c2f34;
@@ -539,26 +544,46 @@
   .rank-col.active{opacity:1;}
   .rank-cols:has(.rank-col.active) .rank-col:not(.active){opacity:.45;}
 
-  /* ---- Mes/Ano em cartoes ----
-     Sao 11 colunas na mesma faixa, e os rotulos nao cabiam: viravam "Pa...",
-     "Em a...", "Venc...". Em grade eles se acomodam em duas fileiras e aparecem
-     inteiros, sem rolagem lateral. So aqui: o "Total por Despesa de" tem 5 colunas,
-     cabe folgado, e continua como esta. O HTML nao muda — os cliques que filtram
-     por mes e por status seguem nos mesmos elementos. */
-  #mesRankBody .rank-cols{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));
-    gap:10px;overflow-x:visible;padding:12px 14px;align-items:start;
+  /* ---- Mes/Ano como grafico de colunas ----
+     Onze meses lado a lado nao cabiam como cartoes nem como colunas de texto: os
+     rotulos cortavam. Como barra, a altura ja diz o tamanho do mes e o rotulo sai
+     do caminho. Escopado por #mesRankBody: o "Total por Despesa de" usa as mesmas
+     classes, tem 5 colunas e continua em texto. */
+  #mesRankBody .mes-graf{
+    display:flex;align-items:flex-end;gap:10px;overflow-x:visible;
+    height:230px;padding:14px 16px 10px;
   }
   #mesRankBody .rank-col{
-    background:var(--surface-2);border:1px solid var(--border);border-radius:11px;
-    padding:11px 13px;min-width:0;flex:none;
+    flex:1 1 0;min-width:0;padding:3px;height:100%;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+    border-left:0;border-radius:8px;
   }
-  /* O cartao ja tem borda propria; a divisoria de coluna viraria linha dupla. */
-  #mesRankBody .rank-col:not(:first-child){border-left:1px solid var(--border);}
-  #mesRankBody .rank-col:first-child{padding-left:13px;}
-  #mesRankBody .rank-col:hover{border-color:var(--border-strong);}
-  /* Com 216px de largura o rotulo cabe: o corte deixa de ser necessario. */
-  #mesRankBody .rank-col-item-lbl{overflow:visible;text-overflow:clip;}
+  #mesRankBody .rank-col:hover{background:var(--surface-2);}
+  #mesRankBody .mes-val{
+    font:600 11.2px var(--num);font-variant-numeric:tabular-nums;color:var(--ink-soft);
+    margin-bottom:6px;white-space:nowrap;
+  }
+  /* A barra so existe do tamanho do mes; o min-height impede o mes minusculo sumir. */
+  #mesRankBody .mes-barra{
+    width:100%;max-width:54px;min-height:4px;
+    display:flex;flex-direction:column-reverse;
+    border-radius:6px;overflow:hidden;background:var(--surface-3);
+  }
+  /* O item deixa de ser linha de texto e vira fatia da pilha. */
+  #mesRankBody .rank-col-item{
+    display:block;width:100%;padding:0;margin:0;border-radius:0;min-height:2px;
+    cursor:pointer;
+  }
+  #mesRankBody .rank-col-item:hover{filter:brightness(1.25);background:none;}
+  #mesRankBody .rank-col-item.active{outline:2px solid var(--ink);outline-offset:-2px;background:none;}
+  #mesRankBody .seg-pago{background:var(--positive);}
+  #mesRankBody .seg-vencido{background:var(--atrasado);}
+  #mesRankBody .seg-hoje{background:var(--warning);}
+  #mesRankBody .seg-avencer{background:var(--ink-muted);}
+  #mesRankBody .rank-col-name{
+    font-size:11.2px;font-weight:500;color:var(--ink-muted);margin:8px 0 0;
+    white-space:nowrap;padding:2px 5px;border-radius:5px;
+  }
   .rank-col-total{font:600 12.9px var(--sans);color:var(--ink-soft);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .rank-col-list{display:flex;flex-direction:column;gap:7px;}
   .rank-col-item{
@@ -2888,20 +2913,26 @@ function renderMesRanking(rows){
   var STATUS_LBL = {pago:'Pago', vencido:'Em atraso', hoje:'Vence hoje', avencer:'A vencer'};
   var mesAtivo = Array.isArray(state._mesano) ? state._mesano : null;
   var statusAtivoMes = Array.isArray(state.status) ? state.status : null;
-  document.getElementById('mesRankBody').innerHTML = entries.length ? '<div class="rank-cols">' + entries.map(function(e){
+  // Grafico de colunas empilhadas. As alturas sao proporcionais ao maior mes, entao a
+  // silhueta mostra em que meses o dinheiro se concentra — coisa que 11 cartoes lado a
+  // lado nao diziam. Os atributos data-mes e data-status ficam onde estavam: o mesmo
+  // ouvinte de clique continua filtrando por mes e por status, sem saber que virou barra.
+  var maxMes = entries.reduce(function(m, e){ return e.total > m ? e.total : m; }, 0) || 1;
+  document.getElementById('mesRankBody').innerHTML = entries.length ? '<div class="rank-cols mes-graf">' + entries.map(function(e){
     var mesAttr = e.mes.replace(/"/g,'&quot;');
     var mesSelecionado = !!(mesAtivo && mesAtivo.indexOf(e.mes) !== -1);
-    var itens = ['pago','vencido','hoje','avencer'].filter(function(k){ return e[k] > 0; }).map(function(k){
+    // 'pago' primeiro: a barra empilha de baixo para cima (column-reverse).
+    var segs = ['pago','vencido','hoje','avencer'].filter(function(k){ return e[k] > 0; }).map(function(k){
       var itemAtivo = mesSelecionado && !!(statusAtivoMes && statusAtivoMes.indexOf(k) !== -1);
-      return '<div class="rank-col-item'+(itemAtivo?' active':'')+'" data-mes="'+mesAttr+'" data-status="'+k+'" title="Clique para filtrar">'+
-        '<span class="rank-swatch rank-swatch-'+k+'"></span>'+
-        '<span class="rank-col-item-lbl">'+STATUS_LBL[k]+'</span>'+
-        '<span class="rank-col-item-val">'+brl(e[k])+'</span></div>';
+      return '<div class="rank-col-item seg-'+k+(itemAtivo?' active':'')+'"'+
+        ' data-mes="'+mesAttr+'" data-status="'+k+'"'+
+        ' style="height:'+(e[k] / e.total * 100).toFixed(3)+'%"'+
+        ' title="'+STATUS_LBL[k]+': '+brl(e[k])+'"></div>';
     }).join('');
     return '<div class="rank-col'+(mesSelecionado?' active':'')+'">'+
+      '<span class="mes-val" title="Total: '+brl(e.total)+'">'+brl(e.total).replace('R$ ','')+'</span>'+
+      '<span class="mes-barra" style="height:'+(e.total / maxMes * 100).toFixed(3)+'%">'+segs+'</span>'+
       '<span class="rank-col-name'+(mesSelecionado?' active':'')+'" data-mes="'+mesAttr+'" title="Clique para filtrar por '+mesAttr+'">'+e.mes+'</span>'+
-      '<span class="rank-col-total">Total: '+brl(e.total)+'</span>'+
-      '<div class="rank-col-list">'+itens+'</div>'+
       '</div>';
   }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
 }
