@@ -73,8 +73,11 @@
     background:var(--bg);
     border:1px solid var(--border);
     border-radius:16px;
-    max-width:1440px;
-    margin:0 auto;
+    /* Sem teto de largura, a pedido: em 2540px o limite de 1440 deixava ~550px de
+       preto de cada lado, e a tabela é larga o bastante para usar a tela toda.
+       Os 22px de padding do body seguram a folha longe da borda. */
+    max-width:none;
+    margin:0;
     padding:22px 24px 44px;
     box-shadow:0 30px 80px rgba(0,0,0,.5);
     min-height:100%;
