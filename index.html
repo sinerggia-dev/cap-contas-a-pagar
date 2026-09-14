@@ -157,6 +157,30 @@
   .clear-btn:disabled:hover{border-color:var(--border);color:var(--ink-soft);}
   .clear-btn.has-filters{border-color:var(--critical);color:var(--critical);}
   .clear-btn.has-filters:hover{background:var(--critical-dim);}
+
+  /* Busca geral: varre todos os campos da linha de uma vez, sem escolher
+     coluna antes. Convive com os filtros — ela restringe o que eles já
+     deixaram passar. */
+  .busca-wrap{flex:1 1 180px;min-width:0;margin:0 12px;position:relative;display:flex;align-items:center;}
+  .busca-wrap > svg{position:absolute;left:10px;width:13px;height:13px;color:var(--ink-muted);pointer-events:none;}
+  .busca-wrap input{
+    width:100%;height:31px;box-sizing:border-box;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:7px;
+    color:var(--ink);font:500 12px var(--sans);padding:0 28px 0 29px;
+  }
+  .busca-wrap input::placeholder{color:var(--ink-muted);}
+  .busca-wrap input:focus{outline:2px solid var(--chart);outline-offset:1px;border-color:transparent;}
+  .busca-wrap.tem-texto input{border-color:var(--chart);}
+  .busca-wrap button{
+    position:absolute;right:8px;width:16px;height:16px;border-radius:50%;
+    background:var(--surface-3);border:1px solid var(--border-strong);color:var(--ink-soft);
+    display:none;align-items:center;justify-content:center;cursor:pointer;
+    font-size:11px;line-height:1;padding:0;
+  }
+  .busca-wrap.tem-texto button{display:flex;}
+  .busca-wrap button:hover{color:var(--ink);border-color:var(--ink-soft);}
+  .busca-vazia{color:var(--ink-muted);}
+  .busca-vazia b{color:var(--ink);font-weight:600;}
   .filter-field label{
     display:block;font-size:10px;color:var(--ink);
     text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;
@@ -1035,6 +1059,13 @@
     <div class="panel">
       <div class="panel-head">
         <h2>Lançamentos</h2>
+        <div class="busca-wrap" id="buscaWrap">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input type="text" id="buscaGeral" autocomplete="off" spellcheck="false"
+                 placeholder="Buscar em tudo: pessoa, descrição, tipo, documento, valor, data…"
+                 aria-label="Buscar em todos os campos dos lançamentos">
+          <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
+        </div>
         <div style="display:flex;align-items:center;gap:10px;">
           <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
             <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
@@ -1627,6 +1658,51 @@ function fmtDate(d){ return String(d.getDate()).padStart(2,'0')+'/'+String(d.get
 function daysBetween(a,b){ return Math.round((a-b)/86400000); }
 function mesAno(d){ var meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']; return meses[d.getMonth()]+'/'+d.getFullYear(); }
 
+/* --- busca geral -------------------------------------------------------
+   Um texto único por linha, sem acento e em minúsculas, com tudo que a
+   linha mostra. A busca casa contra ele. É montado uma vez por linha no
+   normalizeRow porque filtered() roda várias vezes a cada render. */
+function semAcento(s){
+  s = String(s == null ? '' : s).toLowerCase();
+  return s.normalize ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s;
+}
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+var STATUS_BUSCA = {
+  pago: 'pago quitado',
+  vencido: 'vencido em atraso atrasado',
+  hoje: 'vence hoje',
+  avencer: 'a vencer avencer'
+};
+/* A tabela mostra a data com ano de 2 dígitos (15/09/26) e o restante do app
+   usa 4 (15/09/2026). As duas formas entram, senão quem digita o que está
+   vendo na tela não acha nada. */
+function datasBusca(iso){
+  var longo = isoToDDMMYYYY(iso);
+  if (!longo) return '';
+  return longo + ' ' + longo.slice(0, 6) + longo.slice(8);
+}
+function montarTextoBusca(r){
+  var partes = [
+    r.nome, r.doc, r.desc, r.parcela, r.tipo, r.obs, r.barra, r.id,
+    r._mesano, r._ano, STATUS_BUSCA[r.status],
+    datasBusca(r.venc), datasBusca(r.pag),
+    r.valor, String(r.valor).replace('.', ','),
+    r.cobrado == null ? '' : r.cobrado,
+    r.cobrado == null ? '' : String(r.cobrado).replace('.', ',')
+  ];
+  return semAcento(partes.join(' '));
+}
+
+var buscaTermo = '';
+/* Vários termos = todos precisam aparecer (em qualquer campo, em qualquer
+   ordem): "cartao set" acha o cartão que vence em setembro. */
+function termosBusca(){
+  var t = semAcento(buscaTermo).trim();
+  return t ? t.split(/\s+/) : [];
+}
+
 function normalizeRow(r){
   r.vencDate = parseISO(r.venc);
   var diff = daysBetween(HOJE, r.vencDate);
@@ -1637,6 +1713,7 @@ function normalizeRow(r){
   r._pgto = r.pag ? 'com' : 'sem';
   r._mesano = mesAno(r.vencDate);
   r._ano = String(r.vencDate.getFullYear());
+  r._busca = montarTextoBusca(r);
 }
 
 function parseBRL(str){
@@ -2019,17 +2096,50 @@ function buildFilters(){
 
 function updateClearButton(){
   var btn = document.getElementById('clearBtn');
-  var active = FIELDS.some(function(f){ return state[f.key] !== 'todos'; });
+  var active = buscaTermo.trim() !== '' || FIELDS.some(function(f){ return state[f.key] !== 'todos'; });
   btn.classList.toggle('has-filters', active);
   btn.disabled = !active;
 }
 document.getElementById('clearBtn').addEventListener('click', function(){
   FIELDS.forEach(function(f){ state[f.key] = 'todos'; });
+  zerarBusca();
   buildFilters();
   updateClearButton();
   render();
 });
 updateClearButton();
+
+var buscaInput = document.getElementById('buscaGeral');
+var buscaWrap = document.getElementById('buscaWrap');
+var buscaTimer = null;
+
+function zerarBusca(){
+  buscaTermo = '';
+  clearTimeout(buscaTimer);
+  if (buscaInput) buscaInput.value = '';
+  if (buscaWrap) buscaWrap.classList.remove('tem-texto');
+}
+function aplicarBusca(valor){
+  buscaTermo = valor;
+  buscaWrap.classList.toggle('tem-texto', valor.trim() !== '');
+  updateClearButton();
+  render();
+}
+/* Espera a digitação parar: sem isso cada tecla refaz tabela, totais e
+   painéis. */
+buscaInput.addEventListener('input', function(){
+  var v = this.value;
+  clearTimeout(buscaTimer);
+  buscaTimer = setTimeout(function(){ aplicarBusca(v); }, 140);
+});
+buscaInput.addEventListener('keydown', function(ev){
+  if (ev.key === 'Escape' || ev.keyCode === 27){ zerarBusca(); aplicarBusca(''); }
+});
+document.getElementById('buscaLimparBtn').addEventListener('click', function(){
+  zerarBusca();
+  aplicarBusca('');
+  buscaInput.focus();
+});
 
 document.getElementById('mesAtualBtn').addEventListener('click', function(){
   var chaveAtual = mesAno(new Date());
@@ -2084,7 +2194,13 @@ function rowMatchesFilterValue(r, f, v){
 }
 function filtered(excluirChaves){
   excluirChaves = excluirChaves || [];
+  var termos = termosBusca();
   return DATA.filter(function(r){
+    /* A busca é global de propósito: vale aqui e não em excluirChaves, para
+       que os painéis de totais também reflitam o que foi buscado. */
+    for (var i = 0; i < termos.length; i++){
+      if ((r._busca || '').indexOf(termos[i]) === -1) return false;
+    }
     return FIELDS.every(function(f){
       if (excluirChaves.indexOf(f.key) !== -1) return true;
       var sel = state[f.key];
@@ -2395,7 +2511,10 @@ function renderTable(rows){
   var body = document.getElementById('tableBody');
   var visibleCols = visibleColumnOrder();
   if (!rows.length){
-    body.innerHTML = '<tr><td colspan="'+visibleCols.length+'" class="empty-note">Nenhum lançamento para os filtros selecionados.</td></tr>';
+    var aviso = buscaTermo.trim()
+      ? 'Nada encontrado para <b>' + escHtml(buscaTermo.trim()) + '</b>.'
+      : 'Nenhum lançamento para os filtros selecionados.';
+    body.innerHTML = '<tr><td colspan="'+visibleCols.length+'" class="empty-note busca-vazia">'+aviso+'</td></tr>';
   } else {
     var accessor = SORT_ACCESSORS[sortState.key] || SORT_ACCESSORS.venc;
     var sorted = rows.slice().sort(function(a,b){ return compareValues(accessor(a), accessor(b)) * sortState.dir; });
