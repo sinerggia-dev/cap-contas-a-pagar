@@ -104,14 +104,14 @@
   /* Tarja do topo: cinza atras da marca, escurecendo ate o canto direito, onde ficam
      o chip e os botoes — eles sao --surface e precisam continuar parecendo elevados,
      o que so vale enquanto a tarja termina abaixo desse tom (por isso a ponta direita
-     para em --bg-base, o mesmo cinza em que a lavagem da tela termina).
+     para em #0a0c0f, bem abaixo do #1c1f24 deles).
      As margens negativas sangram os 22px/24px de recuo da folha para a tarja ir de
      ponta a ponta; o raio de 15px e o da folha (16px) menos a borda de 1px. */
   .head-row{
     display:flex;justify-content:space-between;align-items:flex-start;
     gap:16px;flex-wrap:wrap;
     flex:none;
-    background:linear-gradient(90deg,#3a3f47 0%,#262a31 34%,var(--bg-base) 100%);
+    background:linear-gradient(90deg,#23262c 0%,#16181d 34%,#0a0c0f 100%);
     border-bottom:1px solid var(--border);
     border-radius:15px 15px 0 0;
     margin:-22px -24px 14px;
