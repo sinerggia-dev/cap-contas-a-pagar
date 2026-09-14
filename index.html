@@ -580,6 +580,26 @@
   #mesRankBody .seg-vencido{background:var(--atrasado);}
   #mesRankBody .seg-hoje{background:var(--warning);}
   #mesRankBody .seg-avencer{background:var(--ink-muted);}
+  /* ---- dica flutuante ---- */
+  .mes-tip{
+    position:fixed;z-index:400;display:none;pointer-events:none;
+    background:var(--surface-2);border:1px solid var(--border-strong);border-radius:10px;
+    padding:10px 12px;min-width:210px;box-shadow:0 12px 30px rgba(0,0,0,.55);
+    font-family:var(--sans);
+  }
+  .mes-tip .tip-h{font-size:13.4px;font-weight:700;color:var(--ink);}
+  .mes-tip .tip-t{
+    font:600 12.3px var(--num);font-variant-numeric:tabular-nums;color:var(--ink-soft);
+    padding-bottom:7px;margin-bottom:7px;border-bottom:1px solid var(--border);
+  }
+  .mes-tip .tip-l{display:flex;align-items:center;gap:7px;padding:2px 0;}
+  .mes-tip .tip-n{font-size:12.3px;color:var(--ink-soft);flex:1;white-space:nowrap;}
+  /* A porcentagem responde "quanto do mes e isto", que a barra mostra mas nao quantifica. */
+  .mes-tip .tip-p{font:12.3px var(--num);font-variant-numeric:tabular-nums;color:var(--ink-muted);}
+  .mes-tip .tip-v{
+    font:600 12.3px var(--num);font-variant-numeric:tabular-nums;color:var(--ink);
+    min-width:96px;text-align:right;
+  }
   #mesRankBody .rank-col-name{
     font-size:11.2px;font-weight:500;color:var(--ink-muted);margin:8px 0 0;
     white-space:nowrap;padding:2px 5px;border-radius:5px;
@@ -2924,13 +2944,20 @@ function renderMesRanking(rows){
     // 'pago' primeiro: a barra empilha de baixo para cima (column-reverse).
     var segs = ['pago','vencido','hoje','avencer'].filter(function(k){ return e[k] > 0; }).map(function(k){
       var itemAtivo = mesSelecionado && !!(statusAtivoMes && statusAtivoMes.indexOf(k) !== -1);
+      // Sem `title`: a dica flutuante mostra o mes inteiro, e o balao nativo do
+      // navegador competiria com ela, aparecendo em cima e com atraso.
       return '<div class="rank-col-item seg-'+k+(itemAtivo?' active':'')+'"'+
         ' data-mes="'+mesAttr+'" data-status="'+k+'"'+
-        ' style="height:'+(e[k] / e.total * 100).toFixed(3)+'%"'+
-        ' title="'+STATUS_LBL[k]+': '+brl(e[k])+'"></div>';
+        ' style="height:'+(e[k] / e.total * 100).toFixed(3)+'%"></div>';
     }).join('');
-    return '<div class="rank-col'+(mesSelecionado?' active':'')+'">'+
-      '<span class="mes-val" title="Total: '+brl(e.total)+'">'+brl(e.total).replace('R$ ','')+'</span>'+
+    // Os valores viajam na propria coluna: a dica os le de volta sem precisar procurar
+    // o mes numa lista a parte, e continua certa depois de qualquer filtro.
+    var dados = ['pago','vencido','hoje','avencer'].map(function(k){
+      return k + ':' + e[k];
+    }).join('|');
+    return '<div class="rank-col'+(mesSelecionado?' active':'')+'"'+
+      ' data-tip-mes="'+mesAttr+'" data-tip-total="'+e.total+'" data-tip="'+dados+'">'+
+      '<span class="mes-val">'+brl(e.total).replace('R$ ','')+'</span>'+
       '<span class="mes-barra" style="height:'+(e.total / maxMes * 100).toFixed(3)+'%">'+segs+'</span>'+
       '<span class="rank-col-name'+(mesSelecionado?' active':'')+'" data-mes="'+mesAttr+'" title="Clique para filtrar por '+mesAttr+'">'+e.mes+'</span>'+
       '</div>';
@@ -2968,6 +2995,63 @@ document.getElementById('rankBody').addEventListener('click', function(ev){
   buildFilters();
   updateClearButton();
   render();
+});
+
+/* ---- dica flutuante do grafico de meses ----
+   Mora no <body> e nao dentro do painel: o corpo do painel tem rolagem propria, e
+   um elemento posicionado ali dentro seria cortado na borda. Fixed tambem dispensa
+   recalcular a posicao quando a pagina rola. */
+var mesTip = null;
+function tipDoMes(col){
+  var partes = (col.getAttribute('data-tip') || '').split('|').map(function(par){
+    var d = par.split(':');
+    return { k: d[0], v: Number(d[1]) || 0 };
+  });
+  var total = Number(col.getAttribute('data-tip-total')) || 0;
+  var linhas = partes.filter(function(x){ return x.v > 0; }).map(function(x){
+    var pct = total ? (x.v / total * 100) : 0;
+    return '<div class="tip-l">'+
+      '<span class="rank-swatch rank-swatch-'+x.k+'"></span>'+
+      '<span class="tip-n">'+STATUS_LBL_TIP[x.k]+'</span>'+
+      '<span class="tip-p">'+pct.toFixed(1).replace('.',',')+'%</span>'+
+      '<span class="tip-v">'+brl(x.v)+'</span></div>';
+  }).join('');
+  return '<div class="tip-h">'+col.getAttribute('data-tip-mes')+'</div>'+
+         '<div class="tip-t">Total '+brl(total)+'</div>'+ linhas;
+}
+var STATUS_LBL_TIP = {pago:'Pago', vencido:'Em atraso', hoje:'Vence hoje', avencer:'A vencer'};
+
+function posicionarTip(ev){
+  if (!mesTip) return;
+  var m = 14, l = ev.clientX + m, t = ev.clientY + m;
+  var c = mesTip.getBoundingClientRect();
+  // Perto da borda a dica vira para o outro lado, em vez de sair da tela.
+  if (l + c.width > window.innerWidth - 8) l = ev.clientX - c.width - m;
+  if (t + c.height > window.innerHeight - 8) t = ev.clientY - c.height - m;
+  mesTip.style.left = Math.max(8, l) + 'px';
+  mesTip.style.top = Math.max(8, t) + 'px';
+}
+
+document.getElementById('mesRankBody').addEventListener('mouseover', function(ev){
+  var col = ev.target.closest('.rank-col[data-tip-mes]');
+  if (!col) return;
+  if (!mesTip) {
+    mesTip = document.createElement('div');
+    mesTip.className = 'mes-tip';
+    document.body.appendChild(mesTip);
+  }
+  mesTip.innerHTML = tipDoMes(col);
+  mesTip.style.display = 'block';
+  posicionarTip(ev);
+});
+document.getElementById('mesRankBody').addEventListener('mousemove', posicionarTip);
+document.getElementById('mesRankBody').addEventListener('mouseout', function(ev){
+  if (!mesTip) return;
+  // So esconde ao sair da coluna de verdade; passar de uma fatia para outra dentro
+  // da mesma coluna nao pode fazer a dica piscar.
+  var indo = ev.relatedTarget;
+  if (indo && indo.closest && indo.closest('.rank-col[data-tip-mes]')) return;
+  mesTip.style.display = 'none';
 });
 
 document.getElementById('mesRankBody').addEventListener('click', function(ev){
