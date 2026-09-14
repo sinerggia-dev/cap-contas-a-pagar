@@ -2793,7 +2793,44 @@ function renderTable(rows){
     });
   }
   renderTableFoot(rows);
+  limitarAlturaTabela();
 }
+
+/* A tabela mostra 7 linhas e rola o resto.
+   A altura e MEDIDA depois de desenhar, e nao fixada no CSS, porque o tamanho da
+   linha muda com a fonte — e a fonte ja mudou varias vezes aqui. Um valor fixo
+   passaria a mostrar 6 ou 8 linhas na primeira vez que alguem mexesse no corpo. */
+var LINHAS_VISIVEIS = 7;
+function limitarAlturaTabela(){
+  var caixa = document.querySelector('.table-scroll');
+  var corpo = document.getElementById('tableBody');
+  if (!caixa || !corpo) return;
+  var linha = corpo.querySelector('tr');
+  if (!linha) { caixa.style.maxHeight = ''; return; }
+  var alturaLinha = linha.getBoundingClientRect().height;
+  if (!alturaLinha) return;
+  /* So conta o que fica GRUDADO na area visivel. O rodape rola junto com as linhas,
+     entao somar a altura dele abria espaco para uma oitava linha — era o que estava
+     acontecendo. Medir a posicao, em vez de supor, evita errar de novo se um dia o
+     rodape virar fixo. */
+  function alturaGrudada(sel){
+    var el = caixa.querySelector(sel);
+    if (!el) return 0;
+    var cs = getComputedStyle(el.querySelector('th, td') || el);
+    // `position:sticky` sozinho nao gruda nada: sem um deslocamento (top/bottom) o
+    // elemento rola junto com o conteudo. Foi o caso do rodape, e conta-lo abria
+    // espaco para uma oitava linha.
+    var grudado = (cs.position === 'sticky' || cs.position === 'fixed') &&
+                  (cs.top !== 'auto' || cs.bottom !== 'auto');
+    return grudado ? el.getBoundingClientRect().height : 0;
+  }
+  var fixos = alturaGrudada('thead') + alturaGrudada('tfoot');
+  /* Sem folga para uma "proxima linha cortada": o rodape e grudado e cobriria esse
+     espaco, entao ele seria so altura morta. A margem de 2px existe so para o
+     arredondamento nao comer a ultima linha. */
+  caixa.style.maxHeight = Math.ceil(fixos + alturaLinha * LINHAS_VISIVEIS) + 2 + 'px';
+}
+window.addEventListener('resize', limitarAlturaTabela);
 
 var DESC_RANK_GROUP_LABELS = {
   desc: {singular: 'descrição', plural: 'descrições', vazio: '(sem descrição)'},
