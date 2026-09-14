@@ -5,39 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CAP - Contas a Pagar</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiM3YzNhZWQiLz48dGV4dCB4PSIzMiIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4kPC90ZXh0Pjwvc3ZnPgo=">
-<body><style>
+<body><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap">
+<style>
   :root{
-    --bg:#0a0b0f;
-    --surface:#14161d;
-    --surface-2:#1a1d27;
-    --surface-3:#20232e;
-    --border:rgba(255,255,255,.08);
-    --border-strong:rgba(255,255,255,.16);
-    --ink:#f5f6f8;
-    --ink-soft:#9aa0b4;
-    --ink-muted:#656b80;
-    --critical:#e2504f;
-    --critical-dim:rgba(226,80,79,.16);
-    --atrasado:#ffd600;
-    --atrasado-dim:rgba(255,214,0,.18);
-    --warning:#fab219;
-    --warning-dim:rgba(250,178,25,.16);
-    --positive:#2fbf6e;
-    --positive-dim:rgba(47,191,110,.16);
-    --neutral-dim:rgba(154,160,180,.14);
-    --urgente:#ff4d4d;
-    --urgente-dim:rgba(255,77,77,.16);
-    --alerta2:#ff8a3d;
-    --alerta2-dim:rgba(255,138,61,.16);
-    --alerta3:#e8c547;
-    --alerta3-dim:rgba(232,197,71,.16);
-    --chart:#3987e5;
-    --chart-soft:#6da7ec;
+    /* Paleta do redesenho "Tela Expandida" (Claude Design, set/2026).
+       Mesma familia escura de antes, um degrau mais funda e mais fria, com o
+       azul como acao e os semanticos dessaturados. Os 12 pares foram medidos:
+       todos passam em WCAG AA. Refaca a conta antes de trocar qualquer tom. */
+    --bg:#07080a;
+    --surface:#101114;
+    --surface-2:#141619;
+    --surface-3:#17191c;
+    --border:#1c1e22;
+    --border-strong:#2c2f34;
+    --ink:#e9eaec;
+    --ink-soft:#b6bac1;
+    --ink-muted:#787d85;
+    --ink-faint:#5f646b;
+    --critical:#f26d7d;
+    --critical-dim:#47181f;
+    --atrasado:#f5b301;
+    --atrasado-dim:#3b3117;
+    --warning:#f5b301;
+    --warning-dim:#3b3117;
+    --positive:#7fb69a;
+    --positive-dim:#24382f;
+    --neutral-dim:#2c2f34;
+    --urgente:#f26d7d;
+    --urgente-dim:#47181f;
+    --alerta2:#f28a5c;
+    --alerta2-dim:#3d2419;
+    --alerta3:#f5b301;
+    --alerta3-dim:#3b3117;
+    --chart:#1d6ef0;
+    --chart-soft:#7cc4fa;
+    --chart-hover:#3b84ff;
+    --chart-fundo:#12406f;
+    --raio:14px;
     --select:#c9ccd6;
     --select-ink:#1a1d27;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --sans:'Manrope',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    /* Numero em Sora com tabular-nums: coluna de valor so alinha se o digito
+       tiver largura fixa, e o desenho pede a Sora nos numeros. */
+    --num:'Sora',ui-monospace,"Cascadia Code",Consolas,monospace;
     --mono:ui-monospace,"Cascadia Code","SFMono-Regular",Consolas,"Liberation Mono",monospace;
-    color-scheme: dark;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -291,7 +304,8 @@
     font:700 12px var(--mono);
   }
   .kpi .icon svg{width:16px;height:16px;opacity:.35;}
-  .kpi .v{font:600 19px var(--sans);letter-spacing:-.015em;}
+  /* O valor do KPI e o numero mais lido da tela: Sora com digito de largura fixa. */
+  .kpi .v{font:600 19px var(--num);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
   .kpi .l{font-size:11.5px;color:var(--ink-soft);margin-top:2px;display:flex;align-items:center;gap:6px;}
   .kpi .l b{color:var(--ink);font-weight:600;}
   .kpi.k-critical .v{color:var(--atrasado);}
@@ -356,7 +370,7 @@
      rodapé de totais e na lista por status de cada pessoa. Nos valores soltos
      (KPIs, indicadores, contadores) a largura fixa de dígito deixa o número
      espaçado demais e com cara de terminal. */
-  table.cap tbody td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;}
+  table.cap tbody td.num{text-align:right;font-family:var(--num);font-variant-numeric:tabular-nums;}
   table.cap tbody tr{cursor:pointer;}
   table.cap tbody tr:hover td{background:var(--surface-2);}
   table.cap tbody tr.active td{background:var(--select);color:var(--select-ink);}
@@ -365,7 +379,7 @@
   table.cap .muted{color:var(--ink-muted);font-size:11px;}
   table.cap .desc-cell{overflow:hidden;text-overflow:ellipsis;}
   table.cap tfoot td{
-    padding:9px 10px;font-family:var(--mono);font-variant-numeric:tabular-nums;
+    padding:9px 10px;font-family:var(--num);font-variant-numeric:tabular-nums;
     font-weight:700;border-top:1px solid var(--border-strong);
     background:var(--surface-2);position:sticky;bottom:0;
   }
@@ -459,8 +473,8 @@
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
   .rank-row .track{flex:1;height:6px;background:var(--surface-2);border-radius:4px;overflow:hidden;display:flex;}
-  .rank-row .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2a5fae,var(--chart));}
-  .rank-row .amt{flex:0 0 84px;text-align:right;font:600 11.5px var(--mono);font-variant-numeric:tabular-nums;}
+  .rank-row .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--chart-fundo),var(--chart));}
+  .rank-row .amt{flex:0 0 84px;text-align:right;font:600 11.5px var(--num);font-variant-numeric:tabular-nums;}
 
   .rank-cols{display:flex;align-items:stretch;padding:12px 8px;overflow-x:auto;gap:6px;}
   .rank-col{display:flex;flex-direction:column;flex:1 1 0;min-width:150px;padding:0 13px;}
@@ -485,7 +499,7 @@
   .rank-col-item.active{background:var(--select);}
   .rank-col-item.active .rank-col-item-lbl, .rank-col-item.active .rank-col-item-val{color:var(--select-ink);}
   .rank-col-item .rank-col-item-lbl{color:var(--ink-muted);flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;}
-  .rank-col-item .rank-col-item-val{flex:none;font:600 11px var(--mono);font-variant-numeric:tabular-nums;color:var(--ink);}
+  .rank-col-item .rank-col-item-val{flex:none;font:600 11px var(--num);font-variant-numeric:tabular-nums;color:var(--ink);}
 
   .rank-legend{display:flex;flex-wrap:wrap;gap:12px;padding:0 16px 12px;flex:none;}
   .rank-legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--ink-muted);}
@@ -530,7 +544,7 @@
     color:#fff;font:600 11.5px var(--sans);padding:7.5px 12px;border-radius:7px;cursor:pointer;
     white-space:nowrap;height:31px;flex:none;
   }
-  .add-btn:hover{background:#2f78d1;}
+  .add-btn:hover{background:var(--chart-hover);}
   .add-btn svg{width:13px;height:13px;}
 
   .entry-panel{display:none;}
@@ -653,7 +667,7 @@
   }
   .ebtn:hover{border-color:var(--border-strong);color:var(--ink);}
   .ebtn.primary{background:var(--chart);border-color:var(--chart);color:#fff;}
-  .ebtn.primary:hover{background:#2f78d1;}
+  .ebtn.primary:hover{background:var(--chart-hover);}
   .ebtn.ghost{background:transparent;}
   .toast{
     position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
@@ -689,7 +703,7 @@
   .emi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px 14px;}
   .emi-item{display:flex;flex-direction:column;gap:3px;min-width:0;}
   .emi-item .k{font-size:9.5px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;}
-  .emi-item .v{font:12.5px var(--mono);color:var(--ink-soft);display:flex;align-items:center;gap:5px;min-width:0;}
+  .emi-item .v{font:12.5px var(--num);color:var(--ink-soft);display:flex;align-items:center;gap:5px;min-width:0;font-variant-numeric:tabular-nums;}
   .emi-item .v .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .emi-item .v a{color:var(--chart-soft);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .emi-item .v a:hover{text-decoration:underline;}
