@@ -425,8 +425,12 @@
      usar altura que ja existia na tela, sem empurrar nada para baixo. */
   /* Linhas com altura definida: sem isto a lista de 21 tipos esticava a linha de cima
      e abria, sob o "Total por Despesa de", o mesmo vazio que se queria eliminar. */
-  .bottom{display:grid;grid-template-columns:320px 1fr;grid-template-rows:300px auto;
-          gap:14px;margin-bottom:14px;flex:0 0 auto;align-items:stretch;}
+  .bottom{display:grid;grid-template-columns:320px 1fr;gap:14px;margin-bottom:14px;
+          flex:0 0 auto;align-items:stretch;}
+  /* So a faixa analitica tem duas linhas. O outro .bottom da pagina e o Desempenho,
+     sozinho e de largura inteira: dar a ele as regras de grade daqui foi o que o
+     empurrou para a coluna 2 e abriu um vazio de 320px a esquerda. */
+  .bottom.analitico{grid-template-rows:300px auto;}
   /* Atravessa as duas linhas E solta a altura: os 300px fixos abaixo continuam
      valendo para o painel do meio, mas aqui eles eram justamente o corte. */
   /* `height:0` com `min-height:100%` e o truque que faz o painel PREENCHER as duas
@@ -435,7 +439,7 @@
      por Despesa de", depois para dentro do "Total por Mes/Ano". Zero de altura faz
      ele contribuir nada para o calculo das linhas; o minimo faz ele ocupar o
      resultado. O que passar disso rola dentro do rank-body, que ja tem overflow. */
-  .bottom > .panel:first-child{grid-row:1 / span 2;height:0;min-height:100%;}
+  .bottom.analitico > .panel:first-child{grid-row:1 / span 2;height:0;min-height:100%;}
   /* Altura fixa nos dois quadros da faixa de cima pra eles ficarem do mesmo
      tamanho: deixar o "Total por" crescer até os 19 tipos esticava a faixa e
      abria um vazio grande ao lado. Quem passa da altura rola dentro do painel. */
@@ -443,12 +447,17 @@
   /* Segunda linha da coluna da direita — a da esquerda agora é ocupada pelo
      "Total por", que desce por ela. Cabe sem rolar, então a altura acompanha
      o conteúdo em vez de sobrar espaço morto embaixo. */
-  .bottom .panel.full{grid-column:2;height:auto;}
+  /* Base: o painel de largura inteira ocupa as duas colunas e cresce com o conteudo.
+     E o caso do Desempenho, que vive sozinho no seu proprio .bottom. */
+  .bottom .panel.full{grid-column:1/-1;height:auto;}
+  /* Na faixa analitica ele e a segunda linha da coluna da direita, porque a esquerda
+     esta ocupada pelo "Total por", que desce por ela. */
+  .bottom.analitico .panel.full{grid-column:2;}
   .bottom .panel-head{flex:none;}
   @media (max-width:760px){ .bottom{grid-template-columns:1fr;}
-    .bottom{grid-template-rows:none;}
-    .bottom > .panel:first-child{grid-row:auto;height:300px;}
-    .bottom .panel.full{grid-column:1/-1;} }
+    .bottom.analitico{grid-template-rows:none;}
+    .bottom.analitico > .panel:first-child{grid-row:auto;height:300px;}
+    .bottom.analitico .panel.full{grid-column:1/-1;} }
 
   /* ---- painel de desempenho ---- */
   .perf-body{
@@ -1037,7 +1046,7 @@
 
   <div class="kpis" id="kpis"></div>
 
-  <div class="bottom">
+  <div class="bottom analitico">
     <div class="panel">
       <div class="panel-head">
         <div class="panel-head-title">
