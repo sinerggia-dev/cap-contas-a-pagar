@@ -374,6 +374,13 @@
     display:flex;justify-content:space-between;align-items:center;
     flex:none;
   }
+  /* O cabecalho que virou barra de ferramentas: titulo, busca esticando e os botoes.
+     `flex-wrap` para as telas estreitas, onde a busca desce para a segunda linha em
+     vez de espremer os botoes ate o texto sumir. */
+  .panel-head.barra-ferramentas{flex-wrap:wrap;gap:10px;padding:10px 16px;}
+  .panel-head.barra-ferramentas h2{flex:none;}
+  .panel-head.barra-ferramentas .busca-wrap{flex:1 1 260px;margin:0;}
+  .panel-head.barra-ferramentas .count{flex:none;margin-left:auto;}
   .panel-head h2{font-size:14.6px;margin:0;font-weight:600;}
   .panel-head .count{font-size:13.4px;color:var(--ink-muted);}
   .panel-head-title{display:flex;align-items:center;gap:6px;}
@@ -1201,8 +1208,32 @@
       </div>
 
     <div class="panel">
-      <div class="panel-head">
+      <!-- A busca e os tres botoes moram aqui, e nao no cabecalho da tabela: eles
+           valem para a tela inteira, nao so para a lista. Perto do topo, o efeito
+           deles nos totais fica visivel sem rolar. -->
+      <div class="panel-head barra-ferramentas">
         <h2>Total por Despesa de:</h2>
+          <div class="busca-wrap" id="buscaWrap">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="buscaGeral" autocomplete="off" spellcheck="false"
+                   placeholder="Buscar em tudo: pessoa, descrição, tipo, documento, valor, data…"
+                   aria-label="Buscar em todos os campos dos lançamentos">
+            <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              Mês Atual
+            </button>
+            <button class="clear-btn" id="filtersIconBtn" type="button" title="Filtros">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Filtros
+            </button>
+            <button class="clear-btn" id="clearBtn" type="button" title="Limpar todos os filtros">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 20H8l-6-6a2 2 0 0 1 0-2.83l8-8a2 2 0 0 1 2.83 0l7 7a2 2 0 0 1 0 2.83L13 20" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.5 8.5 18 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              Limpar
+            </button>
+          </div>
         <span class="count" id="rankCount"></span>
       </div>
       <div class="rank-body" id="rankBody"></div>
@@ -1241,27 +1272,6 @@
         <div class="panel">
           <div class="panel-head">
             <h2>Lançamentos</h2>
-            <div class="busca-wrap" id="buscaWrap">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <input type="text" id="buscaGeral" autocomplete="off" spellcheck="false"
-                     placeholder="Buscar em tudo: pessoa, descrição, tipo, documento, valor, data…"
-                     aria-label="Buscar em todos os campos dos lançamentos">
-              <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
-                <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-                Mês Atual
-              </button>
-              <button class="clear-btn" id="filtersIconBtn" type="button" title="Filtros">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-                Filtros
-              </button>
-              <button class="clear-btn" id="clearBtn" type="button" title="Limpar todos os filtros">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M20 20H8l-6-6a2 2 0 0 1 0-2.83l8-8a2 2 0 0 1 2.83 0l7 7a2 2 0 0 1 0 2.83L13 20" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.5 8.5 18 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-                Limpar
-              </button>
-            </div>
           </div>
           <div class="table-scroll">
             <table class="cap" id="capTable">
