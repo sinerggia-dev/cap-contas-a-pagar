@@ -101,10 +101,21 @@
   }
 
   /* ---- header + filters ---- */
+  /* Tarja do topo: cinza atras da marca, escurecendo ate o canto direito, onde ficam
+     o chip e os botoes — eles sao --surface e precisam continuar parecendo elevados,
+     o que so vale enquanto a tarja termina abaixo desse tom (por isso a ponta direita
+     para em --bg-base, o mesmo cinza em que a lavagem da tela termina).
+     As margens negativas sangram os 22px/24px de recuo da folha para a tarja ir de
+     ponta a ponta; o raio de 15px e o da folha (16px) menos a borda de 1px. */
   .head-row{
     display:flex;justify-content:space-between;align-items:flex-start;
-    gap:16px;flex-wrap:wrap;margin-bottom:14px;
+    gap:16px;flex-wrap:wrap;
     flex:none;
+    background:linear-gradient(90deg,#3a3f47 0%,#262a31 34%,var(--bg-base) 100%);
+    border-bottom:1px solid var(--border);
+    border-radius:15px 15px 0 0;
+    margin:-22px -24px 14px;
+    padding:18px 24px;
   }
   .brand h1{
     font-size:24.6px;margin:0;font-weight:800;letter-spacing:.01em;
@@ -929,7 +940,8 @@
     .report{padding:14px 12px 32px;border-radius:12px;}
     .brand h1{font-size:21.3px;}
     .brand p{font-size:12.9px;}
-    .head-row{gap:10px;margin-bottom:12px;}
+    /* no celular a folha recua 14px/12px, entao a sangria da tarja muda junto */
+    .head-row{gap:10px;margin:-14px -12px 12px;padding:14px 12px;border-radius:11px 11px 0 0;}
     .kpis{gap:8px;margin-bottom:12px;}
     .kpi{padding:13px 14px;min-height:76px;}
     .kpi .v{font-size:20px;}
