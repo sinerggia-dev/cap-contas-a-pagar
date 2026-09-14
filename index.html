@@ -152,7 +152,10 @@
     background:var(--surface);border:1px solid var(--border);border-radius:12px;
     transition:width .18s ease, opacity .18s ease;
   }
-  .filters-drawer.open{width:280px;opacity:1;margin-right:14px;}
+  /* 320px = a mesma largura da primeira coluna da faixa analitica (o "Total por").
+     Com os mesmos 14px de gap, a tabela comeca exatamente onde comeca o "Total por
+     Despesa de" la em cima, e a coluna da esquerda le como uma so. */
+  .filters-drawer.open{width:320px;opacity:1;margin-right:14px;}
   @media (max-width:760px){
     .filters-drawer{width:auto;height:0;}
     .filters-drawer.open{width:100%;height:auto;max-height:220px;margin-right:0;margin-bottom:14px;}
@@ -321,8 +324,15 @@
   /* A zona e a linha [gaveta | corpo]. A gaveta estica pela altura toda porque o flex
      alinha por stretch; o corpo empilha a tabela e o Desempenho dentro dela. Antes a
      gaveta vivia dentro do .middle e parava na altura da tabela. */
-  .zona{display:flex;flex-direction:row;align-items:stretch;flex:1 1 auto;min-height:0;}
+  /* `flex:0 0 auto` e o que segura a gaveta: com `1 1 auto` a zona esticava ate a
+     altura do relatorio, e a gaveta ia junto, passando muito abaixo do Desempenho.
+     Sem esticar, a altura da zona e a do conteudo — e o stretch faz a gaveta ter
+     exatamente essa altura, terminando junto com o Desempenho. */
+  .zona{display:flex;flex-direction:row;align-items:stretch;flex:0 0 auto;min-height:0;}
   .zona-corpo{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;}
+  /* O ultimo bloco da coluna leva margem embaixo, e essa margem entrava na altura
+     da zona: a gaveta terminava 14px abaixo do cartao do Desempenho. */
+  .zona-corpo > *:last-child{margin-bottom:0;}
   /* O .middle deixou de hospedar a gaveta: agora e so a faixa da tabela. */
   .middle{margin-bottom:14px;flex:1 1 auto;min-height:230px;max-height:330px;display:flex;flex-direction:row;}
   .middle .panel{flex:1;display:flex;flex-direction:column;min-height:0;min-width:0;}
