@@ -160,7 +160,7 @@
   /* 320px = a mesma largura da primeira coluna da faixa analitica (o "Total por").
      Com os mesmos 14px de gap, a tabela comeca exatamente onde comeca o "Total por
      Despesa de" la em cima, e a coluna da esquerda le como uma so. */
-  .filters-drawer.open{width:320px;opacity:1;margin-right:14px;}
+  .filters-drawer.open{width:440px;opacity:1;margin-right:14px;}
   @media (max-width:760px){
     .filters-drawer{width:auto;height:0;}
     .filters-drawer.open{width:100%;height:auto;max-height:220px;margin-right:0;margin-bottom:14px;}
@@ -453,7 +453,7 @@
      usar altura que ja existia na tela, sem empurrar nada para baixo. */
   /* Linhas com altura definida: sem isto a lista de 21 tipos esticava a linha de cima
      e abria, sob o "Total por Despesa de", o mesmo vazio que se queria eliminar. */
-  .bottom{display:grid;grid-template-columns:320px 1fr;gap:14px;margin-bottom:14px;
+  .bottom{display:grid;grid-template-columns:440px 1fr;gap:14px;margin-bottom:14px;
           flex:0 0 auto;align-items:stretch;}
   /* So a faixa analitica tem duas linhas. O outro .bottom da pagina e o Desempenho,
      sozinho e de largura inteira: dar a ele as regras de grade daqui foi o que o
@@ -607,6 +607,17 @@
     font:600 12.3px var(--num);font-variant-numeric:tabular-nums;color:var(--ink);
     min-width:96px;text-align:right;
   }
+  /* ---- "Total por" em corpo maior ----
+     Ele ocupa a coluna inteira da esquerda, do topo ate o fim do Mes/Ano, e estava com
+     a mesma letra de 12,9px de quando era um quadro baixo. Com 440px de largura sobra
+     espaco para o nome do tipo inteiro e para o valor sem apertar. */
+  .bottom.analitico > .panel:first-child .panel-head h2{font-size:16.8px;}
+  .bottom.analitico > .panel:first-child .rank-group-sel{font-size:14.6px;padding:4px 8px;}
+  #descRankBody .rank-row{padding:6px 8px;gap:12px;}
+  #descRankBody .rank-row .name{flex:0 0 186px;font-size:14.6px;color:var(--ink);}
+  #descRankBody .rank-row .track{height:7px;}
+  #descRankBody .rank-row .amt{flex:0 0 112px;font-size:14.6px;}
+
   #mesRankBody .rank-col-name{
     font-size:11.2px;font-weight:500;color:var(--ink-muted);margin:8px 0 0;
     white-space:nowrap;padding:2px 5px;border-radius:5px;
