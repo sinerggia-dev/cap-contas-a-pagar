@@ -420,16 +420,35 @@
   .attach.off{color:var(--ink-muted);opacity:.3;pointer-events:none;}
 
   /* ---- bottom: chart + ranking ---- */
-  .bottom{display:grid;grid-template-columns:320px 1fr;gap:14px;margin-bottom:14px;flex:0 0 auto;align-items:start;}
+  /* O "Total por" lista 21 tipos e ficava cortado em uma linha so, enquanto sobrava
+     vazio ao lado do "Total por Mes/Ano". Atravessando as duas linhas, a lista passa a
+     usar altura que ja existia na tela, sem empurrar nada para baixo. */
+  /* Linhas com altura definida: sem isto a lista de 21 tipos esticava a linha de cima
+     e abria, sob o "Total por Despesa de", o mesmo vazio que se queria eliminar. */
+  .bottom{display:grid;grid-template-columns:320px 1fr;grid-template-rows:300px auto;
+          gap:14px;margin-bottom:14px;flex:0 0 auto;align-items:stretch;}
+  /* Atravessa as duas linhas E solta a altura: os 300px fixos abaixo continuam
+     valendo para o painel do meio, mas aqui eles eram justamente o corte. */
+  /* `height:0` com `min-height:100%` e o truque que faz o painel PREENCHER as duas
+     linhas sem DITAR a altura delas: com altura automatica, a lista de 21 tipos
+     esticava a grade e o vazio so mudava de lugar — primeiro para baixo do "Total
+     por Despesa de", depois para dentro do "Total por Mes/Ano". Zero de altura faz
+     ele contribuir nada para o calculo das linhas; o minimo faz ele ocupar o
+     resultado. O que passar disso rola dentro do rank-body, que ja tem overflow. */
+  .bottom > .panel:first-child{grid-row:1 / span 2;height:0;min-height:100%;}
   /* Altura fixa nos dois quadros da faixa de cima pra eles ficarem do mesmo
      tamanho: deixar o "Total por" crescer até os 19 tipos esticava a faixa e
      abria um vazio grande ao lado. Quem passa da altura rola dentro do painel. */
   .bottom .panel{display:flex;flex-direction:column;height:300px;}
-  /* Ocupa a faixa inteira (hoje é o Desempenho). Cabe sem rolar, então a altura
-     acompanha o conteúdo em vez de sobrar espaço morto embaixo. */
-  .bottom .panel.full{grid-column:1/-1;height:auto;}
+  /* Segunda linha da coluna da direita — a da esquerda agora é ocupada pelo
+     "Total por", que desce por ela. Cabe sem rolar, então a altura acompanha
+     o conteúdo em vez de sobrar espaço morto embaixo. */
+  .bottom .panel.full{grid-column:2;height:auto;}
   .bottom .panel-head{flex:none;}
-  @media (max-width:760px){ .bottom{grid-template-columns:1fr;} }
+  @media (max-width:760px){ .bottom{grid-template-columns:1fr;}
+    .bottom{grid-template-rows:none;}
+    .bottom > .panel:first-child{grid-row:auto;height:300px;}
+    .bottom .panel.full{grid-column:1/-1;} }
 
   /* ---- painel de desempenho ---- */
   .perf-body{
