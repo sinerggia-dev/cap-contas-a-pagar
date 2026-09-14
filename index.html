@@ -344,15 +344,26 @@
      altura do relatorio, e a gaveta ia junto, passando muito abaixo do Desempenho.
      Sem esticar, a altura da zona e a do conteudo — e o stretch faz a gaveta ter
      exatamente essa altura, terminando junto com o Desempenho. */
-  .zona{display:flex;flex-direction:row;align-items:stretch;flex:0 0 auto;min-height:0;}
-  .zona-corpo{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;}
+  /* Grade, e nao linha flex: `min-height:100%` so resolve contra uma altura definida,
+     e numa linha flex ela vira 0 — o "Total por" nascia com 2px. Na grade o mesmo
+     truque funciona, como ja funciona na faixa de cima. */
+  .zona{display:grid;grid-template-columns:440px 1fr;gap:14px;align-items:stretch;
+        flex:0 0 auto;min-height:0;}
+  /* O "Total por" virou a coluna esquerda da zona, alinhado com a gaveta acima.
+     `height:0` com `min-height:100%` de novo: preenche a altura da zona sem ditar
+     qual e ela — senao a lista de 21 tipos estica a tabela junto. */
+  .zona > .panel{
+    min-width:0;height:0;min-height:100%;
+    display:flex;flex-direction:column;
+  }
+  .zona-corpo{min-width:0;display:flex;flex-direction:column;}
   /* O ultimo bloco da coluna leva margem embaixo, e essa margem entrava na altura
      da zona: a gaveta terminava 14px abaixo do cartao do Desempenho. */
   .zona-corpo > *:last-child{margin-bottom:0;}
   /* O .middle deixou de hospedar a gaveta: agora e so a faixa da tabela. */
   .middle{margin-bottom:14px;flex:1 1 auto;min-height:230px;max-height:330px;display:flex;flex-direction:row;}
   .middle .panel{flex:1;display:flex;flex-direction:column;min-height:0;min-width:0;}
-  @media (max-width:760px){ .zona{flex-direction:column;} .middle{flex-direction:column;} .table-scroll{max-height:195px;} }
+  @media (max-width:760px){ .zona{grid-template-columns:1fr;} .middle{flex-direction:column;} .table-scroll{max-height:195px;} }
 
   .panel{
     background:var(--surface);border:1px solid var(--border);border-radius:12px;
@@ -471,7 +482,16 @@
      por Despesa de", depois para dentro do "Total por Mes/Ano". Zero de altura faz
      ele contribuir nada para o calculo das linhas; o minimo faz ele ocupar o
      resultado. O que passar disso rola dentro do rank-body, que ja tem overflow. */
-  .bottom.analitico > .panel:first-child{grid-row:1 / span 2;height:0;min-height:100%;}
+  /* A gaveta de filtros virou a coluna esquerda da faixa analitica. Dentro da grade
+     a largura e da COLUNA, nao dela: por isso width:auto, anulando os 440px que ela
+     usa para animar quando vive numa linha flex. */
+  .bottom.analitico > .filters-drawer,
+  .bottom.analitico > .filters-drawer.open{
+    grid-row:1 / span 2;width:auto;min-width:0;margin-right:0;
+    height:0;min-height:100%;
+  }
+  /* Fechada, quem recolhe e a COLUNA — senao sobra um vao de 440px a esquerda. */
+  .bottom.analitico:has(> .filters-drawer:not(.open)){grid-template-columns:0 1fr;column-gap:0;}
   /* Altura fixa nos dois quadros da faixa de cima pra eles ficarem do mesmo
      tamanho: deixar o "Total por" crescer até os 19 tipos esticava a faixa e
      abria um vazio grande ao lado. Quem passa da altura rola dentro do painel. */
@@ -488,7 +508,8 @@
   .bottom .panel-head{flex:none;}
   @media (max-width:760px){ .bottom{grid-template-columns:1fr;}
     .bottom.analitico{grid-template-rows:none;}
-    .bottom.analitico > .panel:first-child{grid-row:auto;height:300px;}
+    .bottom.analitico > .filters-drawer{grid-row:auto;height:auto;min-height:0;}
+    .zona > .panel{flex:none;width:auto;margin:0 0 14px;height:auto;min-height:0;}
     .bottom.analitico .panel.full{grid-column:1/-1;} }
 
   /* ---- painel de desempenho ---- */
@@ -615,8 +636,8 @@
      Ele ocupa a coluna inteira da esquerda, do topo ate o fim do Mes/Ano, e estava com
      a mesma letra de 12,9px de quando era um quadro baixo. Com 440px de largura sobra
      espaco para o nome do tipo inteiro e para o valor sem apertar. */
-  .bottom.analitico > .panel:first-child .panel-head h2{font-size:16.8px;}
-  .bottom.analitico > .panel:first-child .rank-group-sel{font-size:14.6px;padding:4px 8px;}
+  .zona > .panel .panel-head h2{font-size:16.8px;}
+  .zona > .panel .rank-group-sel{font-size:14.6px;padding:4px 8px;}
   #descRankBody .rank-row{padding:6px 8px;gap:12px;}
   #descRankBody .rank-row .name{flex:0 0 186px;font-size:14.6px;color:var(--ink);}
   #descRankBody .rank-row .track{height:7px;}
@@ -1167,19 +1188,17 @@
   <div class="kpis" id="kpis"></div>
 
   <div class="bottom analitico">
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-head-title">
-          <h2>Total por</h2>
-          <select id="descRankGroupSel" class="rank-group-sel">
-            <option value="desc">Descrição</option>
-            <option value="tipo">Tipo de Despesa</option>
-          </select>
+    <div class="filters-drawer" id="filtersDrawer">
+        <div class="filters-drawer-head">
+          <h2>Filtros</h2>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="ebtn ghost" id="filtersDrawerCloseBtn">Fechar</button>
+          </div>
         </div>
-        <span class="count" id="descRankCount"></span>
+        <div class="filters-drawer-body">
+          <div class="filters" id="filters"></div>
+        </div>
       </div>
-      <div class="rank-body" id="descRankBody"></div>
-    </div>
 
     <div class="panel">
       <div class="panel-head">
@@ -1204,17 +1223,19 @@
        Desempenho. Antes ela vivia dentro do .middle e parava na altura da tabela,
        cortando os campos a partir do Status. -->
   <div class="zona">
-    <div class="filters-drawer" id="filtersDrawer">
-        <div class="filters-drawer-head">
-          <h2>Filtros</h2>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <button type="button" class="ebtn ghost" id="filtersDrawerCloseBtn">Fechar</button>
-          </div>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-head-title">
+          <h2>Total por</h2>
+          <select id="descRankGroupSel" class="rank-group-sel">
+            <option value="desc">Descrição</option>
+            <option value="tipo">Tipo de Despesa</option>
+          </select>
         </div>
-        <div class="filters-drawer-body">
-          <div class="filters" id="filters"></div>
-        </div>
+        <span class="count" id="descRankCount"></span>
       </div>
+      <div class="rank-body" id="descRankBody"></div>
+    </div>
     <div class="zona-corpo">
       <div class="middle">
         <div class="panel">
