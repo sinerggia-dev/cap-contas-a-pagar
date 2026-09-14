@@ -538,6 +538,27 @@
   .rank-col-name.active{background:var(--select);color:var(--select-ink);}
   .rank-col.active{opacity:1;}
   .rank-cols:has(.rank-col.active) .rank-col:not(.active){opacity:.45;}
+
+  /* ---- Mes/Ano em cartoes ----
+     Sao 11 colunas na mesma faixa, e os rotulos nao cabiam: viravam "Pa...",
+     "Em a...", "Venc...". Em grade eles se acomodam em duas fileiras e aparecem
+     inteiros, sem rolagem lateral. So aqui: o "Total por Despesa de" tem 5 colunas,
+     cabe folgado, e continua como esta. O HTML nao muda — os cliques que filtram
+     por mes e por status seguem nos mesmos elementos. */
+  #mesRankBody .rank-cols{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));
+    gap:10px;overflow-x:visible;padding:12px 14px;align-items:start;
+  }
+  #mesRankBody .rank-col{
+    background:var(--surface-2);border:1px solid var(--border);border-radius:11px;
+    padding:11px 13px;min-width:0;flex:none;
+  }
+  /* O cartao ja tem borda propria; a divisoria de coluna viraria linha dupla. */
+  #mesRankBody .rank-col:not(:first-child){border-left:1px solid var(--border);}
+  #mesRankBody .rank-col:first-child{padding-left:13px;}
+  #mesRankBody .rank-col:hover{border-color:var(--border-strong);}
+  /* Com 216px de largura o rotulo cabe: o corte deixa de ser necessario. */
+  #mesRankBody .rank-col-item-lbl{overflow:visible;text-overflow:clip;}
   .rank-col-total{font:600 12.9px var(--sans);color:var(--ink-soft);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .rank-col-list{display:flex;flex-direction:column;gap:7px;}
   .rank-col-item{
