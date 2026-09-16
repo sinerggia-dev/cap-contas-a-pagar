@@ -994,7 +994,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46260,
-"",
+46260,
 "Cartão Ivanilda - Nubank PJ",
 "Cartão de Crédito",
 "A Vencer",
@@ -1138,7 +1138,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46260,
-"",
+46260,
 "Cartão Ivanilda - Nubank PF",
 "Cartão de Crédito",
 "A Vencer",
@@ -1306,15 +1306,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46285,
-"",
+46281,
 "Cartão Ivanilda Mercado Pago",
 "Cartão de Crédito",
 "A Vencer",
 3,
-3000,
+4142.26,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-57-1789567757713.jpeg",
 "",
 "Lançamento Projetado - Setembro"
 ]
@@ -2170,17 +2170,17 @@
 "Natanael Silva",
 "Envio de Boleto",
 46279,
-"",
+46279,
 "Cartão Mercado Pago",
 "Cartão de Crédito",
 "A Vencer",
 "",
-1750.49,
+1100,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-96-1789134156734.pdf",
 "",
 "",
-""
+"1.750,49"
 ]
 ]
 },
@@ -2627,7 +2627,7 @@
 "Envio de Boleto",
 46162,
 46162,
-"Empréstimo PicPay - Parcela 1",
+"PicPay - Parcela 1",
 "Empréstimo",
 "Pago",
 "",
@@ -2651,7 +2651,7 @@
 "Envio de Boleto",
 46192,
 46192,
-"Empréstimo PicPay - Parcela 2",
+"PicPay - Parcela 2",
 "Empréstimo",
 "Pago",
 "",
@@ -2673,13 +2673,13 @@
 "",
 "Soluções",
 "Envio de Boleto",
-46387,
+46388,
 "",
-"Empréstimo PicPay - Parcela 3",
-"Empréstimo",
+"PicPay - Parcela 3/25",
+"Negociação",
 "A Vencer",
 "",
-0,
+1647,
 "",
 "",
 "",
@@ -2697,18 +2697,18 @@
 "",
 "Soluções",
 "Envio de Boleto",
-46285,
+46280,
+46280,
+"PicPay - Parcela 1",
+"Negociação",
+"Pago",
 "",
-"Empréstimo PicPay - Parcela 5",
-"Empréstimo",
-"A Vencer",
+1000,
 "",
-2577.04,
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-119-1789568223308.jpeg",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-119-1789568064594.jpeg",
 "",
-"",
-"",
-"",
-""
+"Entrada"
 ]
 ]
 },
@@ -2716,18 +2716,18 @@
 "index": 113,
 "values": [
 [
-120,
+121,
 "",
 "",
 "Soluções",
 "Envio de Boleto",
-46315,
+46327,
 "",
-"Empréstimo PicPay - Parcela 6",
-"Empréstimo",
+"PicPay - Parcela 1/25",
+"Negociação",
 "A Vencer",
 "",
-2577.04,
+1647,
 "",
 "",
 "",
@@ -2740,18 +2740,18 @@
 "index": 114,
 "values": [
 [
-121,
+122,
 "",
 "",
 "Soluções",
 "Envio de Boleto",
-46346,
+46357,
 "",
-"Empréstimo PicPay - Parcela 7",
-"Empréstimo",
+"PicPay - Parcela 2/25",
+"Negociação",
 "A Vencer",
 "",
-2577.04,
+1647,
 "",
 "",
 "",
@@ -2764,40 +2764,16 @@
 "index": 115,
 "values": [
 [
-122,
-"",
-"",
-"Soluções",
-"Envio de Boleto",
-46376,
-"",
-"Empréstimo PicPay - Parcela 8",
-"Empréstimo",
-"A Vencer",
-"",
-2577.04,
-"",
-"",
-"",
-"",
-""
-]
-]
-},
-{
-"index": 116,
-"values": [
-[
 123,
 "",
 "",
 "Soluções",
 "Envio de Boleto",
-46215,
+46231,
 46239,
 "Cartão Parcelado Bradesco - Parcela 12",
 "Cartão de Crédito",
-"A Vencer",
+"Pago",
 "",
 587.08,
 "",
@@ -2809,7 +2785,7 @@
 ]
 },
 {
-"index": 117,
+"index": 116,
 "values": [
 [
 124,
@@ -2817,11 +2793,11 @@
 "",
 "Soluções",
 "Envio de Boleto",
-46254,
+46262,
 46262,
 "Cartão Parcelado Bradesco",
 "Cartão de Crédito",
-"A Vencer",
+"Pago",
 "",
 587.08,
 625.34,
@@ -2833,7 +2809,7 @@
 ]
 },
 {
-"index": 118,
+"index": 117,
 "values": [
 [
 125,
@@ -2841,7 +2817,31 @@
 "",
 "Soluções",
 "Envio de Boleto",
-46277,
+46293,
+"",
+"Cartão Parcelado Bradesco",
+"Cartão de Crédito",
+"A Vencer",
+"",
+587.08,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 118,
+"values": [
+[
+126,
+"",
+"",
+"Soluções",
+"Envio de Boleto",
+46323,
 "",
 "Cartão Parcelado Bradesco",
 "Cartão de Crédito",
@@ -2860,12 +2860,12 @@
 "index": 119,
 "values": [
 [
-126,
+127,
 "",
 "",
 "Soluções",
 "Envio de Boleto",
-46307,
+46354,
 "",
 "Cartão Parcelado Bradesco",
 "Cartão de Crédito",
@@ -2884,12 +2884,12 @@
 "index": 120,
 "values": [
 [
-127,
+128,
 "",
 "",
 "Soluções",
 "Envio de Boleto",
-46338,
+46384,
 "",
 "Cartão Parcelado Bradesco",
 "Cartão de Crédito",
@@ -2906,30 +2906,6 @@
 },
 {
 "index": 121,
-"values": [
-[
-128,
-"",
-"",
-"Soluções",
-"Envio de Boleto",
-46368,
-"",
-"Cartão Parcelado Bradesco",
-"Cartão de Crédito",
-"A Vencer",
-"",
-587.08,
-"",
-"",
-"",
-"",
-""
-]
-]
-},
-{
-"index": 122,
 "values": [
 [
 129,
@@ -2953,7 +2929,7 @@
 ]
 },
 {
-"index": 123,
+"index": 122,
 "values": [
 [
 130,
@@ -2977,7 +2953,7 @@
 ]
 },
 {
-"index": 124,
+"index": 123,
 "values": [
 [
 131,
@@ -2986,7 +2962,7 @@
 "Soluções",
 "Envio de Boleto",
 46275,
-"",
+46275,
 "Parcelamento Bradesco - Parcela 36/72",
 "Cartão de Crédito",
 "A Vencer",
@@ -3001,7 +2977,7 @@
 ]
 },
 {
-"index": 125,
+"index": 124,
 "values": [
 [
 132,
@@ -3025,7 +3001,7 @@
 ]
 },
 {
-"index": 126,
+"index": 125,
 "values": [
 [
 133,
@@ -3049,7 +3025,7 @@
 ]
 },
 {
-"index": 127,
+"index": 126,
 "values": [
 [
 134,
@@ -3073,7 +3049,7 @@
 ]
 },
 {
-"index": 128,
+"index": 127,
 "values": [
 [
 135,
@@ -3097,7 +3073,7 @@
 ]
 },
 {
-"index": 129,
+"index": 128,
 "values": [
 [
 136,
@@ -3121,7 +3097,7 @@
 ]
 },
 {
-"index": 130,
+"index": 129,
 "values": [
 [
 137,
@@ -3145,7 +3121,7 @@
 ]
 },
 {
-"index": 131,
+"index": 130,
 "values": [
 [
 138,
@@ -3169,7 +3145,7 @@
 ]
 },
 {
-"index": 132,
+"index": 131,
 "values": [
 [
 139,
@@ -3193,7 +3169,7 @@
 ]
 },
 {
-"index": 133,
+"index": 132,
 "values": [
 [
 140,
@@ -3217,7 +3193,7 @@
 ]
 },
 {
-"index": 134,
+"index": 133,
 "values": [
 [
 141,
@@ -3241,7 +3217,7 @@
 ]
 },
 {
-"index": 135,
+"index": 134,
 "values": [
 [
 143,
@@ -3265,7 +3241,7 @@
 ]
 },
 {
-"index": 136,
+"index": 135,
 "values": [
 [
 144,
@@ -3289,7 +3265,7 @@
 ]
 },
 {
-"index": 137,
+"index": 136,
 "values": [
 [
 145,
@@ -3313,7 +3289,7 @@
 ]
 },
 {
-"index": 138,
+"index": 137,
 "values": [
 [
 147,
@@ -3337,7 +3313,7 @@
 ]
 },
 {
-"index": 139,
+"index": 138,
 "values": [
 [
 148,
@@ -3361,7 +3337,7 @@
 ]
 },
 {
-"index": 140,
+"index": 139,
 "values": [
 [
 149,
@@ -3385,7 +3361,7 @@
 ]
 },
 {
-"index": 141,
+"index": 140,
 "values": [
 [
 150,
@@ -3409,7 +3385,7 @@
 ]
 },
 {
-"index": 142,
+"index": 141,
 "values": [
 [
 151,
@@ -3433,7 +3409,7 @@
 ]
 },
 {
-"index": 143,
+"index": 142,
 "values": [
 [
 152,
@@ -3457,7 +3433,7 @@
 ]
 },
 {
-"index": 144,
+"index": 143,
 "values": [
 [
 153,
@@ -3481,7 +3457,7 @@
 ]
 },
 {
-"index": 145,
+"index": 144,
 "values": [
 [
 155,
@@ -3505,7 +3481,7 @@
 ]
 },
 {
-"index": 146,
+"index": 145,
 "values": [
 [
 156,
@@ -3529,7 +3505,7 @@
 ]
 },
 {
-"index": 147,
+"index": 146,
 "values": [
 [
 157,
@@ -3553,7 +3529,7 @@
 ]
 },
 {
-"index": 148,
+"index": 147,
 "values": [
 [
 158,
@@ -3577,7 +3553,7 @@
 ]
 },
 {
-"index": 149,
+"index": 148,
 "values": [
 [
 161,
@@ -3601,7 +3577,7 @@
 ]
 },
 {
-"index": 150,
+"index": 149,
 "values": [
 [
 163,
@@ -3625,7 +3601,7 @@
 ]
 },
 {
-"index": 151,
+"index": 150,
 "values": [
 [
 164,
@@ -3649,7 +3625,7 @@
 ]
 },
 {
-"index": 152,
+"index": 151,
 "values": [
 [
 165,
@@ -3673,7 +3649,7 @@
 ]
 },
 {
-"index": 153,
+"index": 152,
 "values": [
 [
 166,
@@ -3697,7 +3673,7 @@
 ]
 },
 {
-"index": 154,
+"index": 153,
 "values": [
 [
 167,
@@ -3721,7 +3697,7 @@
 ]
 },
 {
-"index": 155,
+"index": 154,
 "values": [
 [
 168,
@@ -3745,7 +3721,7 @@
 ]
 },
 {
-"index": 156,
+"index": 155,
 "values": [
 [
 169,
@@ -3769,7 +3745,7 @@
 ]
 },
 {
-"index": 157,
+"index": 156,
 "values": [
 [
 170,
@@ -3793,7 +3769,7 @@
 ]
 },
 {
-"index": 158,
+"index": 157,
 "values": [
 [
 171,
@@ -3817,7 +3793,7 @@
 ]
 },
 {
-"index": 159,
+"index": 158,
 "values": [
 [
 174,
@@ -3841,7 +3817,7 @@
 ]
 },
 {
-"index": 160,
+"index": 159,
 "values": [
 [
 175,
@@ -3865,7 +3841,7 @@
 ]
 },
 {
-"index": 161,
+"index": 160,
 "values": [
 [
 176,
@@ -3889,7 +3865,7 @@
 ]
 },
 {
-"index": 162,
+"index": 161,
 "values": [
 [
 177,
@@ -3913,7 +3889,7 @@
 ]
 },
 {
-"index": 163,
+"index": 162,
 "values": [
 [
 178,
@@ -3937,7 +3913,7 @@
 ]
 },
 {
-"index": 164,
+"index": 163,
 "values": [
 [
 179,
@@ -3961,7 +3937,7 @@
 ]
 },
 {
-"index": 165,
+"index": 164,
 "values": [
 [
 180,
@@ -3985,7 +3961,7 @@
 ]
 },
 {
-"index": 166,
+"index": 165,
 "values": [
 [
 181,
@@ -4009,7 +3985,7 @@
 ]
 },
 {
-"index": 167,
+"index": 166,
 "values": [
 [
 183,
@@ -4033,7 +4009,7 @@
 ]
 },
 {
-"index": 168,
+"index": 167,
 "values": [
 [
 184,
@@ -4057,7 +4033,7 @@
 ]
 },
 {
-"index": 169,
+"index": 168,
 "values": [
 [
 185,
@@ -4081,7 +4057,7 @@
 ]
 },
 {
-"index": 170,
+"index": 169,
 "values": [
 [
 186,
@@ -4105,7 +4081,7 @@
 ]
 },
 {
-"index": 171,
+"index": 170,
 "values": [
 [
 187,
@@ -4129,7 +4105,7 @@
 ]
 },
 {
-"index": 172,
+"index": 171,
 "values": [
 [
 188,
@@ -4153,7 +4129,7 @@
 ]
 },
 {
-"index": 173,
+"index": 172,
 "values": [
 [
 189,
@@ -4177,7 +4153,7 @@
 ]
 },
 {
-"index": 174,
+"index": 173,
 "values": [
 [
 190,
@@ -4201,7 +4177,7 @@
 ]
 },
 {
-"index": 175,
+"index": 174,
 "values": [
 [
 191,
@@ -4225,7 +4201,7 @@
 ]
 },
 {
-"index": 176,
+"index": 175,
 "values": [
 [
 192,
@@ -4249,7 +4225,7 @@
 ]
 },
 {
-"index": 177,
+"index": 176,
 "values": [
 [
 193,
@@ -4273,7 +4249,7 @@
 ]
 },
 {
-"index": 178,
+"index": 177,
 "values": [
 [
 194,
@@ -4282,7 +4258,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46281,
-"",
+46281,
 "Neoenergia Apto 301",
 "Energia",
 "A Vencer",
@@ -4290,14 +4266,14 @@
 250.03,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-194-1787163766837.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-194-1789567456482.jpeg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 179,
+"index": 178,
 "values": [
 [
 195,
@@ -4321,7 +4297,7 @@
 ]
 },
 {
-"index": 180,
+"index": 179,
 "values": [
 [
 196,
@@ -4345,7 +4321,7 @@
 ]
 },
 {
-"index": 181,
+"index": 180,
 "values": [
 [
 197,
@@ -4369,7 +4345,7 @@
 ]
 },
 {
-"index": 182,
+"index": 181,
 "values": [
 [
 198,
@@ -4393,7 +4369,7 @@
 ]
 },
 {
-"index": 183,
+"index": 182,
 "values": [
 [
 199,
@@ -4417,7 +4393,7 @@
 ]
 },
 {
-"index": 184,
+"index": 183,
 "values": [
 [
 200,
@@ -4441,7 +4417,7 @@
 ]
 },
 {
-"index": 185,
+"index": 184,
 "values": [
 [
 201,
@@ -4465,7 +4441,7 @@
 ]
 },
 {
-"index": 186,
+"index": 185,
 "values": [
 [
 202,
@@ -4489,7 +4465,7 @@
 ]
 },
 {
-"index": 187,
+"index": 186,
 "values": [
 [
 203,
@@ -4513,7 +4489,7 @@
 ]
 },
 {
-"index": 188,
+"index": 187,
 "values": [
 [
 204,
@@ -4537,7 +4513,7 @@
 ]
 },
 {
-"index": 189,
+"index": 188,
 "values": [
 [
 205,
@@ -4546,7 +4522,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46276,
-"",
+46280,
 "Neoenergia Apto 102",
 "Energia",
 "A Vencer",
@@ -4554,14 +4530,14 @@
 318.22,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-205-1788875879142.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-205-1789567029350.jpeg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 190,
+"index": 189,
 "values": [
 [
 207,
@@ -4570,7 +4546,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46276,
-"",
+46281,
 "Neoenergia Gravtá 21",
 "Energia",
 "A Vencer",
@@ -4578,14 +4554,14 @@
 336.52,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-207-1788876271577.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-207-1789567081815.jpeg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 191,
+"index": 190,
 "values": [
 [
 209,
@@ -4609,7 +4585,7 @@
 ]
 },
 {
-"index": 192,
+"index": 191,
 "values": [
 [
 210,
@@ -4633,7 +4609,7 @@
 ]
 },
 {
-"index": 193,
+"index": 192,
 "values": [
 [
 211,
@@ -4657,7 +4633,7 @@
 ]
 },
 {
-"index": 194,
+"index": 193,
 "values": [
 [
 212,
@@ -4681,7 +4657,7 @@
 ]
 },
 {
-"index": 195,
+"index": 194,
 "values": [
 [
 213,
@@ -4705,7 +4681,7 @@
 ]
 },
 {
-"index": 196,
+"index": 195,
 "values": [
 [
 214,
@@ -4729,7 +4705,7 @@
 ]
 },
 {
-"index": 197,
+"index": 196,
 "values": [
 [
 215,
@@ -4753,7 +4729,7 @@
 ]
 },
 {
-"index": 198,
+"index": 197,
 "values": [
 [
 216,
@@ -4777,7 +4753,7 @@
 ]
 },
 {
-"index": 199,
+"index": 198,
 "values": [
 [
 217,
@@ -4801,7 +4777,7 @@
 ]
 },
 {
-"index": 200,
+"index": 199,
 "values": [
 [
 218,
@@ -4825,7 +4801,7 @@
 ]
 },
 {
-"index": 201,
+"index": 200,
 "values": [
 [
 219,
@@ -4849,7 +4825,7 @@
 ]
 },
 {
-"index": 202,
+"index": 201,
 "values": [
 [
 220,
@@ -4873,7 +4849,7 @@
 ]
 },
 {
-"index": 203,
+"index": 202,
 "values": [
 [
 221,
@@ -4888,6 +4864,150 @@
 "A Vencer",
 "",
 46.96,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 203,
+"values": [
+[
+222,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46280,
+46280,
+"Internet Jcfw - Casa de Mãe",
+"Telefone/Internet",
+"A Vencer",
+"",
+60,
+"",
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-222-1789564307705.jpeg",
+"",
+""
+]
+]
+},
+{
+"index": 204,
+"values": [
+[
+223,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46310,
+"",
+"Internet Jcfw - Casa de Mãe",
+"Telefone/Internet",
+"A Vencer",
+"",
+60,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 205,
+"values": [
+[
+224,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46342,
+"",
+"Internet Jcfw - Casa de Mãe",
+"Telefone/Internet",
+"A Vencer",
+"",
+60,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 206,
+"values": [
+[
+225,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46420,
+"",
+"PicPay - Parcela 4/25",
+"Negociação",
+"A Vencer",
+"",
+1647,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 207,
+"values": [
+[
+226,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46447,
+"",
+"PicPay - Parcela 5/25",
+"Negociação",
+"A Vencer",
+"",
+1647,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 208,
+"values": [
+[
+227,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46478,
+"",
+"PicPay - Parcela 6/25",
+"Negociação",
+"A Vencer",
+"",
+1647,
 "",
 "",
 "",
