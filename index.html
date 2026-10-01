@@ -294,8 +294,8 @@
   .busca-wrap button:hover{color:var(--ink);border-color:var(--ink-soft);}
   .busca-vazia{color:var(--ink-muted);}
   /* Periodo De/Ate pelo vencimento. Global como a busca: vale para a tabela e
-     para os paineis de totais. So existe no celular (ver @media 640px abaixo). */
-  .periodo-wrap{display:none;align-items:center;gap:6px;flex:none;}
+     para os paineis de totais. No celular ele ocupa a linha inteira (ver @media 640px). */
+  .periodo-wrap{display:flex;align-items:center;gap:6px;flex:none;}
   .periodo-wrap label{color:var(--ink-muted);font:500 12.5px var(--sans);}
   .periodo-wrap input{
     height:31px;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--border);
@@ -2739,17 +2739,10 @@ function aplicarPeriodo(){
 }
 periodoDe.addEventListener('change', aplicarPeriodo);
 periodoAte.addEventListener('change', aplicarPeriodo);
-/* Fora do celular os campos somem; um periodo escolhido antes de alargar a janela
-   nao pode continuar filtrando escondido. */
-var periodoMq = window.matchMedia('(max-width:640px)');
-function periodoForaDoCelular(){
-  if (periodoMq.matches || (!periodo.de && !periodo.ate)) return;
-  zerarPeriodo();
-  updateClearButton();
-  render();
-}
-if (periodoMq.addEventListener) periodoMq.addEventListener('change', periodoForaDoCelular);
-else if (periodoMq.addListener) periodoMq.addListener(periodoForaDoCelular);
+/* Saiu daqui a guarda que zerava o periodo ao alargar a janela. Ela existia porque os
+   campos so apareciam no celular: periodo escolhido e depois escondido filtraria sem
+   ninguem ver. Agora os campos aparecem nos dois tamanhos, e zerar ao girar o aparelho
+   seria perder o filtro sem motivo. */
 
 document.getElementById('mesAtualBtn').addEventListener('click', function(){
   var chaveAtual = mesAno(new Date());
