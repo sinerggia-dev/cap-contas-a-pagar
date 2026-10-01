@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiM3YzNhZWQiLz48dGV4dCB4PSIzMiIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4kPC90ZXh0Pjwvc3ZnPgo=">
 <body><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap">
 <style>
   :root{
     /* Paleta do redesenho "Tela Expandida" (Claude Design, set/2026).
@@ -79,6 +79,30 @@
     --bg:#00040e; --bg-base:#0f1624;
     --tarja-a:#1b2130; --tarja-b:#121826; --tarja-c:#080c15;
   }
+  /* ---- Modelo F · Grafite (Claude Design, out/2026) ----
+     Tudo em cinza; a acao principal vira cinza-claro com texto escuro, no lugar do
+     azul. Os tokens SEMANTICOS (critical, atrasado, warning, positive...) NAO foram
+     tocados: eles estao medidos para separar as fatias do grafico de meses. */
+  html[data-fundo="modelof"]{
+    --bg:#1c1c1e; --bg-base:#1c1c1e;
+    --tarja-a:#2a2a2c; --tarja-b:#222224; --tarja-c:#1c1c1e;
+    --surface:#242426; --surface-2:#2a2a2c; --surface-3:#333335;
+    --border:#333335; --border-strong:#48484a;
+    --ink:#f2f2f2; --ink-soft:#d1d1d6; --ink-muted:#a1a1a6; --ink-faint:#8e8e93;
+    --chart:#e5e5e5; --chart-soft:#f2f2f2; --chart-hover:#ffffff; --chart-fundo:#48484a;
+    --select:#e5e5e5; --select-ink:#1c1c1e;
+    --raio:16px;
+    --sans:'Geist',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --num:'Geist Mono',ui-monospace,"Cascadia Code",Consolas,monospace;
+  }
+  /* Com --chart claro, os botoes que pintavam texto branco por cima ficariam
+     ilegiveis: no Modelo F o texto deles e escuro. */
+  html[data-fundo="modelof"] .ebtn.primary,
+  html[data-fundo="modelof"] .add-btn,
+  html[data-fundo="modelof"] .ss-opt.selected,
+  html[data-fundo="modelof"] .date-cal-grid button.selected{color:#1c1c1e;}
+  html[data-fundo="modelof"] .filter-resizer:hover,
+  html[data-fundo="modelof"] .filter-resizer.resizing{background:rgba(229,229,229,.25);}
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -209,6 +233,7 @@
   .amostra-preto{background:linear-gradient(135deg,#000000,#14171c);}
   .amostra-grafite{background:linear-gradient(135deg,#0f1114,#14171b);}
   .amostra-azul{background:linear-gradient(135deg,#00040e,#0f1624);}
+  .amostra-modelof{background:linear-gradient(135deg,#1c1c1e,#333335);}
   @media (max-width:640px){
     .actions-drawer{width:92vw;max-width:none;}
   }
@@ -1008,6 +1033,140 @@
     .periodo-wrap{display:flex;flex:1 1 100%;}
     .periodo-wrap input{flex:1 1 0;min-width:0;}
   }
+  /* ---- Modelo F: barra de navegacao inferior (so no celular) ---- */
+  .nav-mobile{display:none;}
+  @media (max-width:640px){
+    body.com-nav{padding-bottom:96px;}
+    .nav-mobile{
+      display:flex;align-items:center;justify-content:space-around;
+      position:fixed;left:0;right:0;bottom:0;z-index:15;
+      height:76px;padding:6px 8px calc(12px + env(safe-area-inset-bottom));
+      background:var(--tarja-c);border-top:1px solid var(--border);
+    }
+    .nav-mobile button{
+      min-width:64px;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+      background:transparent;border:0;color:var(--ink-faint);font:500 11px var(--sans);cursor:pointer;
+    }
+    .nav-mobile button svg{width:22px;height:22px;}
+    .nav-mobile button.ativo{color:var(--ink);font-weight:700;}
+    .nav-mobile .nav-novo{
+      width:56px;height:56px;min-width:56px;margin-top:-26px;border-radius:18px;
+      background:var(--chart);color:#fff;
+    }
+    html[data-fundo="modelof"] .nav-mobile .nav-novo{color:#1c1c1e;}
+    .nav-mobile .nav-novo svg{width:26px;height:26px;}
+    /* No celular o "Novo" do cabecalho sai: a barra de baixo assume. */
+    body.com-nav #addToggleBtn{display:none !important;}
+  }
+  /* ---- Modelo F no celular (Claude Design, "F · 02 Contas do mes") ----
+     No computador nada disto aparece. No celular a tela vira a do desenho:
+     periodo no titulo, resumo em cartoes, chips de status e a lista de contas
+     em cartoes no lugar da tabela. A paleta Grafite vale sempre no celular,
+     qualquer que seja o fundo escolhido: o desenho foi feito para ela. */
+  .mobile-only{display:none;}
+  #logoutBtnM{display:none;}
+  @media (max-width:640px){
+    html, html[data-fundo]{
+      --bg:#1c1c1e; --bg-base:#1c1c1e;
+      --tarja-a:#1c1c1e; --tarja-b:#1c1c1e; --tarja-c:#161618;
+      --surface:#242426; --surface-2:#2a2a2c; --surface-3:#333335;
+      --border:#333335; --border-strong:#48484a;
+      --ink:#f2f2f2; --ink-soft:#d1d1d6; --ink-muted:#a1a1a6; --ink-faint:#8e8e93;
+      --chart:#e5e5e5; --chart-soft:#f2f2f2; --chart-hover:#ffffff; --chart-fundo:#48484a;
+      --select:#e5e5e5; --select-ink:#1c1c1e;
+      --sans:'Geist',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      --num:'Geist Mono',ui-monospace,"Cascadia Code",Consolas,monospace;
+    }
+    .ebtn.primary, .add-btn, .ss-opt.selected, .date-cal-grid button.selected,
+    .nav-mobile .nav-novo{color:#1c1c1e;}
+    /* O seletor de fundo nao muda nada no celular; esconder evita a duvida. */
+    .fundo-wrap{display:none;}
+    #logoutBtnM{display:flex;}
+
+    body{padding:12px 16px;}
+    .report{border:0;box-shadow:none;padding:4px 0 24px;border-radius:0;}
+    .head-row{background:none;border:0;border-radius:0;margin:0 0 16px;padding:0;
+      align-items:center;flex-wrap:nowrap;}
+    .brand{min-width:0;}
+    .brand h1, .brand p{display:none;}
+    .brand-m{display:flex;flex-direction:column;gap:2px;min-width:0;}
+    .brand-kicker{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);}
+    .brand-mes{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .quick-icons{display:none;}
+    .user-chip{width:44px;height:44px;padding:0;border-radius:22px;justify-content:center;
+      background:var(--surface-2);border:1px solid #3a3a3c;cursor:pointer;}
+    .user-chip > svg, .user-chip #userName, .user-chip #logoutBtn{display:none;}
+    .user-ini{display:inline;font:600 14px var(--sans);color:var(--ink);}
+
+    .kpis{display:none;}
+    /* A faixa analitica vira uma coluna so. O quadro "Total por Despesa de" se
+       desfaz (display:contents) para a barra de busca subir e os totais por
+       pessoa descerem para depois da lista. */
+    .bottom.analitico{display:flex;flex-direction:column;gap:14px;}
+    .bottom.analitico > .panel:not(.full){display:contents;}
+    .bottom.analitico > .panel.full{display:none;}
+    .bottom.analitico > .filters-drawer:not(.open){display:none;}
+    .panel-head.barra-ferramentas{order:1;border:0;padding:0;background:none;gap:10px;}
+    .barra-ferramentas h2, .barra-ferramentas .count{display:none;}
+    .barra-ferramentas .busca-wrap{flex:1 1 100%;}
+    .barra-ferramentas .busca-wrap input{height:48px;border-radius:14px;font-size:15px;padding-left:36px;}
+    .barra-ferramentas .busca-wrap > svg{left:14px;width:16px;height:16px;}
+    .periodo-wrap input{height:40px;border-radius:12px;}
+    .barra-botoes{width:100%;}
+    .barra-botoes .clear-btn{flex:1 1 0;justify-content:center;height:40px;border-radius:12px;}
+    #filtersDrawer{order:2;}
+    #mResumo{order:3;} #mChips{order:4;} #mLista{order:5;}
+    #rankBody{order:6;background:var(--surface);border:1px solid var(--border);border-radius:16px;}
+    #rankBody::before{content:'Total por Despesa de';display:block;font-size:15px;font-weight:600;
+      color:var(--ink);padding:0 0 4px 6px;}
+    .bottom.analitico .rank-legend{display:none;}
+
+    .m-resumo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .m-card-big{grid-column:span 2;padding:18px;border-radius:20px;background:var(--surface-2);
+      border:1px solid #3a3a3c;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:4px 12px;}
+    .m-card-big .k{display:block;font-size:13px;color:var(--ink-muted);margin-bottom:4px;}
+    .m-card-big .v{display:block;font:600 28px var(--num);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+    .m-card-big .de{font-size:13px;color:var(--ink-muted);padding-bottom:6px;}
+    .m-card{padding:14px 16px;border-radius:16px;background:var(--surface);border:1px solid var(--border);
+      display:flex;flex-direction:column;gap:4px;min-width:0;}
+    .m-card .k{font-size:12px;color:var(--ink-muted);}
+    .m-card .v{font:500 16px var(--num);font-variant-numeric:tabular-nums;}
+    .m-card.venc{border-color:#5c2a27;}
+    .m-card.venc .k{color:#ff8a80;}
+
+    .m-chips{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;margin-right:-16px;padding-right:16px;}
+    .m-chip{flex:none;height:40px;padding:0 14px;border-radius:20px;border:1px solid #3a3a3c;
+      background:transparent;color:var(--ink-soft);font:500 13px var(--sans);cursor:pointer;}
+    .m-chip.on{background:#e5e5e5;border-color:#e5e5e5;color:#1c1c1e;font-weight:600;}
+
+    .m-lista{display:flex;flex-direction:column;gap:8px;}
+    .m-vazio{padding:20px 8px;text-align:center;color:var(--ink-muted);font-size:14px;}
+    .m-item{display:flex;align-items:center;gap:10px;min-height:64px;padding:10px 14px;border-radius:16px;
+      background:#2a2a2c;border:1px solid #3a3a3c;color:var(--ink);}
+    .m-abrir{flex:1;min-width:0;display:flex;align-items:center;gap:14px;background:none;border:0;padding:0;
+      color:inherit;font:inherit;text-align:left;}
+    button.m-abrir{cursor:pointer;}
+    .m-data{width:40px;flex:none;display:flex;flex-direction:column;align-items:center;}
+    .m-dia{font:600 18px var(--num);line-height:1;}
+    .m-mes{font-size:10px;font-weight:600;letter-spacing:.08em;color:#8e8e93;}
+    .m-meio{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+    .m-desc{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .m-st{font-size:12px;font-weight:500;color:#a1a1a6;display:flex;align-items:center;gap:4px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .m-st svg{width:13px;height:13px;flex:none;}
+    .m-dir{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+    .m-val{font:600 14px var(--num);font-variant-numeric:tabular-nums;}
+    .m-anexos{display:flex;gap:2px;}
+    .m-anexos .attach{width:30px;height:30px;color:var(--ink-soft);}
+    .m-item.venc{border-color:#5c2a27;}
+    .m-item.venc .m-dia, .m-item.venc .m-st{color:#ff8a80;}
+    .m-item.hoje{background:#333335;border-color:#4a4a4c;}
+    .m-item.hoje .m-st{color:#f2f2f2;}
+    .m-item.pago{background:#222224;border-color:#2c2c2e;}
+    .m-item.pago .m-dia, .m-item.pago .m-st{color:#8e8e93;}
+    .m-item.pago .m-desc, .m-item.pago .m-val{color:#a1a1a6;}
+  }
 </style>
 
 <script>
@@ -1016,7 +1175,7 @@
   (function(){
     try {
       var f = localStorage.getItem('cap_fundo_v1');
-      if (f === 'grafite' || f === 'azul') document.documentElement.setAttribute('data-fundo', f);
+      if (f === 'grafite' || f === 'azul' || f === 'modelof') document.documentElement.setAttribute('data-fundo', f);
     } catch(e){}
   })();
 </script>
@@ -1026,6 +1185,10 @@
     <div class="brand">
       <h1>CAP</h1>
       <p>Contas a Pagar</p>
+      <div class="brand-m mobile-only">
+        <span class="brand-kicker">CAP · Contas a Pagar</span>
+        <span class="brand-mes" id="brandMes">Todas as contas</span>
+      </div>
     </div>
     <div class="head-right">
       <button class="back-btn" id="backBtn" type="button" title="Voltar para o painel">
@@ -1039,6 +1202,7 @@
       <div class="user-chip" id="userChip" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none"><path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/></svg>
         <span id="userName"></span>
+        <span class="user-ini mobile-only" id="userIni"></span>
         <button type="button" class="ebtn ghost" id="logoutBtn">Sair</button>
       </div>
       <div class="quick-icons">
@@ -1086,6 +1250,10 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Emissão de Documentos
       </button>
+      <button class="clear-btn" id="logoutBtnM" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sair da conta
+      </button>
       <div class="fundo-wrap">
         <div class="fundo-lbl">Fundo da tela</div>
         <div class="fundo-opts" id="fundoOpts">
@@ -1097,6 +1265,9 @@
           </button>
           <button type="button" class="fundo-opt" data-fundo-opt="azul" aria-pressed="false">
             <span class="fundo-amostra amostra-azul"></span>Azul-noite
+          </button>
+          <button type="button" class="fundo-opt" data-fundo-opt="modelof" aria-pressed="false">
+            <span class="fundo-amostra amostra-modelof"></span>Modelo F
           </button>
         </div>
       </div>
@@ -1313,6 +1484,11 @@
         </div>
       </div>
 
+    <!-- So no celular (Modelo F): resumo, chips de status e a lista em cartoes. -->
+    <section class="m-resumo mobile-only" id="mResumo" aria-label="Resumo"></section>
+    <div class="m-chips mobile-only" id="mChips" role="group" aria-label="Status"></div>
+    <section class="m-lista mobile-only" id="mLista" aria-label="Lançamentos"></section>
+
     <div class="panel">
       <!-- A busca e os tres botoes moram aqui, e nao no cabecalho da tabela: eles
            valem para a tela inteira, nao so para a lista. Perto do topo, o efeito
@@ -1332,7 +1508,7 @@
             <label for="periodoAte">Até:</label>
             <input type="date" id="periodoAte" aria-label="Vencimento até">
           </div>
-          <div style="display:flex;align-items:center;gap:10px;">
+          <div class="barra-botoes" style="display:flex;align-items:center;gap:10px;">
             <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
               <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
               Mês Atual
@@ -1413,6 +1589,57 @@
   </div>
 </div>
 
+<nav class="nav-mobile" id="navMobile" aria-label="Navegação principal">
+  <button type="button" class="ativo" data-nav="topo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Contas
+  </button>
+  <button type="button" data-nav="filtros">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros
+  </button>
+  <button type="button" class="nav-novo" data-nav="novo" aria-label="Novo lançamento">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+  <button type="button" data-nav="lancamentos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Lista
+  </button>
+  <button type="button" data-nav="acoes">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>Mais
+  </button>
+</nav>
+<script>
+  /* Barra inferior do Modelo F. Nao tem logica propria: cada botao so aperta o botao
+     que ja existe no app, entao permissao (Editor/Visualizador) e comportamento
+     continuam vindo do codigo original. */
+  (function(){
+    document.body.classList.add('com-nav');
+    var addBtn = document.getElementById('addToggleBtn');
+    var novo = document.querySelector('#navMobile [data-nav="novo"]');
+    function sincronizarNovo(){
+      /* Visualizador nao lanca: o app esconde o "Novo" por style inline; espelhamos. */
+      novo.style.visibility = addBtn.style.display === 'none' ? 'hidden' : 'visible';
+    }
+    sincronizarNovo();
+    new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
+    var acoes = {
+      topo: function(){ document.body.scrollTo({top:0, behavior:'smooth'}); },
+      filtros: function(){ document.getElementById('filtersIconBtn').click(); },
+      novo: function(){ addBtn.click(); document.body.scrollTo({top:0, behavior:'smooth'}); },
+      lancamentos: function(){ document.getElementById('mLista').scrollIntoView({behavior:'smooth', block:'start'}); },
+      acoes: function(){ document.getElementById('actionsIconBtn').click(); }
+    };
+    document.getElementById('navMobile').addEventListener('click', function(ev){
+      var b = ev.target.closest('[data-nav]');
+      if (!b) return;
+      ev.stopPropagation();
+      var k = b.getAttribute('data-nav');
+      if (acoes[k]) acoes[k]();
+      if (k === 'topo' || k === 'lancamentos'){
+        var bs = this.querySelectorAll('[data-nav]');
+        for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('ativo', bs[i] === b);
+      }
+    });
+  })();
+</script>
 <div class="toast" id="toast"></div>
 
 <div class="login-overlay open" id="loginOverlay">
@@ -1617,11 +1844,18 @@ function primeiroNome(account){
   var parte = user.split('@')[0].split('.')[0];
   return parte ? parte.charAt(0).toUpperCase() + parte.slice(1).toLowerCase() : '';
 }
+function iniciais(account){
+  var nome = currentUserNome || (account && account.name) || String((account && account.username) || '').split('@')[0];
+  var partes = String(nome || '').trim().split(/[\s._-]+/).filter(Boolean);
+  if (!partes.length) return '';
+  return (partes[0].charAt(0) + (partes.length > 1 ? partes[partes.length-1].charAt(0) : '')).toUpperCase();
+}
 function atualizarEstadoLogin(){
   var logado = !!currentAccount;
   document.getElementById('loginOverlay').classList.toggle('open', !logado);
   document.getElementById('userChip').style.display = logado ? 'flex' : 'none';
   if (logado) document.getElementById('userName').textContent = 'Olá! ' + primeiroNome(currentAccount);
+  if (logado) document.getElementById('userIni').textContent = iniciais(currentAccount);
 }
 
 function ehDono(){
@@ -2126,7 +2360,7 @@ document.getElementById('actionsDrawerCloseBtn').addEventListener('click', funct
   ev.stopPropagation();
   fecharGavetaAcoes();
 });
-var FUNDOS = ['preto', 'grafite', 'azul'];
+var FUNDOS = ['preto', 'grafite', 'azul', 'modelof'];
 function fundoSalvo(){
   try {
     var v = localStorage.getItem('cap_fundo_v1');
@@ -3331,10 +3565,131 @@ function render(){
   renderLegendas(filtered(['status']));
   renderDesempenho(rows);
   renderTable(rows);
+  renderMobile(rows, filtered(['status']));
   renderDescRanking(filtered());
   renderRanking(filtered(['nome','status']));
   renderMesRanking(filtered(['_mesano','status']));
 }
+
+/* ---- Modelo F no celular ----
+   Desenha o resumo, os chips e a lista em cartoes a partir das MESMAS linhas
+   filtradas da tabela: busca, De/Ate, Mes Atual e Filtros valem igual aqui. */
+var MESES_CURTO = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+var MESES_LONGO = {jan:'Janeiro',fev:'Fevereiro',mar:'Março',abr:'Abril',mai:'Maio',jun:'Junho',
+  jul:'Julho',ago:'Agosto',set:'Setembro',out:'Outubro',nov:'Novembro',dez:'Dezembro'};
+var M_CHIPS = [
+  {lbl:'Todos',    st:null},
+  {lbl:'A vencer', st:['hoje','avencer']},
+  {lbl:'Vencidos', st:['vencido']},
+  {lbl:'Pagos',    st:['pago']}
+];
+var SVG_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+function rotuloPeriodoMobile(){
+  if (periodo.de || periodo.ate){
+    var f = function(iso){ return iso ? isoToDDMMYYYY(iso).slice(0, 5) : '…'; };
+    return f(periodo.de) + ' – ' + f(periodo.ate);
+  }
+  if (Array.isArray(state._mesano) && state._mesano.length === 1){
+    var p = state._mesano[0].split('/');
+    return (MESES_LONGO[p[0]] || p[0]) + ' ' + p[1];
+  }
+  return 'Todas as contas';
+}
+function mesmoStatus(a, b){
+  if (!b) return a === 'todos';
+  return Array.isArray(a) && a.length === b.length && b.every(function(v){ return a.indexOf(v) !== -1; });
+}
+function statusTextoMobile(r){
+  var dias = function(n){ return n + (n === 1 ? ' dia' : ' dias'); };
+  if (r.status === 'pago') return 'Pago em ' + isoToDDMMYYYY(r.pag).slice(0, 5);
+  if (r.status === 'vencido') return 'Vencido há ' + dias(r.dias);
+  if (r.status === 'hoje') return 'Vence hoje';
+  return r.dias <= 7 ? 'Vence em ' + dias(r.dias) : 'A vencer';
+}
+function anexoMobile(url, rotulo){
+  if (!url || url.indexOf('data:') === 0) return '';
+  return '<a class="attach" href="' + escHtml(url) + '" target="_blank" rel="noopener" aria-label="' + rotulo + '" title="' + rotulo + '">' +
+    '<svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.6"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6"/></svg></a>';
+}
+
+function renderMobile(rows, rowsSemStatus){
+  document.getElementById('brandMes').textContent = rotuloPeriodoMobile();
+
+  var total = sum(rows, function(r){ return r.valor; });
+  var aberto = sum(rows.filter(function(r){ return r.status !== 'pago'; }), function(r){ return r.valor; });
+  var pagos = rows.filter(function(r){ return r.status === 'pago'; });
+  var venc = rows.filter(function(r){ return r.status === 'vencido'; });
+  var umMes = Array.isArray(state._mesano) && state._mesano.length === 1;
+  document.getElementById('mResumo').innerHTML =
+    '<div class="m-card-big"><div><span class="k">Em aberto' + (umMes ? ' no mês' : '') + '</span>' +
+      '<span class="v">' + brl(aberto) + '</span></div>' +
+      '<span class="de">de ' + brl(total) + '</span></div>' +
+    '<div class="m-card"><span class="k">Pago · ' + pagos.length + '</span>' +
+      '<span class="v">' + brl(sum(pagos, function(r){ return pago(r); })) + '</span></div>' +
+    '<div class="m-card venc"><span class="k">Vencido · ' + venc.length + '</span>' +
+      '<span class="v">' + brl(sum(venc, function(r){ return r.valor; })) + '</span></div>';
+
+  document.getElementById('mChips').innerHTML = M_CHIPS.map(function(c, i){
+    var n = c.st ? rowsSemStatus.filter(function(r){ return c.st.indexOf(r.status) !== -1; }).length : rowsSemStatus.length;
+    var on = mesmoStatus(state.status, c.st);
+    return '<button type="button" class="m-chip' + (on ? ' on' : '') + '" data-m-chip="' + i + '" aria-pressed="' + on + '">' +
+      c.lbl + ' · ' + n + '</button>';
+  }).join('');
+
+  var lista = document.getElementById('mLista');
+  if (!rows.length){
+    lista.innerHTML = '<div class="m-vazio busca-vazia">' + (buscaTermo.trim()
+      ? 'Nada encontrado para <b>' + escHtml(buscaTermo.trim()) + '</b>.'
+      : 'Nenhum lançamento para os filtros selecionados.') + '</div>';
+    return;
+  }
+  var accessor = SORT_ACCESSORS[sortState.key] || SORT_ACCESSORS.venc;
+  var editor = currentUserRole === 'Editor';
+  lista.innerHTML = rows.slice().sort(function(a, b){ return compareValues(accessor(a), accessor(b)) * sortState.dir; }).map(function(r){
+    var cls = r.status === 'vencido' ? 'venc' : r.status;
+    var nome = String(r.nome || '').split(' ')[0];
+    var miolo =
+      '<span class="m-data"><span class="m-dia">' + String(r.vencDate.getDate()).padStart(2, '0') + '</span>' +
+        '<span class="m-mes">' + MESES_CURTO[r.vencDate.getMonth()] + '</span></span>' +
+      '<span class="m-meio"><span class="m-desc">' + escHtml(r.desc || '(sem descrição)') + '</span>' +
+        '<span class="m-st">' + (r.status === 'pago' ? SVG_CHECK : '') + escHtml(statusTextoMobile(r) + (nome ? ' · ' + nome : '')) + '</span></span>';
+    var abrir = editor
+      ? '<button type="button" class="m-abrir" data-rawid="' + r.id + '" data-rowidx="' + r._rowIndex + '" aria-label="Editar ' + escHtml(r.desc || 'lançamento') + '">' + miolo + '</button>'
+      : '<div class="m-abrir">' + miolo + '</div>';
+    return '<div class="m-item ' + cls + '">' + abrir +
+      '<div class="m-dir"><span class="m-val">' + brl(r.valor) + '</span>' +
+        '<span class="m-anexos">' + anexoMobile(r.anexo, 'Abrir boleto') + anexoMobile(r.anexoComprovante, 'Abrir comprovante') + '</span></div>' +
+      '</div>';
+  }).join('');
+}
+
+document.getElementById('mChips').addEventListener('click', function(ev){
+  var b = ev.target.closest('[data-m-chip]');
+  if (!b) return;
+  var c = M_CHIPS[Number(b.getAttribute('data-m-chip'))];
+  state.status = c.st ? c.st.slice() : 'todos';
+  buildFilters();
+  updateClearButton();
+  render();
+});
+/* Tocar no cartao abre o lancamento para editar, com a mesma senha do lapis da tabela. */
+document.getElementById('mLista').addEventListener('click', function(ev){
+  var b = ev.target.closest('button.m-abrir');
+  if (!b) return;
+  pedirSenha('Digite a senha para editar este lançamento:', function(ok){
+    if (!ok) return;
+    abrirParaEdicao(Number(b.getAttribute('data-rawid')), Number(b.getAttribute('data-rowidx')));
+    document.body.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+/* No celular o avatar e o "Conta e configuracoes" do desenho: abre a gaveta de Acoes,
+   onde fica o "Sair da conta". */
+document.getElementById('userChip').addEventListener('click', function(ev){
+  if (!window.matchMedia('(max-width:640px)').matches) return;
+  ev.stopPropagation();
+  abrirGavetaAcoes();
+});
 
 document.getElementById('rankBody').addEventListener('click', function(ev){
   var itemEl = ev.target.closest('.rank-col-item');
@@ -4692,6 +5047,7 @@ document.getElementById('semAcessoSairBtn').addEventListener('click', sair);
 renderTableHead();
 document.getElementById('loginBtn').addEventListener('click', entrar);
 document.getElementById('logoutBtn').addEventListener('click', sair);
+document.getElementById('logoutBtnM').addEventListener('click', function(){ fecharGavetaAcoes(); sair(); });
 initAuth();
 </script>
 
