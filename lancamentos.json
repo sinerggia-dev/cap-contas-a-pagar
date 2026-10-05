@@ -2098,15 +2098,15 @@
 "Natanael Silva",
 "Envio de Boleto",
 46305,
-"",
+46300,
 "Cartão Inter",
 "Cartão de Crédito",
 "A Vencer",
 "",
-268.91,
+272.85,
 "",
-"",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-100-1791209482928.jpeg",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-100-1791209484035.jpeg",
 "",
 ""
 ]
@@ -2199,7 +2199,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-1131.24,
+1414.12,
 "",
 "",
 "",
@@ -4786,15 +4786,15 @@
 "Felipe Hozana",
 "Envio de Boleto",
 46290,
-"",
-"Claro Apto 201- 136-411619680",
+46290,
+"Claro Apto 201 - 136-411619680",
 "Telefone/Internet",
-"A Vencer",
+"Pago",
 "",
 128.46,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-218-1789649443171.png",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-218-1791206296279.jpeg",
 "",
 ""
 ]
@@ -4906,7 +4906,7 @@
 "Natanael Silva",
 "Envio de Boleto",
 46310,
-"",
+46300,
 "Internet Jcfw - Casa de Mãe",
 "Telefone/Internet",
 "A Vencer",
@@ -4914,7 +4914,7 @@
 60,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-223-1791209002488.jpeg",
 "",
 ""
 ]
@@ -5026,15 +5026,15 @@
 "Natanael Silva",
 "Envio de Boleto",
 46307,
-"",
+46300,
 "Cartão Bradesco 2049",
 "Cartão de Crédito",
 "A Vencer",
 "",
 121.47,
 "",
-"",
-"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-228-1790891103543.jpeg",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-228-1791209717569.jpeg",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-228-1791209718904.jpeg",
 "",
 ""
 ]
@@ -5106,6 +5106,438 @@
 253.27,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-232-1789688625814.jpeg",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 213,
+"values": [
+[
+233,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46308,
+"",
+"Neoenergia Gravtá 21",
+"Energia",
+"A Vencer",
+"",
+461.49,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-233-1791205734601.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 214,
+"values": [
+[
+234,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46311,
+"",
+"Neoenergia Apto 301",
+"Energia",
+"A Vencer",
+"",
+338.41,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-234-1791205904699.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 215,
+"values": [
+[
+235,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46320,
+"",
+"Claro Apto 102 - 136-411619671",
+"Telefone/Internet",
+"A Vencer",
+"",
+130,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 216,
+"values": [
+[
+236,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46351,
+"",
+"Claro Apto 102 - 136-411619671",
+"Telefone/Internet",
+"A Vencer",
+"",
+130,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 217,
+"values": [
+[
+237,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46381,
+"",
+"Claro Apto 102 - 136-411619671",
+"Telefone/Internet",
+"A Vencer",
+"",
+130,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 218,
+"values": [
+[
+238,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46412,
+"",
+"Claro Apto 102 - 136-411619671",
+"Telefone/Internet",
+"A Vencer",
+"",
+130,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 219,
+"values": [
+[
+239,
+"",
+"",
+"Felipe Hozana",
+"Envio de Boleto",
+46320,
+"",
+"Claro Apto 201 - 136-411619680",
+"Telefone/Internet",
+"A Vencer",
+"",
+128.46,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 220,
+"values": [
+[
+240,
+"",
+"",
+"Felipe Hozana",
+"Envio de Boleto",
+46351,
+"",
+"Claro Apto 201 - 136-411619680",
+"Telefone/Internet",
+"A Vencer",
+"",
+130,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 221,
+"values": [
+[
+241,
+"",
+"",
+"Felipe Hozana",
+"Envio de Boleto",
+46381,
+"",
+"Claro Apto 201 - 136-411619680",
+"Telefone/Internet",
+"A Vencer",
+"",
+130,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 222,
+"values": [
+[
+242,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46315,
+"",
+"Claro Apto 301 - 136-412746235",
+"Telefone/Internet",
+"A Vencer",
+"",
+110,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 223,
+"values": [
+[
+243,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46346,
+"",
+"Claro Apto 301 - 136-412746235",
+"Telefone/Internet",
+"A Vencer",
+"",
+110,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 224,
+"values": [
+[
+244,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46376,
+"",
+"Claro Apto 301 - 136-412746235",
+"Telefone/Internet",
+"A Vencer",
+"",
+110,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 225,
+"values": [
+[
+245,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46310,
+"",
+"Internet Net.Com - Casa de Gravatá",
+"Telefone/Internet",
+"A Vencer",
+"",
+80,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 226,
+"values": [
+[
+246,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46341,
+"",
+"Internet Net.Com - Casa de Gravatá",
+"Telefone/Internet",
+"A Vencer",
+"",
+80,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 227,
+"values": [
+[
+247,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46371,
+"",
+"Internet Net.Com - Casa de Gravatá",
+"Telefone/Internet",
+"A Vencer",
+"",
+80,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 228,
+"values": [
+[
+248,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46371,
+"",
+"Internet Jcfw - Casa de Mãe",
+"Telefone/Internet",
+"A Vencer",
+"",
+60,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 229,
+"values": [
+[
+249,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46310,
+"",
+"Cartão Novo Atacarejo",
+"Cartão de Crédito",
+"A Vencer",
+"",
+388.39,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-249-1791208180292.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 230,
+"values": [
+[
+250,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46309,
+"",
+"Cartão Carrefour",
+"Cartão de Crédito",
+"A Vencer",
+"",
+113.94,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-250-1791208786933.pdf",
 "",
 "",
 ""
