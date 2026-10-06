@@ -908,6 +908,29 @@
     margin-left:auto;font-size:12.9px;color:var(--positive);font-weight:600;
     max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
+  /* X para desistir do arquivo recem-escolhido. Fica acima do input invisivel que
+     cobre a caixa inteira, senao o clique abriria o seletor de arquivo de novo. */
+  .filedrop-limpar{
+    display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;
+    width:24px;height:24px;border-radius:50%;padding:0;cursor:pointer;
+    background:var(--surface-3);border:1px solid var(--border-strong);color:var(--ink-soft);
+    align-items:center;justify-content:center;font-size:15px;line-height:1;
+  }
+  .filedrop-limpar:hover{background:var(--critical-dim);color:var(--critical);border-color:var(--critical);}
+  .filedrop.has-file .filedrop-limpar{display:flex;}
+  .filedrop.has-file .filedrop-filename{margin-right:28px;}
+  /* O anexo que ja esta salvo no lancamento, com Abrir e Remover. */
+  .anexo-atual{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.9px;color:var(--ink-soft);
+    background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;}
+  .anexo-atual[hidden]{display:none;}
+  .anexo-atual a{color:var(--chart-soft);font-weight:600;text-decoration:none;}
+  .anexo-atual a:hover{text-decoration:underline;}
+  .anexo-atual .anexo-acao{margin-left:auto;background:none;border:1px solid var(--border-strong);border-radius:6px;
+    color:var(--ink-soft);font:600 12.3px var(--sans);padding:4px 10px;cursor:pointer;}
+  .anexo-atual .anexo-acao:hover{border-color:var(--critical);color:var(--critical);}
+  .anexo-atual.removido{border-style:dashed;border-color:var(--critical);color:var(--critical);}
+  .anexo-atual.removido a{display:none;}
+  .anexo-atual.removido .anexo-acao:hover{border-color:var(--ink-soft);color:var(--ink);}
   .efield.invalid input, .efield.invalid select{border-color:var(--critical);}
   .date-field{position:relative;display:flex;}
   .date-field input{flex:1;padding-right:32px;}
@@ -1438,7 +1461,9 @@
               <span class="filedrop-text">Arraste o arquivo aqui ou <b>clique para escolher</b></span>
               <span class="filedrop-filename" id="nf_anexoBoletoNome"></span>
             </div>
+            <button type="button" class="filedrop-limpar" data-limpar-anexo="nf_anexoBoleto" title="Tirar o arquivo escolhido" aria-label="Tirar o boleto escolhido">&times;</button>
           </div>
+          <div class="anexo-atual" id="nf_anexoBoletoAtual" hidden></div>
           <span class="hint">PDF ou imagem, até 2MB — tire uma foto, arraste ou escolha um arquivo</span>
         </div>
         <div class="efield span2">
@@ -1450,7 +1475,9 @@
               <span class="filedrop-text">Arraste o arquivo aqui ou <b>clique para escolher</b></span>
               <span class="filedrop-filename" id="nf_anexoComprovanteNome"></span>
             </div>
+            <button type="button" class="filedrop-limpar" data-limpar-anexo="nf_anexoComprovante" title="Tirar o arquivo escolhido" aria-label="Tirar o comprovante escolhido">&times;</button>
           </div>
+          <div class="anexo-atual" id="nf_anexoComprovanteAtual" hidden></div>
           <span class="hint">PDF ou imagem, até 2MB — tire uma foto, arraste ou escolha um arquivo</span>
         </div>
         <div class="efield span2">
@@ -3997,14 +4024,64 @@ function togglePanel(open){
   if (open) document.getElementById('nf_nome').focus();
 }
 
+/* Anexo ja salvo que o usuario mandou tirar. So vale ao clicar em Salvar: ate la,
+   "Desfazer" volta atras. O arquivo continua na pasta de Anexos do SharePoint;
+   o lancamento e que deixa de apontar para ele. */
+var anexoRemover = { boleto: false, comp: false };
+var ANEXO_CAMPOS = [
+  { chave: 'boleto', prefixo: 'nf_anexoBoleto',      campo: 'anexo',            rotulo: 'boleto' },
+  { chave: 'comp',   prefixo: 'nf_anexoComprovante', campo: 'anexoComprovante', rotulo: 'comprovante' }
+];
+
 function limparNomesAnexo(){
   ['nf_anexoBoleto', 'nf_anexoComprovante'].forEach(function(prefixo){
     var nomeEl = document.getElementById(prefixo + 'Nome');
     var dropEl = document.getElementById(prefixo + 'Drop');
+    var atualEl = document.getElementById(prefixo + 'Atual');
     if (nomeEl) nomeEl.textContent = '';
     if (dropEl) dropEl.classList.remove('has-file');
+    if (atualEl){ atualEl.hidden = true; atualEl.innerHTML = ''; atualEl.classList.remove('removido'); }
   });
+  anexoRemover = { boleto: false, comp: false };
 }
+
+function desenharAnexoAtual(c, url){
+  var el = document.getElementById(c.prefixo + 'Atual');
+  if (!url){ el.hidden = true; el.innerHTML = ''; return; }
+  var removido = anexoRemover[c.chave];
+  el.hidden = false;
+  el.classList.toggle('removido', removido);
+  var abrir = url.indexOf('data:') === 0 ? '' :
+    '<a href="' + escHtml(url) + '" target="_blank" rel="noopener">Abrir</a>';
+  el.innerHTML = removido
+    ? '<span>O ' + c.rotulo + ' salvo será removido ao clicar em Salvar alterações.</span>' +
+      '<button type="button" class="anexo-acao" data-anexo-desfazer="' + c.chave + '">Desfazer</button>'
+    : '<span>' + (c.rotulo === 'boleto' ? 'Boleto' : 'Comprovante') + ' já salvo neste lançamento.</span>' + abrir +
+      '<button type="button" class="anexo-acao" data-anexo-remover="' + c.chave + '">Remover</button>';
+}
+function mostrarAnexosAtuais(entry){
+  ANEXO_CAMPOS.forEach(function(c){ desenharAnexoAtual(c, entry ? entry[c.campo] : ''); });
+}
+document.getElementById('entryForm').addEventListener('click', function(ev){
+  var rem = ev.target.closest('[data-anexo-remover]');
+  var des = ev.target.closest('[data-anexo-desfazer]');
+  var lim = ev.target.closest('[data-limpar-anexo]');
+  if (lim){
+    ev.preventDefault();
+    ev.stopPropagation();
+    var prefixo = lim.getAttribute('data-limpar-anexo');
+    document.getElementById(prefixo).value = '';
+    document.getElementById(prefixo + 'Nome').textContent = '';
+    document.getElementById(prefixo + 'Drop').classList.remove('has-file');
+    return;
+  }
+  if (!rem && !des) return;
+  var chave = (rem || des).getAttribute(rem ? 'data-anexo-remover' : 'data-anexo-desfazer');
+  anexoRemover[chave] = !!rem;
+  var existente = editingId !== null ? encontrarLancamento(editingId, editingRowIndex) : null;
+  var c = ANEXO_CAMPOS.filter(function(x){ return x.chave === chave; })[0];
+  desenharAnexoAtual(c, existente ? existente[c.campo] : '');
+});
 
 function setupFileDrop(dropId, inputId, nomeId){
   var drop = document.getElementById(dropId);
@@ -4124,6 +4201,7 @@ function abrirParaEdicao(rawId, rowIndex){
   document.getElementById('nf_anexoBoleto').value = '';
   document.getElementById('nf_anexoComprovante').value = '';
   limparNomesAnexo();
+  mostrarAnexosAtuais(entry);
   setFormMode(true);
   togglePanel(true);
 }
@@ -4203,8 +4281,8 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
       var linhasAtuaisGraph = isEditing ? null : await buscarLinhasAtuaisGraph(token);
       var novoId = isEditing ? existing.id : (linhasAtuaisGraph.reduce(function(m,r){ return Math.max(m, r.values[0][0]); }, 0) + 1);
 
-      var anexoBoletoUrl = isEditing ? (existing.anexo || '') : '';
-      var anexoComprovanteUrl = isEditing ? (existing.anexoComprovante || '') : '';
+      var anexoBoletoUrl = (isEditing && !anexoRemover.boleto) ? (existing.anexo || '') : '';
+      var anexoComprovanteUrl = (isEditing && !anexoRemover.comp) ? (existing.anexoComprovante || '') : '';
       if (boletoFile) anexoBoletoUrl = await subirAnexo(token, boletoFile, 'boleto', novoId);
       if (compFile) anexoComprovanteUrl = await subirAnexo(token, compFile, 'comprovante', novoId);
 
