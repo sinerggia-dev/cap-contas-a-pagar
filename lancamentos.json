@@ -749,19 +749,19 @@
 "values": [
 [
 33,
-"25/06/2026 21:13",
-"25/06/2026 21:14",
+"",
+"",
 "Natanael Silva",
 "Envio de Boleto",
-"20/10/2026",
+46325,
 "",
 "Terreno Natanael",
 "Financiamento",
 "A Vencer",
 "03399.41114 15000.000198 61950.201014 4 16050000057479",
-"574,79",
+574.79,
 "",
-"https://sinerggiacombr.sharepoint.com/sites/SinergiaFinanceiro/Documentos%20Compartilhados/Aplicativos/Microsoft%20Forms/Envio%20de%20Boletos%20e%20Comprovantes/Pergunta/20.10.2026%20-%20P%C3%A1ginas%20De%20Boletos%202026%20-%20NATANA_Natanael%20Silva.pdf",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-33-1791297431514.pdf",
 "",
 "",
 ""
@@ -3586,15 +3586,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46305,
-"",
+46301,
 "Condomínio Prive Serra Florada",
 "Condomínio",
 "A Vencer",
 "",
-1700,
+1600,
 "",
-"",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-163-1791287690962.pdf",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-163-1791287692925.jpeg",
 "",
 ""
 ]
@@ -4162,7 +4162,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46300,
-"",
+46300,
 "Faxineira Cláudia Gravata",
 "Serviços Domésticos",
 "A Vencer",
@@ -4170,7 +4170,7 @@
 650,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-190-1791288293355.jpeg",
 "",
 ""
 ]
@@ -4745,7 +4745,7 @@
 "",
 1038.82,
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-216-1791288193399.pdf",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-216-1788993711676.pdf",
 "",
 ""
@@ -5538,6 +5538,78 @@
 113.94,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-250-1791208786933.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 231,
+"values": [
+[
+251,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46305,
+"",
+"Condomínio Apto 102",
+"Condomínio",
+"A Vencer",
+"",
+1038.82,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-251-1791287940267.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 232,
+"values": [
+[
+252,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46336,
+"",
+"Condomínio Apto 102",
+"Condomínio",
+"A Vencer",
+"",
+1038.82,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 233,
+"values": [
+[
+253,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46366,
+"",
+"Condomínio Apto 102",
+"Condomínio",
+"A Vencer",
+"",
+1038.82,
+"",
+"",
 "",
 "",
 ""
