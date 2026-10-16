@@ -567,12 +567,12 @@
 "IPTU",
 "A Vencer",
 "",
-166.38,
+0,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-25-1786650765269.png",
 "",
 "",
-""
+"Boleto Vencimento - Gerar para o mês novembro"
 ]
 ]
 },
@@ -2986,7 +2986,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46305,
-"",
+46305,
 "Soluções - Parcelamento Bradesco - Parcela 38/72",
 "Cartão de Crédito",
 "A Vencer",
@@ -2996,7 +2996,7 @@
 "",
 "",
 "",
-""
+"Pago na conta"
 ]
 ]
 },
@@ -4428,7 +4428,7 @@
 46326,
 "",
 "Result Vision - Parcelamento Simples Nacional - Parcela 3/33",
-"Outras",
+"Parcelamento",
 "A Vencer",
 "",
 308.18,
@@ -4452,7 +4452,7 @@
 46387,
 "",
 "Result Vision - Parcelamento Simples Nacional - Parcela 4/33",
-"Outras",
+"Parcelamento",
 "A Vencer",
 "",
 308.18,
@@ -5146,7 +5146,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46311,
-"",
+46311,
 "Neoenergia Apto 301",
 "Energia",
 "A Vencer",
@@ -5154,7 +5154,7 @@
 338.41,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-234-1791205904699.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-234-1792163226238.pdf",
 "",
 ""
 ]
@@ -5658,6 +5658,126 @@
 451.06,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-255-1791316559543.pdf",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 236,
+"values": [
+[
+256,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46315,
+46311,
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 0/60",
+"Parcelamento",
+"Pago",
+"",
+2503.14,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-256-1792161972155.pdf",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-256-1792161973303.jpeg",
+"",
+"Entrada do parcelamento"
+]
+]
+},
+{
+"index": 237,
+"values": [
+[
+257,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46346,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 1/60",
+"Parcelamento",
+"A Vencer",
+"",
+381.83,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 238,
+"values": [
+[
+258,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46376,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 2/60",
+"Parcelamento",
+"A Vencer",
+"",
+381.83,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 239,
+"values": [
+[
+259,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46407,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 3/60",
+"Financiamento",
+"A Vencer",
+"",
+381.83,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 240,
+"values": [
+[
+260,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46438,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 4/60",
+"Parcelamento",
+"A Vencer",
+"",
+381.83,
+"",
+"",
 "",
 "",
 ""
