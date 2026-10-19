@@ -773,17 +773,17 @@
 "values": [
 [
 34,
-"25/06/2026 21:14",
-"25/06/2026 21:15",
+"",
+"",
 "Natanael Silva",
 "Envio de Boleto",
-"20/11/2026",
+46356,
 "",
 "Terreno Natanael",
 "Financiamento",
 "A Vencer",
 "03399.41114 15000.000198 61951.001017 8 16360000057479",
-"574,79",
+574.79,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/SinergiaFinanceiro/Documentos%20Compartilhados/Aplicativos/Microsoft%20Forms/Envio%20de%20Boletos%20e%20Comprovantes/Pergunta/20.11.2026%20-%20P%C3%A1ginas%20De%20Boletos%202026%20-%20NATANA_Natanael%20Silva.pdf",
 "",
@@ -869,20 +869,20 @@
 "values": [
 [
 38,
-"25/06/2026 21:27",
-"25/06/2026 21:28",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"20/09/2026",
-"",
+46285,
+46274,
 "Terreno Ivanilda",
 "Financiamento",
 "A Vencer",
 "03399.41114 15000.000198 61777.101017 5 15750000057479",
-"574,79",
+574.79,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/SinergiaFinanceiro/Documentos%20Compartilhados/Aplicativos/Microsoft%20Forms/Envio%20de%20Boletos%20e%20Comprovantes/Pergunta/20.09.2026%20-%20Terreno%20Bezerros%20IvanildaP%C3%A1ginas_Natanael%20Silva.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-38-1792421410899.jpeg",
 "",
 ""
 ]
@@ -895,7 +895,7 @@
 39,
 "",
 "",
-"Natanael Silva",
+"Ivanilda Hozana",
 "Envio de Boleto",
 46326,
 "",
@@ -1037,17 +1037,17 @@
 "values": [
 [
 46,
-"26/06/2026 21:11",
-"26/06/2026 21:12",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"26/10/2026",
+46321,
 "",
 "Cartão Ivanilda - Nubank PJ",
 "Cartão de Crédito",
 "A Vencer",
 4,
-"3.000,00",
+843.43,
 "",
 "",
 "",
@@ -1181,17 +1181,17 @@
 "values": [
 [
 52,
-"30/06/2026 19:01",
-"30/06/2026 19:02",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"26/10/2026",
+46321,
 "",
 "Cartão Ivanilda - Nubank PF",
 "Cartão de Crédito",
 "A Vencer",
 4,
-"3.000,00",
+4385.42,
 "",
 "",
 "",
@@ -1325,20 +1325,20 @@
 "values": [
 [
 58,
-"30/06/2026 19:07",
-"30/06/2026 19:08",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"20/10/2026",
-"",
+46315,
+46314,
 "Cartão Ivanilda Mercado Pago",
 "Cartão de Crédito",
 "A Vencer",
 4,
-"3.000,00",
+3494.21,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-58-1792422760214.jpeg",
 "",
 "Lançamento Projetado - Outubro"
 ]
@@ -1445,20 +1445,20 @@
 "values": [
 [
 65,
-"30/06/2026 19:12",
-"30/06/2026 19:13",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"30/10/2026",
-"",
+46296,
+46314,
 "Cartão Ivanilda - Xp",
 "Cartão de Crédito",
 "A Vencer",
 5,
-"3.000,00",
+3153.94,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-65-1792422473413.jpeg",
 "",
 "Lançamento Projetado - Novembro"
 ]
@@ -1541,20 +1541,20 @@
 "values": [
 [
 70,
-"30/06/2026 19:17",
-"30/06/2026 19:18",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"15/10/2026",
-"",
+46310,
+46303,
 "Aluguel Apto 301",
 "Aluguel",
 "A Vencer",
 4,
-"4.000,00",
+4000,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-70-1792421316440.jpeg",
 "",
 "Lançamento Projetado - Outubro"
 ]
@@ -1785,7 +1785,7 @@
 "",
 "Ivanilda Hozana",
 "Envio de Boleto",
-46328,
+46327,
 "",
 "Cartão Ivanilda - Xp",
 "Cartão de Crédito",
@@ -2223,7 +2223,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-313.25,
+376.75,
 "",
 "",
 "",
@@ -4671,7 +4671,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-421.39,
+1070.55,
 "",
 "",
 "",
@@ -4738,7 +4738,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46275,
-"",
+46305,
 "Condomínio Apto 102",
 "Condomínio",
 "A Vencer",
@@ -4858,15 +4858,15 @@
 "Natanael Silva",
 "Envio de Boleto",
 46320,
-"",
+46314,
 "Polo Wear Cred System",
 "Cartão de Crédito",
 "A Vencer",
 "",
-46.96,
+55.48,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-221-1792423741271.jpeg",
 "",
 ""
 ]
@@ -5044,30 +5044,6 @@
 "index": 210,
 "values": [
 [
-230,
-"",
-"",
-"Natanael Silva",
-"Envio de Boleto",
-46337,
-"",
-"Cartão Novo Atacarejo - Parcela 3/3",
-"Cartão de Crédito",
-"A Vencer",
-"",
-368.41,
-"",
-"",
-"",
-"",
-""
-]
-]
-},
-{
-"index": 211,
-"values": [
-[
 231,
 "",
 "",
@@ -5089,7 +5065,7 @@
 ]
 },
 {
-"index": 212,
+"index": 211,
 "values": [
 [
 232,
@@ -5098,7 +5074,7 @@
 "Natanael Silva",
 "Envio de Boleto",
 46314,
-"",
+46314,
 "Cartão Magazine Luiz 4566",
 "Cartão de Crédito",
 "A Vencer",
@@ -5106,14 +5082,14 @@
 253.27,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-232-1789688625814.jpeg",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-232-1792421575233.jpeg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 213,
+"index": 212,
 "values": [
 [
 233,
@@ -5137,7 +5113,7 @@
 ]
 },
 {
-"index": 214,
+"index": 213,
 "values": [
 [
 234,
@@ -5161,7 +5137,7 @@
 ]
 },
 {
-"index": 215,
+"index": 214,
 "values": [
 [
 235,
@@ -5185,7 +5161,7 @@
 ]
 },
 {
-"index": 216,
+"index": 215,
 "values": [
 [
 236,
@@ -5209,7 +5185,7 @@
 ]
 },
 {
-"index": 217,
+"index": 216,
 "values": [
 [
 237,
@@ -5233,7 +5209,7 @@
 ]
 },
 {
-"index": 218,
+"index": 217,
 "values": [
 [
 238,
@@ -5257,7 +5233,7 @@
 ]
 },
 {
-"index": 219,
+"index": 218,
 "values": [
 [
 239,
@@ -5281,7 +5257,7 @@
 ]
 },
 {
-"index": 220,
+"index": 219,
 "values": [
 [
 240,
@@ -5305,7 +5281,7 @@
 ]
 },
 {
-"index": 221,
+"index": 220,
 "values": [
 [
 241,
@@ -5329,7 +5305,7 @@
 ]
 },
 {
-"index": 222,
+"index": 221,
 "values": [
 [
 242,
@@ -5338,7 +5314,7 @@
 "Natanael Silva",
 "Envio de Boleto",
 46315,
-"",
+46314,
 "Claro Apto 301 - 136-412746235",
 "Telefone/Internet",
 "A Vencer",
@@ -5346,14 +5322,14 @@
 102.13,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-242-1791901373929.png",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-242-1792422658345.jpeg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 223,
+"index": 222,
 "values": [
 [
 243,
@@ -5377,7 +5353,7 @@
 ]
 },
 {
-"index": 224,
+"index": 223,
 "values": [
 [
 244,
@@ -5401,7 +5377,7 @@
 ]
 },
 {
-"index": 225,
+"index": 224,
 "values": [
 [
 245,
@@ -5425,7 +5401,7 @@
 ]
 },
 {
-"index": 226,
+"index": 225,
 "values": [
 [
 246,
@@ -5449,7 +5425,7 @@
 ]
 },
 {
-"index": 227,
+"index": 226,
 "values": [
 [
 247,
@@ -5473,7 +5449,7 @@
 ]
 },
 {
-"index": 228,
+"index": 227,
 "values": [
 [
 248,
@@ -5497,7 +5473,7 @@
 ]
 },
 {
-"index": 229,
+"index": 228,
 "values": [
 [
 249,
@@ -5521,7 +5497,7 @@
 ]
 },
 {
-"index": 230,
+"index": 229,
 "values": [
 [
 250,
@@ -5545,7 +5521,7 @@
 ]
 },
 {
-"index": 231,
+"index": 230,
 "values": [
 [
 251,
@@ -5569,13 +5545,13 @@
 ]
 },
 {
-"index": 232,
+"index": 231,
 "values": [
 [
 252,
 "",
 "",
-"Natanael Silva",
+"Ivanilda Hozana",
 "Envio de Boleto",
 46336,
 "",
@@ -5593,7 +5569,7 @@
 ]
 },
 {
-"index": 233,
+"index": 232,
 "values": [
 [
 253,
@@ -5617,7 +5593,7 @@
 ]
 },
 {
-"index": 234,
+"index": 233,
 "values": [
 [
 254,
@@ -5641,7 +5617,7 @@
 ]
 },
 {
-"index": 235,
+"index": 234,
 "values": [
 [
 255,
@@ -5650,7 +5626,7 @@
 "Felipe Hozana",
 "Envio de Boleto",
 46308,
-"",
+46314,
 "Neoenergia Apto 201",
 "Energia",
 "A Vencer",
@@ -5658,14 +5634,14 @@
 451.06,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-255-1791316559543.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-255-1792438325998.pdf",
 "",
 ""
 ]
 ]
 },
 {
-"index": 236,
+"index": 235,
 "values": [
 [
 256,
@@ -5689,7 +5665,7 @@
 ]
 },
 {
-"index": 237,
+"index": 236,
 "values": [
 [
 257,
@@ -5713,7 +5689,7 @@
 ]
 },
 {
-"index": 238,
+"index": 237,
 "values": [
 [
 258,
@@ -5737,7 +5713,7 @@
 ]
 },
 {
-"index": 239,
+"index": 238,
 "values": [
 [
 259,
@@ -5761,7 +5737,7 @@
 ]
 },
 {
-"index": 240,
+"index": 239,
 "values": [
 [
 260,
@@ -5779,6 +5755,102 @@
 "",
 "",
 "",
+"",
+""
+]
+]
+},
+{
+"index": 240,
+"values": [
+[
+261,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46388,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 241,
+"values": [
+[
+262,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46419,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 242,
+"values": [
+[
+263,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46318,
+46314,
+"Cartão Midway Riachuelo",
+"Cartão de Crédito",
+"A Vencer",
+"",
+127.11,
+"",
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-263-1792423218693.jpeg",
+"",
+""
+]
+]
+},
+{
+"index": 243,
+"values": [
+[
+264,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46321,
+46314,
+"Cartão Hiper 2242",
+"Cartão de Crédito",
+"A Vencer",
+"",
+37.54,
+"",
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-264-1792423584712.jpeg",
 "",
 ""
 ]
