@@ -865,12 +865,39 @@
   }
   .login-box h2{margin:0 0 6px;font-size:22.4px;font-weight:800;}
   .login-box p{margin:0 0 20px;font-size:14px;color:var(--ink-soft);line-height:1.5;}
+  /* Cartao do usuario no topo: saudacao, atualizar, clima, data e hora. */
   .user-chip{
-    display:flex;align-items:center;gap:8px;font-size:12.9px;color:var(--ink-soft);
-    background:var(--surface);border:1px solid var(--border);padding:5px 10px;border-radius:20px;
+    display:flex;align-items:center;gap:12px;font-size:12.9px;color:var(--ink-soft);
+    background:var(--surface);border:1px solid var(--border);padding:6px 14px 6px 6px;border-radius:24px;
   }
-  .user-chip svg{width:15px;height:15px;flex:none;color:var(--ink-muted);}
-  .user-chip .ebtn{padding:3px 9px;font-size:11.8px;}
+  .user-chip #logoutBtn{display:none;}
+  .uc-avatar{
+    width:34px;height:34px;border-radius:50%;flex:none;border:0;padding:0;cursor:pointer;
+    background:var(--chart);color:#fff;font:700 14px var(--sans);display:flex;align-items:center;justify-content:center;
+  }
+  .uc-avatar:hover{background:var(--chart-hover);}
+  .uc-ola{display:flex;flex-direction:column;line-height:1.2;min-width:0;}
+  .uc-ola span{font-size:11.8px;color:var(--ink-muted);}
+  .uc-ola b{font-size:14px;color:var(--ink);font-weight:700;white-space:nowrap;}
+  .uc-refresh{
+    width:28px;height:28px;border-radius:50%;flex:none;padding:0;cursor:pointer;
+    background:transparent;border:1px solid var(--border-strong);color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .uc-refresh:hover{color:var(--ink);border-color:var(--ink-soft);}
+  .uc-refresh svg{width:14px;height:14px;}
+  .uc-refresh.girando svg{animation:uc-girar .8s linear infinite;}
+  @keyframes uc-girar{to{transform:rotate(360deg);}}
+  .uc-sep{width:1px;height:28px;background:var(--border);flex:none;}
+  .uc-clima{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .uc-clima .uc-icone{width:22px;height:22px;flex:none;}
+  .uc-clima b{font:700 15px var(--sans);color:var(--ink);}
+  .uc-clima .uc-pin{width:13px;height:13px;color:var(--critical);flex:none;}
+  .uc-clima .uc-cidade{font-size:12.9px;color:var(--ink-soft);}
+  .uc-hora{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;white-space:nowrap;}
+  .uc-hora span{font-size:11.8px;color:var(--ink-muted);}
+  .uc-hora b{font:700 15px var(--num);color:var(--ink);font-variant-numeric:tabular-nums;}
+  @media (max-width:1100px){ .user-chip .uc-clima, .user-chip .uc-clima + .uc-sep{display:none;} }
 
   /* ---- senha de autorização ---- */
   .senha-overlay{
@@ -1148,7 +1175,6 @@
      em cartoes no lugar da tabela. A paleta Grafite vale sempre no celular,
      qualquer que seja o fundo escolhido: o desenho foi feito para ela. */
   .mobile-only{display:none;}
-  #logoutBtnM{display:none;}
   @media (max-width:640px){
     html, html[data-fundo]{
       --bg:#1c1c1e; --bg-base:#1c1c1e;
@@ -1165,7 +1191,6 @@
     .nav-mobile .nav-novo{color:#1c1c1e;}
     /* O seletor de fundo nao muda nada no celular; esconder evita a duvida. */
     .fundo-wrap{display:none;}
-    #logoutBtnM{display:flex;}
 
     body{padding:12px 16px;}
     .report{border:0;box-shadow:none;padding:4px 0 24px;border-radius:0;}
@@ -1178,10 +1203,11 @@
     .brand-mes{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .quick-icons{display:none;}
-    .user-chip{width:44px;height:44px;padding:0;border-radius:22px;justify-content:center;
-      background:var(--surface-2);border:1px solid #3a3a3c;cursor:pointer;}
-    .user-chip > svg, .user-chip #userName, .user-chip #logoutBtn{display:none;}
-    .user-ini{display:inline;font:600 14px var(--sans);color:var(--ink);}
+    /* No celular o cartao vira so o avatar do desenho (Modelo F). */
+    .user-chip{padding:0;border:0;background:none;gap:0;}
+    .user-chip .uc-ola, .user-chip .uc-refresh, .user-chip .uc-sep,
+    .user-chip .uc-clima, .user-chip .uc-hora{display:none;}
+    .uc-avatar{width:44px;height:44px;}
 
     .kpis{display:none;}
     /* A faixa analitica vira uma coluna so. O quadro "Total por Despesa de" se
@@ -1251,6 +1277,30 @@
     .m-item.pago .m-dia, .m-item.pago .m-st{color:#8e8e93;}
     .m-item.pago .m-desc, .m-item.pago .m-val{color:#a1a1a6;}
   }
+  /* ---- Cor de destaque ----
+     Troca so a cor de acao (botoes, selecao, barras, foco). Os tons de status
+     (pago, atrasado, vence hoje) nao mudam: eles tem significado. Vem por ultimo
+     para valer por cima do Modelo F e da paleta do celular; com destaque escolhido
+     o texto dos botoes volta a ser branco, porque todas estas cores sao escuras. */
+  html[data-acento="indigo"]{--chart:#4f46e5;--chart-soft:#a5b4fc;--chart-hover:#6366f1;--chart-fundo:#312e81;}
+  html[data-acento="roxo"]{--chart:#7c3aed;--chart-soft:#c4b5fd;--chart-hover:#8b5cf6;--chart-fundo:#4c1d95;}
+  html[data-acento="rosa"]{--chart:#be185d;--chart-soft:#f9a8d4;--chart-hover:#db2777;--chart-fundo:#831843;}
+  html[data-acento="vinho"]{--chart:#9f1239;--chart-soft:#fda4af;--chart-hover:#be123c;--chart-fundo:#4c0519;}
+  html[data-acento="laranja"]{--chart:#c2410c;--chart-soft:#fdba74;--chart-hover:#ea580c;--chart-fundo:#7c2d12;}
+  html[data-acento="verde"]{--chart:#15803d;--chart-soft:#86efac;--chart-hover:#16a34a;--chart-fundo:#14532d;}
+  html[data-acento="turquesa"]{--chart:#0f766e;--chart-soft:#5eead4;--chart-hover:#0d9488;--chart-fundo:#134e4a;}
+  html[data-acento="grafite"]{--chart:#52525b;--chart-soft:#d4d4d8;--chart-hover:#71717a;--chart-fundo:#27272a;}
+  html[data-acento] .ebtn.primary, html[data-acento] .add-btn, html[data-acento] .ss-opt.selected,
+  html[data-acento] .date-cal-grid button.selected, html[data-acento] .nav-mobile .nav-novo{color:#fff;}
+  .acento-opts{display:flex;flex-wrap:wrap;gap:8px;}
+  .acento-opt{
+    width:30px;height:30px;border-radius:50%;padding:0;cursor:pointer;flex:none;
+    border:2px solid transparent;box-shadow:inset 0 0 0 2px var(--surface);
+  }
+  .acento-opt.active{border-color:var(--ink);}
+  .acento-opt:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  /* O fundo some no celular (la a paleta e fixa), mas a cor de destaque vale e fica. */
+  @media (max-width:640px){ .fundo-wrap.acento-wrap{display:block;} }
 </style>
 
 <script>
@@ -1260,6 +1310,8 @@
     try {
       var f = localStorage.getItem('cap_fundo_v1');
       if (f === 'grafite' || f === 'azul' || f === 'modelof') document.documentElement.setAttribute('data-fundo', f);
+      var a = localStorage.getItem('cap_acento_v1');
+      if (a && /^[a-z]+$/.test(a) && a !== 'azul') document.documentElement.setAttribute('data-acento', a);
     } catch(e){}
   })();
 </script>
@@ -1284,9 +1336,20 @@
         Novo
       </button>
       <div class="user-chip" id="userChip" style="display:none;">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/></svg>
-        <span id="userName"></span>
-        <span class="user-ini mobile-only" id="userIni"></span>
+        <button type="button" class="uc-avatar" id="ucAvatar" title="Conta e configurações" aria-label="Conta e configurações"><span id="userIni"></span></button>
+        <div class="uc-ola"><span id="ucSaudacao">Olá,</span><b id="userName"></b></div>
+        <button type="button" class="uc-refresh" id="ucAtualizar" title="Atualizar dados" aria-label="Atualizar dados">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="uc-sep"></span>
+        <div class="uc-clima" id="ucClima" title="Clima agora">
+          <span id="ucIcone"></span>
+          <b id="ucTemp">--°</b>
+          <svg class="uc-pin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+          <span class="uc-cidade">Recife</span>
+        </div>
+        <span class="uc-sep"></span>
+        <div class="uc-hora"><span id="ucData"></span><b id="ucRelogio"></b></div>
         <button type="button" class="ebtn ghost" id="logoutBtn">Sair</button>
       </div>
       <div class="quick-icons">
@@ -1338,6 +1401,20 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Sair da conta
       </button>
+      <div class="fundo-wrap acento-wrap">
+        <div class="fundo-lbl">Cor de destaque</div>
+        <div class="acento-opts" id="acentoOpts">
+          <button type="button" class="acento-opt" data-acento-opt="azul" title="Azul" aria-label="Azul" aria-pressed="false" style="background:#1d6ef0"></button>
+          <button type="button" class="acento-opt" data-acento-opt="indigo" title="Índigo" aria-label="Índigo" aria-pressed="false" style="background:#4f46e5"></button>
+          <button type="button" class="acento-opt" data-acento-opt="roxo" title="Roxo" aria-label="Roxo" aria-pressed="false" style="background:#7c3aed"></button>
+          <button type="button" class="acento-opt" data-acento-opt="rosa" title="Rosa" aria-label="Rosa" aria-pressed="false" style="background:#be185d"></button>
+          <button type="button" class="acento-opt" data-acento-opt="vinho" title="Vinho" aria-label="Vinho" aria-pressed="false" style="background:#9f1239"></button>
+          <button type="button" class="acento-opt" data-acento-opt="laranja" title="Laranja" aria-label="Laranja" aria-pressed="false" style="background:#c2410c"></button>
+          <button type="button" class="acento-opt" data-acento-opt="verde" title="Verde" aria-label="Verde" aria-pressed="false" style="background:#15803d"></button>
+          <button type="button" class="acento-opt" data-acento-opt="turquesa" title="Turquesa" aria-label="Turquesa" aria-pressed="false" style="background:#0f766e"></button>
+          <button type="button" class="acento-opt" data-acento-opt="grafite" title="Grafite" aria-label="Grafite" aria-pressed="false" style="background:#52525b"></button>
+        </div>
+      </div>
       <div class="fundo-wrap">
         <div class="fundo-lbl">Fundo da tela</div>
         <div class="fundo-opts" id="fundoOpts">
@@ -1986,7 +2063,7 @@ function atualizarEstadoLogin(){
   var logado = !!currentAccount;
   document.getElementById('loginOverlay').classList.toggle('open', !logado);
   document.getElementById('userChip').style.display = logado ? 'flex' : 'none';
-  if (logado) document.getElementById('userName').textContent = 'Olá! ' + primeiroNome(currentAccount);
+  if (logado) document.getElementById('userName').textContent = primeiroNome(currentAccount);
   if (logado) document.getElementById('userIni').textContent = iniciais(currentAccount);
 }
 
@@ -2524,6 +2601,31 @@ document.getElementById('fundoOpts').addEventListener('click', function(ev){
   aplicarFundo(alvo.getAttribute('data-fundo-opt'));
 });
 marcarFundo(fundoSalvo());
+
+var ACENTOS = ['azul', 'indigo', 'roxo', 'rosa', 'vinho', 'laranja', 'verde', 'turquesa', 'grafite'];
+function marcarAcento(v){
+  var opts = document.querySelectorAll('[data-acento-opt]');
+  for (var i = 0; i < opts.length; i++){
+    var ligado = opts[i].getAttribute('data-acento-opt') === v;
+    opts[i].classList.toggle('active', ligado);
+    opts[i].setAttribute('aria-pressed', ligado ? 'true' : 'false');
+  }
+}
+function aplicarAcento(v){
+  if (ACENTOS.indexOf(v) < 0) v = 'azul';
+  /* Azul e o padrao: sem atributo, cada fundo usa a sua propria cor de acao. */
+  if (v === 'azul') document.documentElement.removeAttribute('data-acento');
+  else document.documentElement.setAttribute('data-acento', v);
+  try { localStorage.setItem('cap_acento_v1', v); } catch(e){}
+  marcarAcento(v);
+}
+document.getElementById('acentoOpts').addEventListener('click', function(ev){
+  var alvo = ev.target.closest ? ev.target.closest('[data-acento-opt]') : null;
+  if (!alvo) return;
+  ev.stopPropagation();
+  aplicarAcento(alvo.getAttribute('data-acento-opt'));
+});
+marcarAcento(document.documentElement.getAttribute('data-acento') || 'azul');
 
 document.getElementById('filtersManageBtn').addEventListener('click', function(ev){
   ev.stopPropagation();
@@ -4127,9 +4229,75 @@ document.getElementById('mLista').addEventListener('click', function(ev){
 /* No celular o avatar e o "Conta e configuracoes" do desenho: abre a gaveta de Acoes,
    onde fica o "Sair da conta". */
 document.getElementById('userChip').addEventListener('click', function(ev){
-  if (!window.matchMedia('(max-width:640px)').matches) return;
+  if (ev.target.closest('#ucAtualizar')) return;
+  var celular = window.matchMedia('(max-width:640px)').matches;
+  if (!celular && !ev.target.closest('#ucAvatar')) return;
   ev.stopPropagation();
   abrirGavetaAcoes();
+});
+
+/* ---- Cartao do usuario: saudacao, data, hora e clima ----
+   O clima vem do Open-Meteo (gratuito, sem chave, sem cadastro) para Recife.
+   So vao coordenadas fixas da cidade: nada da pessoa sai do navegador. */
+var CLIMA_LAT = -8.05, CLIMA_LON = -34.88;
+var SVG_CLIMA = {
+  sol: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" fill="#f5b301"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="#f5b301" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  lua: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" fill="#d1d5db"/></svg>',
+  parcial: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="4" fill="#f5b301"/><path d="M7.5 19h10a3.5 3.5 0 0 0 .3-7 5 5 0 0 0-9.5 1.3A3 3 0 0 0 7.5 19Z" fill="#d1d5db"/></svg>',
+  nuvem: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><path d="M6.5 19h11a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 6.5 19Z" fill="#9ca3af"/></svg>',
+  chuva: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><path d="M6.5 15h11a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 6.5 15Z" fill="#9ca3af"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  trovoada: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><path d="M6.5 14h11a4 4 0 0 0 .4-8 5.5 5.5 0 0 0-10.6 1.5A3.3 3.3 0 0 0 6.5 14Z" fill="#9ca3af"/><path d="M12.5 15l-2.5 4h3l-2 4" stroke="#f5b301" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  neblina: '<svg class="uc-icone" viewBox="0 0 24 24" fill="none"><path d="M4 9h16M3 13h18M5 17h14" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>'
+};
+/* Codigos WMO do Open-Meteo agrupados no que um icone consegue mostrar. */
+function iconeClima(codigo, dia){
+  if (codigo === 0) return { svg: dia ? SVG_CLIMA.sol : SVG_CLIMA.lua, txt: 'Céu limpo' };
+  if (codigo <= 2) return { svg: dia ? SVG_CLIMA.parcial : SVG_CLIMA.nuvem, txt: 'Parcialmente nublado' };
+  if (codigo === 3) return { svg: SVG_CLIMA.nuvem, txt: 'Nublado' };
+  if (codigo === 45 || codigo === 48) return { svg: SVG_CLIMA.neblina, txt: 'Neblina' };
+  if (codigo >= 95) return { svg: SVG_CLIMA.trovoada, txt: 'Trovoada' };
+  return { svg: SVG_CLIMA.chuva, txt: 'Chuva' };
+}
+async function atualizarClima(){
+  try {
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + CLIMA_LAT + '&longitude=' + CLIMA_LON +
+      '&current=temperature_2m,weather_code,is_day&timezone=America%2FRecife';
+    var resp = await fetch(url, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var atual = (await resp.json()).current;
+    var ic = iconeClima(Number(atual.weather_code), atual.is_day === 1);
+    document.getElementById('ucIcone').innerHTML = ic.svg;
+    document.getElementById('ucTemp').textContent = Math.round(atual.temperature_2m) + '°';
+    document.getElementById('ucClima').title = ic.txt + ' em Recife';
+  } catch (e) {
+    document.getElementById('ucTemp').textContent = '--°';
+    document.getElementById('ucClima').title = 'Clima indisponível agora';
+  }
+}
+function atualizarRelogio(){
+  var agora = new Date();
+  var h = agora.getHours();
+  document.getElementById('ucSaudacao').textContent = h < 5 ? 'Boa noite,' : h < 12 ? 'Bom dia,' : h < 18 ? 'Boa tarde,' : 'Boa noite,';
+  document.getElementById('ucData').textContent = agora.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
+  document.getElementById('ucRelogio').textContent = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+atualizarRelogio();
+setInterval(atualizarRelogio, 15000);
+atualizarClima();
+setInterval(atualizarClima, 30 * 60 * 1000);
+
+/* Atualizar: rele a planilha (o que outra pessoa lancou aparece) e o clima. */
+document.getElementById('ucAtualizar').addEventListener('click', async function(ev){
+  ev.stopPropagation();
+  var b = this;
+  if (b.classList.contains('girando') || !currentAccount) return;
+  b.classList.add('girando');
+  try {
+    await Promise.all([carregarDados(), atualizarClima()]);
+    showToast('Dados atualizados.');
+  } finally {
+    b.classList.remove('girando');
+  }
 });
 
 document.getElementById('rankBody').addEventListener('click', function(ev){
