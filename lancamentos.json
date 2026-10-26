@@ -2223,7 +2223,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-376.75,
+446.27,
 "",
 "",
 "",
@@ -2391,7 +2391,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-58.2,
+98.62,
 "",
 "",
 "",
@@ -3199,7 +3199,7 @@
 141,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46127,
 46127,
@@ -3223,7 +3223,7 @@
 143,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46157,
 46157,
@@ -3247,7 +3247,7 @@
 144,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46218,
 46218,
@@ -3271,13 +3271,13 @@
 145,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46251,
 46251,
 "Cartão Melius - Seguro S10 - Parcela 5/10",
 "Cartão de Crédito",
-"A Vencer",
+"Pago",
 "",
 589.47,
 "",
@@ -3295,7 +3295,7 @@
 147,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46188,
 46188,
@@ -3319,13 +3319,13 @@
 148,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46280,
 46281,
 "Cartão Melius - Seguro S10 - Parcela 6/10",
 "Cartão de Crédito",
-"A Vencer",
+"Pago",
 "",
 589.47,
 "",
@@ -3343,13 +3343,13 @@
 149,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46310,
 46310,
 "Cartão Melius - Seguro S10 - Parcela 7/10",
 "Cartão de Crédito",
-"A Vencer",
+"Pago",
 "",
 589.47,
 "",
@@ -3367,7 +3367,7 @@
 150,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46342,
 "",
@@ -3391,7 +3391,7 @@
 151,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46371,
 "",
@@ -3415,7 +3415,7 @@
 152,
 "",
 "",
-"Ivanilda Hozana",
+"Natanael Silva",
 "Envio de Boleto",
 46402,
 "",
@@ -5146,15 +5146,15 @@
 "Natanael Silva",
 "Envio de Boleto",
 46320,
-"",
+46321,
 "Claro Apto 102 - 136-411619671",
 "Telefone/Internet",
 "A Vencer",
 "",
-130,
+132.63,
 "",
-"",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-235-1793010201930.png",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-235-1793010534996.jpeg",
 "",
 ""
 ]
@@ -5780,7 +5780,7 @@
 "",
 "",
 "",
-""
+"Lançamento Projetado - Dezembro"
 ]
 ]
 },
@@ -5804,7 +5804,7 @@
 "",
 "",
 "",
-""
+"Lançamento Projetado - Dezembro"
 ]
 ]
 },
@@ -5853,6 +5853,438 @@
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-264-1792423584712.jpeg",
 "",
 ""
+]
+]
+},
+{
+"index": 244,
+"values": [
+[
+265,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46338,
+"",
+"Cartão Bradesco 2049",
+"Cartão de Crédito",
+"A Vencer",
+"",
+86.5,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 245,
+"values": [
+[
+266,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46336,
+"",
+"Cartão Inter",
+"Cartão de Crédito",
+"A Vencer",
+"",
+162.45,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 246,
+"values": [
+[
+267,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46447,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 247,
+"values": [
+[
+268,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46478,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 248,
+"values": [
+[
+269,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46508,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 249,
+"values": [
+[
+270,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46539,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 250,
+"values": [
+[
+271,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46569,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 251,
+"values": [
+[
+272,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46600,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 252,
+"values": [
+[
+273,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46631,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 253,
+"values": [
+[
+274,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46661,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 254,
+"values": [
+[
+275,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46692,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 255,
+"values": [
+[
+276,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46722,
+"",
+"Cartão Ivanilda - Xp",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 256,
+"values": [
+[
+277,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46405,
+"",
+"Cartão Ivanilda Mercado Pago",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 257,
+"values": [
+[
+278,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46436,
+"",
+"Cartão Ivanilda Mercado Pago",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 258,
+"values": [
+[
+279,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46464,
+"",
+"Cartão Ivanilda Mercado Pago",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 259,
+"values": [
+[
+280,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46495,
+"",
+"Cartão Ivanilda Mercado Pago",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 260,
+"values": [
+[
+281,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46525,
+"",
+"Cartão Ivanilda Mercado Pago",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 261,
+"values": [
+[
+282,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46556,
+"",
+"Cartão Ivanilda Mercado Pago",
+"Cartão de Crédito",
+"A Vencer",
+"",
+3000,
+"",
+"",
+"",
+"",
+"Lançamento Projetado - Dezembro"
 ]
 ]
 }
