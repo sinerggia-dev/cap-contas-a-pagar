@@ -298,6 +298,20 @@
   .busca-vazia{color:var(--ink-muted);}
   /* Periodo De/Ate pelo vencimento. Global como a busca: vale para a tabela e
      para os paineis de totais. No celular ele ocupa a linha inteira (ver @media 640px). */
+  /* Alteracao em lote: barra que aparece acima da tabela quando ha selecao. */
+  .lote-box{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    margin:0 16px 10px;padding:9px 12px;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:10px;
+  }
+  .lote-box[hidden]{display:none;}
+  .lote-box label{color:var(--ink-muted);font:500 12.5px var(--sans);}
+  .lote-box select,.lote-box input{
+    height:31px;box-sizing:border-box;background:var(--surface);border:1px solid var(--border);
+    border-radius:7px;color:var(--ink);font:500 12.8px var(--sans);padding:0 8px;color-scheme:dark;
+  }
+  .lote-box #loteValor{flex:1 1 220px;min-width:0;}
+  .lote-aviso{font:500 12px var(--sans);color:var(--ink-muted);flex:1 1 100%;}
   .periodo-wrap{display:flex;align-items:center;gap:6px;flex:none;}
   .periodo-wrap label{color:var(--ink-muted);font:500 12.5px var(--sans);}
   .periodo-wrap input{
@@ -1878,6 +1892,33 @@
               <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
               <span id="excluirSelTxt">Excluir selecionados</span>
             </button>
+            <button class="clear-btn" id="alterarSelBtn" type="button" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17v3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+              <span id="alterarSelTxt">Alterar selecionados</span>
+            </button>
+          </div>
+          <!-- Painel de alteracao em lote. Fica escondido ate alguem pedir. -->
+          <div id="loteBox" class="lote-box" hidden>
+            <label for="loteCampo">Alterar</label>
+            <select id="loteCampo">
+              <option value="nome">Despesa de</option>
+              <option value="desc">Descrição</option>
+              <option value="tipo">Tipo</option>
+              <option value="parcela">Parcela</option>
+              <option value="status">Status</option>
+              <option value="venc">Vencimento</option>
+              <option value="obs">Observação</option>
+            </select>
+            <label for="loteValor">para</label>
+            <input type="text" id="loteValor" list="tipoList" autocomplete="off" placeholder="novo valor">
+            <select id="loteValorSel" hidden>
+              <option value="A Vencer">A Vencer</option>
+              <option value="Pago">Pago</option>
+            </select>
+            <input type="date" id="loteValorData" hidden>
+            <button class="clear-btn" id="loteAplicar" type="button">Aplicar</button>
+            <button class="clear-btn" id="loteCancelar" type="button">Cancelar</button>
+            <span id="loteAviso" class="lote-aviso"></span>
           </div>
           <div class="table-scroll">
             <table class="cap" id="capTable">
@@ -4267,6 +4308,14 @@ function atualizarSelecao(rows){
   var btn = document.getElementById('excluirSelBtn');
   btn.style.display = editor && n ? '' : 'none';
   document.getElementById('excluirSelTxt').textContent = 'Excluir selecionados (' + n + ')';
+  var btnAlt = document.getElementById('alterarSelBtn');
+  if (btnAlt){
+    btnAlt.style.display = editor && n ? '' : 'none';
+    document.getElementById('alterarSelTxt').textContent = 'Alterar selecionados (' + n + ')';
+  }
+  // Sem selecao nao ha o que alterar: o painel nao pode ficar aberto sozinho.
+  var box = document.getElementById('loteBox');
+  if (box && !n) box.hidden = true;
   var todos = document.getElementById('selTodos');
   if (todos){
     todos.style.display = editor ? '' : 'none';
@@ -4331,6 +4380,143 @@ async function excluirSelecionados(){
     await carregarDados();
   }
 }
+/* ---------------- alterar em lote ----------------
+   Os campos da tela nem sempre sao colunas da planilha:
+
+     parcela  -> vive DENTRO da descricao, coluna 7: "Texto - Parcela 1/25"
+     doc      -> vive DENTRO de "Despesa de", coluna 3: "Nome - Doc"
+
+   Por isso cada alteracao remonta a coluna inteira preservando a parte que nao
+   foi pedida. Trocar a descricao escrevendo so o texto novo apagaria a parcela de
+   cada linha, e nao haveria como saber depois qual linha era 1/25 e qual era 2/25. */
+var LOTE_CAMPOS = {
+  nome:    { rotulo: 'Despesa de',  tipo: 'texto' },
+  desc:    { rotulo: 'Descrição',   tipo: 'texto' },
+  tipo:    { rotulo: 'Tipo',        tipo: 'texto' },
+  parcela: { rotulo: 'Parcela',     tipo: 'texto' },
+  status:  { rotulo: 'Status',      tipo: 'lista' },
+  venc:    { rotulo: 'Vencimento',  tipo: 'data'  },
+  obs:     { rotulo: 'Observação',  tipo: 'texto' },
+};
+
+/* Devolve a linha de 17 colunas com UM campo trocado. `r` e o lancamento ja lido,
+   `linha` e o que esta na planilha agora. */
+function loteAplicarCampo(linha, r, campo, valor){
+  var nova = linha.slice();
+  if (campo === 'nome'){
+    // Preserva o documento, que mora depois do " - " na mesma coluna.
+    nova[3] = valor + (r.doc ? ' - ' + r.doc : '');
+  } else if (campo === 'desc'){
+    // Preserva a parcela DESTA linha: cada uma tem a sua.
+    nova[7] = valor + (r.parcela ? ' - Parcela ' + r.parcela : '');
+  } else if (campo === 'parcela'){
+    nova[7] = r.desc + (valor ? ' - Parcela ' + valor : '');
+  } else if (campo === 'tipo'){
+    nova[8] = valor;
+  } else if (campo === 'status'){
+    nova[9] = valor;
+  } else if (campo === 'venc'){
+    nova[5] = ddmmyyyyToSerial(valor);
+  } else if (campo === 'obs'){
+    nova[16] = valor;
+  }
+  return nova;
+}
+
+function loteValorEscolhido(){
+  var campo = document.getElementById('loteCampo').value;
+  var t = LOTE_CAMPOS[campo].tipo;
+  if (t === 'lista') return document.getElementById('loteValorSel').value;
+  if (t === 'data'){
+    var iso = document.getElementById('loteValorData').value;   // aaaa-mm-dd
+    if (!iso) return '';
+    var p = iso.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+  return document.getElementById('loteValor').value.trim();
+}
+
+function loteTrocarCampo(){
+  var campo = document.getElementById('loteCampo').value;
+  var t = LOTE_CAMPOS[campo].tipo;
+  document.getElementById('loteValor').hidden = t !== 'texto';
+  document.getElementById('loteValorSel').hidden = t !== 'lista';
+  document.getElementById('loteValorData').hidden = t !== 'data';
+  var dica = {
+    nome: 'O documento, se houver, é mantido.',
+    desc: 'A parcela de cada lançamento é mantida.',
+    parcela: 'Atenção: põe a MESMA parcela em todos os selecionados.',
+    venc: 'Atenção: põe o MESMO vencimento em todos os selecionados.',
+  }[campo] || '';
+  document.getElementById('loteAviso').textContent = dica;
+}
+
+async function alterarSelecionados(){
+  var chaves = Object.keys(selecionados);
+  if (!chaves.length) return;
+  var campo = document.getElementById('loteCampo').value;
+  var valor = loteValorEscolhido();
+  var btn = document.getElementById('loteAplicar');
+  btn.disabled = true;
+  var alterados = 0;
+  try {
+    var token = await getToken();
+    // Mesma regra da exclusao: resolve TODAS as posicoes antes de gravar a
+    // primeira. Se alguma nao bater, nada e alterado.
+    var linhas = await buscarLinhasAtuaisGraph(token);
+    var alvos = chaves.map(function(k){
+      var p = k.split('|'), id = Number(p[0]), esperado = Number(p[1]);
+      var cand = linhas.filter(function(row){ return Number(row.values[0][0]) === id; });
+      if (!cand.length) return null;
+      if (cand.length > 1){
+        var mesmo = cand.filter(function(row){ return row.index === esperado; })[0];
+        if (!mesmo) throw new Error('Id ' + id + ' está duplicado na planilha e mudou de posição — corrija na planilha antes de alterar.');
+        return mesmo;
+      }
+      return cand[0];
+    }).filter(function(x){ return x !== null; });
+
+    for (var i = 0; i < alvos.length; i++){
+      var atual = alvos[i];
+      var r = graphRowToRow(atual.values[0], atual.index);
+      await atualizarLinhaGraph(token, atual.index, loteAplicarCampo(atual.values[0], r, campo, valor));
+      alterados++;
+    }
+    selecionados = {};
+    document.getElementById('loteBox').hidden = true;
+    showToast(alterados + (alterados === 1 ? ' lançamento alterado.' : ' lançamentos alterados.'));
+  } catch (err) {
+    showToast((alterados ? alterados + ' alterado(s); depois parou: ' : 'Erro ao alterar: ') + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
+    await carregarDados();
+  }
+}
+
+document.getElementById('loteCampo').addEventListener('change', loteTrocarCampo);
+document.getElementById('loteCancelar').addEventListener('click', function(){
+  document.getElementById('loteBox').hidden = true;
+});
+document.getElementById('alterarSelBtn').addEventListener('click', function(){
+  var box = document.getElementById('loteBox');
+  box.hidden = !box.hidden;
+  if (!box.hidden){ loteTrocarCampo(); document.getElementById('loteValor').focus(); }
+});
+document.getElementById('loteAplicar').addEventListener('click', function(){
+  var n = Object.keys(selecionados).length;
+  if (!n) return;
+  var campo = document.getElementById('loteCampo').value;
+  var valor = loteValorEscolhido();
+  if (valor === '' && campo !== 'obs' && campo !== 'parcela'){
+    showToast('Escreva o novo valor antes de aplicar.');
+    return;
+  }
+  pedirSenha('Digite a senha para alterar ' + LOTE_CAMPOS[campo].rotulo + ' para "' + valor +
+             '" em ' + n + (n === 1 ? ' lançamento' : ' lançamentos') + ':', function(ok){
+    if (ok) alterarSelecionados();
+  });
+});
+
 document.getElementById('excluirSelBtn').addEventListener('click', function(){
   var n = Object.keys(selecionados).length;
   if (!n) return;
