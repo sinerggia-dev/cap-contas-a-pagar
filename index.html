@@ -2754,7 +2754,15 @@ document.getElementById('filtersIconBtn').addEventListener('click', function(ev)
   fecharGavetaAcoes();
   if (jaAberta) fecharGavetaFiltros(); else abrirGavetaFiltros();
 });
-document.getElementById('filtersDrawer').addEventListener('click', function(ev){ ev.stopPropagation(); });
+/* O clique dentro de um dropdown nao chega aqui: o proprio dropdown o barra antes.
+   Entao chegar aqui quer dizer clique na gaveta mas FORA dos dropdowns — e eles tem
+   de fechar. Faltava isto: a gaveta barrava o clique, o fecha-tudo do `document`
+   nunca rodava, e a lista so fechava clicando fora da gaveta inteira. Parecia
+   travada. */
+document.getElementById('filtersDrawer').addEventListener('click', function(ev){
+  closeAllFilterDropdowns();
+  ev.stopPropagation();
+});
 document.getElementById('filtersDrawerCloseBtn').addEventListener('click', function(ev){
   ev.stopPropagation();
   fecharGavetaFiltros();
