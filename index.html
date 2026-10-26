@@ -214,9 +214,9 @@
     font-size:10.6px;color:var(--ink-muted);text-transform:uppercase;
     letter-spacing:.05em;margin-bottom:8px;
   }
-  .fundo-opts{display:flex;gap:6px;}
+  .fundo-opts{display:flex;flex-wrap:wrap;gap:6px;}
   .fundo-opt{
-    flex:1 1 0;min-width:0;
+    flex:1 1 calc(25% - 6px);min-width:0;
     display:flex;flex-direction:column;align-items:center;gap:6px;
     background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
     color:var(--ink-soft);font:600 11.8px var(--sans);padding:8px 6px;cursor:pointer;
@@ -234,6 +234,9 @@
   .amostra-grafite{background:linear-gradient(135deg,#0f1114,#14171b);}
   .amostra-azul{background:linear-gradient(135deg,#00040e,#0f1624);}
   .amostra-modelof{background:linear-gradient(135deg,#1c1c1e,#333335);}
+  .amostra-branco{background:linear-gradient(135deg,#ffffff,#f2f4f7);}
+  .amostra-gelo{background:linear-gradient(135deg,#f3f6f9,#e7edf3);}
+  .amostra-cinzaclaro{background:linear-gradient(135deg,#e9eaec,#dcdee2);}
   @media (max-width:640px){
     .actions-drawer{width:92vw;max-width:none;}
   }
@@ -1317,6 +1320,65 @@
   .acento-opt:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
   /* O fundo some no celular (la a paleta e fixa), mas a cor de destaque vale e fica. */
   @media (max-width:640px){ .fundo-wrap.acento-wrap{display:block;} }
+  /* ---- Fundos claros (so no computador: no celular a paleta Grafite e fixa) ----
+     Tema claro de verdade: alem das superficies, os tons de status escurecem,
+     porque o amarelo de "em atraso" e o verde de "pago", feitos para fundo
+     escuro, somem sobre branco. Todos os textos passam de 4,5:1 sobre --surface. */
+  @media (min-width:641px){
+    html[data-fundo="branco"]{--bg:#ffffff; --bg-base:#f2f4f7; --tarja-a:#ffffff; --tarja-b:#f7f8fa; --tarja-c:#eef0f3;
+      --surface:#ffffff; --surface-2:#f6f7f9; --surface-3:#eceef2; --border:#e1e4ea; --border-strong:#cdd2da;}
+    html[data-fundo="gelo"]{--bg:#f3f6f9; --bg-base:#e7edf3; --tarja-a:#fbfcfd; --tarja-b:#f1f5f8; --tarja-c:#e6ecf2;
+      --surface:#fbfcfd; --surface-2:#f0f4f8; --surface-3:#e4eaf1; --border:#d9e1ea; --border-strong:#c3cedb;}
+    html[data-fundo="cinzaclaro"]{--bg:#e9eaec; --bg-base:#dcdee2; --tarja-a:#f4f5f6; --tarja-b:#e9ebee; --tarja-c:#dfe2e6;
+      --surface:#f4f5f6; --surface-2:#eaecef; --surface-3:#dfe2e6; --border:#d0d4da; --border-strong:#b9bfc7;}
+    html[data-claro]{
+      color-scheme:light;
+      --ink:#16181d; --ink-soft:#3d434d; --ink-muted:#5b626d; --ink-faint:#80868f;
+      --chart:#1d6ef0; --chart-soft:#1452b8; --chart-hover:#1557c0; --chart-fundo:#bcd3fa;
+      --select:#d9e6fc; --select-ink:#0f1d3a;
+      --critical:#b91c1c; --critical-dim:#fde2e2;
+      --atrasado:#7f5400; --atrasado-dim:#fdf1c7;
+      --warning:#9c3d0c; --warning-dim:#ffe8d6;
+      --positive:#116834; --positive-dim:#d9f5e3;
+      --neutral-dim:#e9ecf0;
+      --urgente:#b91c1c; --urgente-dim:#fde2e2;
+      --alerta2:#9c3d0c; --alerta2-dim:#ffe8d6;
+      --alerta3:#7f5400; --alerta3-dim:#fdf1c7;
+    }
+    /* Com cor de destaque escolhida, o texto em tom de destaque usa a propria cor
+       (os tons "soft" sao claros, feitos para fundo escuro). */
+    html[data-claro][data-acento]{--chart-soft:var(--chart);}
+    html[data-claro] .kpi .icon{border-color:rgba(0,0,0,.12);color:rgba(0,0,0,.28);}
+    html[data-claro] .periodo-wrap input{color-scheme:light;}
+    html[data-claro] .report{box-shadow:0 20px 50px rgba(15,23,42,.10);}
+    html[data-claro] table.cap tbody tr.active td .muted{color:rgba(15,29,58,.7);}
+    /* Destaque claro some em fundo claro: as bolinhas claras saem da lista. */
+    html[data-claro] .acento-opt.claro{display:none;}
+  }
+
+  /* ---- Destaques claros (para os fundos escuros) ---- */
+  html[data-acento="branco"]{--chart:#f4f4f5;--chart-soft:#ffffff;--chart-hover:#ffffff;--chart-fundo:#52525b;}
+  html[data-acento="gelo"]{--chart:#dbe5ef;--chart-soft:#eef3f8;--chart-hover:#eef3f8;--chart-fundo:#475569;}
+  html[data-acento="cinzaclaro"]{--chart:#c3c7cd;--chart-soft:#e4e7eb;--chart-hover:#d6d9de;--chart-fundo:#4b5563;}
+  html[data-acento="branco"] .ebtn.primary,
+  html[data-acento="branco"] .add-btn,
+  html[data-acento="branco"] .ss-opt.selected,
+  html[data-acento="branco"] .date-cal-grid button.selected,
+  html[data-acento="branco"] .nav-mobile .nav-novo,
+  html[data-acento="branco"] .uc-avatar,
+  html[data-acento="gelo"] .ebtn.primary,
+  html[data-acento="gelo"] .add-btn,
+  html[data-acento="gelo"] .ss-opt.selected,
+  html[data-acento="gelo"] .date-cal-grid button.selected,
+  html[data-acento="gelo"] .nav-mobile .nav-novo,
+  html[data-acento="gelo"] .uc-avatar,
+  html[data-acento="cinzaclaro"] .ebtn.primary,
+  html[data-acento="cinzaclaro"] .add-btn,
+  html[data-acento="cinzaclaro"] .ss-opt.selected,
+  html[data-acento="cinzaclaro"] .date-cal-grid button.selected,
+  html[data-acento="cinzaclaro"] .nav-mobile .nav-novo,
+  html[data-acento="cinzaclaro"] .uc-avatar{color:#1c1c1e;}
+  .acento-opt.claro{box-shadow:inset 0 0 0 2px var(--surface),0 0 0 1px var(--border-strong);}
 </style>
 
 <script>
@@ -1325,7 +1387,8 @@
   (function(){
     try {
       var f = localStorage.getItem('cap_fundo_v1');
-      if (f === 'grafite' || f === 'azul' || f === 'modelof') document.documentElement.setAttribute('data-fundo', f);
+      if (['grafite','azul','modelof','branco','gelo','cinzaclaro'].indexOf(f) >= 0) document.documentElement.setAttribute('data-fundo', f);
+      if (['branco','gelo','cinzaclaro'].indexOf(f) >= 0) document.documentElement.setAttribute('data-claro', '');
       var a = localStorage.getItem('cap_acento_v1');
       if (a && /^[a-z]+$/.test(a) && a !== 'azul') document.documentElement.setAttribute('data-acento', a);
     } catch(e){}
@@ -1438,6 +1501,9 @@
           <button type="button" class="acento-opt" data-acento-opt="verde" title="Verde" aria-label="Verde" aria-pressed="false" style="background:#15803d"></button>
           <button type="button" class="acento-opt" data-acento-opt="turquesa" title="Turquesa" aria-label="Turquesa" aria-pressed="false" style="background:#0f766e"></button>
           <button type="button" class="acento-opt" data-acento-opt="grafite" title="Grafite" aria-label="Grafite" aria-pressed="false" style="background:#52525b"></button>
+          <button type="button" class="acento-opt claro" data-acento-opt="branco" title="Branco" aria-label="Branco" aria-pressed="false" style="background:#f4f4f5"></button>
+          <button type="button" class="acento-opt claro" data-acento-opt="gelo" title="Gelo" aria-label="Gelo" aria-pressed="false" style="background:#dbe5ef"></button>
+          <button type="button" class="acento-opt claro" data-acento-opt="cinzaclaro" title="Cinza claro" aria-label="Cinza claro" aria-pressed="false" style="background:#c3c7cd"></button>
         </div>
       </div>
       <div class="fundo-wrap">
@@ -1454,6 +1520,15 @@
           </button>
           <button type="button" class="fundo-opt" data-fundo-opt="modelof" aria-pressed="false">
             <span class="fundo-amostra amostra-modelof"></span>Modelo F
+          </button>
+          <button type="button" class="fundo-opt" data-fundo-opt="branco" aria-pressed="false">
+            <span class="fundo-amostra amostra-branco"></span>Branco
+          </button>
+          <button type="button" class="fundo-opt" data-fundo-opt="gelo" aria-pressed="false">
+            <span class="fundo-amostra amostra-gelo"></span>Gelo
+          </button>
+          <button type="button" class="fundo-opt" data-fundo-opt="cinzaclaro" aria-pressed="false">
+            <span class="fundo-amostra amostra-cinzaclaro"></span>Cinza claro
           </button>
         </div>
       </div>
@@ -2595,7 +2670,9 @@ document.getElementById('actionsDrawerCloseBtn').addEventListener('click', funct
   ev.stopPropagation();
   fecharGavetaAcoes();
 });
-var FUNDOS = ['preto', 'grafite', 'azul', 'modelof'];
+var FUNDOS = ['preto', 'grafite', 'azul', 'modelof', 'branco', 'gelo', 'cinzaclaro'];
+var FUNDOS_CLAROS = ['branco', 'gelo', 'cinzaclaro'];
+var ACENTOS_CLAROS = ['branco', 'gelo', 'cinzaclaro'];
 function fundoSalvo(){
   try {
     var v = localStorage.getItem('cap_fundo_v1');
@@ -2616,8 +2693,13 @@ function aplicarFundo(v){
      para dar errado se algum dia os tokens do :root mudarem. */
   if (v === 'preto') document.documentElement.removeAttribute('data-fundo');
   else document.documentElement.setAttribute('data-fundo', v);
+  var claro = FUNDOS_CLAROS.indexOf(v) >= 0;
+  if (claro) document.documentElement.setAttribute('data-claro', '');
+  else document.documentElement.removeAttribute('data-claro');
   try { localStorage.setItem('cap_fundo_v1', v); } catch(e){}
   marcarFundo(v);
+  /* Destaque claro sobre fundo claro nao aparece: volta para o azul. */
+  if (claro && ACENTOS_CLAROS.indexOf(document.documentElement.getAttribute('data-acento')) >= 0) aplicarAcento('azul');
 }
 document.getElementById('fundoOpts').addEventListener('click', function(ev){
   var alvo = ev.target.closest ? ev.target.closest('[data-fundo-opt]') : null;
@@ -2627,7 +2709,7 @@ document.getElementById('fundoOpts').addEventListener('click', function(ev){
 });
 marcarFundo(fundoSalvo());
 
-var ACENTOS = ['azul', 'indigo', 'roxo', 'rosa', 'vinho', 'laranja', 'verde', 'turquesa', 'grafite'];
+var ACENTOS = ['azul', 'indigo', 'roxo', 'rosa', 'vinho', 'laranja', 'verde', 'turquesa', 'grafite', 'branco', 'gelo', 'cinzaclaro'];
 function marcarAcento(v){
   var opts = document.querySelectorAll('[data-acento-opt]');
   for (var i = 0; i < opts.length; i++){
