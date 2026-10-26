@@ -1369,6 +1369,15 @@
         <div id="adm_filtro_lista" style="max-height:150px;overflow:auto;display:flex;flex-direction:column;gap:3px;margin-top:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px;"></div>
       </div>
       <div id="adm_lista"></div>
+      <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border);">
+        <h3 style="margin:0 0 4px;font:700 14.6px var(--sans);color:var(--ink);">Senha de autorização</h3>
+        <p style="font-size:12.9px;color:var(--ink-muted);margin:0 0 10px;">É a senha pedida para editar, excluir, copiar lançamentos e mexer em filtros e colunas. Vale para todos os usuários. <span id="adm_senha_estado"></span></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <input type="password" id="adm_senha_nova" placeholder="Nova senha" autocomplete="new-password" style="flex:1;min-width:160px;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:8px 10px;border-radius:7px;font:14.6px var(--sans);">
+          <input type="password" id="adm_senha_conf" placeholder="Repita a nova senha" autocomplete="new-password" style="flex:1;min-width:160px;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:8px 10px;border-radius:7px;font:14.6px var(--sans);">
+          <button type="button" class="ebtn primary" id="adm_senha_salvar">Redefinir senha</button>
+        </div>
+      </div>
       <p style="font-size:12.3px;color:var(--ink-muted);margin-top:14px;">Conceder acesso compartilha o arquivo de verdade no SharePoint para esse e-mail (Editor = leitura e escrita, Visualizador = somente leitura). Revogar remove esse compartilhamento.</p>
     </div>
   </div>
@@ -2196,6 +2205,7 @@ function forcarSomenteLeitura(){
 async function carregarDados(){
   try {
     DATA = await carregarDadosAoVivo();
+    await carregarSenhaConfig();
   } catch (eAoVivo) {
     try {
       DATA = await carregarDadosEstatico();
@@ -4369,7 +4379,95 @@ document.getElementById('cancelEntryBtn').addEventListener('click', function(){
   limparNomesAnexo();
 });
 
+/* Senha de autorizacao. A valida fica na aba "Config" da planilha financeira,
+   so como hash SHA-256 com sal (nunca o texto). Enquanto o administrador nao
+   redefinir, vale a senha de fabrica abaixo — que esta escrita neste arquivo
+   publico, por isso o painel avisa ate ela ser trocada. A aba nao entra na
+   sincronizacao do GitHub (scripts/sincronizar_*.py so copiam lancamentos e
+   usuarios), entao o hash nao vai para o repositorio. */
 var SENHA_ACAO = '727349';
+var senhaConfig = null;   // { salt, hash } lido da planilha; null = vale SENHA_ACAO
+var CONFIG_SHEET_NAME = 'Config';
+var CONFIG_TABLE_NAME = 'TabelaConfig';
+var CONFIG_COLS = ['Chave', 'Valor', 'Atualizado em'];
+var CONFIG_CHAVE_SENHA = 'senha_acao';
+
+async function hashSenha(salt, senha){
+  var dados = new TextEncoder().encode(salt + ':' + senha);
+  var buf = await crypto.subtle.digest('SHA-256', dados);
+  return Array.prototype.map.call(new Uint8Array(buf), function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+}
+async function senhaConfere(valor){
+  if (!senhaConfig) return valor === SENHA_ACAO;
+  return (await hashSenha(senhaConfig.salt, valor)) === senhaConfig.hash;
+}
+function configUrl(alvo, sufixo){
+  return GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + '/workbook' + sufixo;
+}
+/* Le a senha da aba Config. Sem a aba (ainda nao redefinida) ou sem acesso: fica a de fabrica. */
+async function carregarSenhaConfig(){
+  try {
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    var resp = await fetch(configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')/rows"), { headers: { Authorization: 'Bearer ' + token } });
+    if (!resp.ok) { senhaConfig = null; return; }
+    var json = await resp.json();
+    var linha = (json.value || []).map(function(r){ return r.values[0]; })
+      .filter(function(v){ return String(v[0]) === CONFIG_CHAVE_SENHA; })[0];
+    var m = linha ? String(linha[1]).match(/^sha256:([0-9a-f]+):([0-9a-f]{64})$/) : null;
+    senhaConfig = m ? { salt: m[1], hash: m[2], atualizado: String(linha[2] || '') } : null;
+  } catch (e) { senhaConfig = null; }
+}
+async function garantirTabelaConfig(token, alvo){
+  var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+  var hGet = { Authorization: 'Bearer ' + token };
+  var respTabela = await fetch(configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')"), { headers: hGet });
+  if (respTabela.ok) return;
+  if (respTabela.status !== 404) throw new Error('Não foi possível checar a aba Config (' + respTabela.status + ').');
+  var respAba = await fetch(configUrl(alvo, "/worksheets('" + CONFIG_SHEET_NAME + "')"), { headers: hGet });
+  if (!respAba.ok){
+    var r1 = await fetch(configUrl(alvo, '/worksheets'), { method: 'POST', headers: hJson, body: JSON.stringify({ name: CONFIG_SHEET_NAME }) });
+    if (!r1.ok) throw new Error('Falha ao criar a aba Config (' + r1.status + '): ' + (await r1.text()).slice(0, 300));
+  }
+  var endereco = 'A1:C1';
+  var r2 = await fetch(configUrl(alvo, "/worksheets('" + CONFIG_SHEET_NAME + "')/range(address='" + endereco + "')"), {
+    method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [CONFIG_COLS] })
+  });
+  if (!r2.ok) throw new Error('Falha ao escrever o cabeçalho da aba Config (' + r2.status + ').');
+  var r3 = await fetch(configUrl(alvo, "/worksheets('" + CONFIG_SHEET_NAME + "')/tables/add"), {
+    method: 'POST', headers: hJson, body: JSON.stringify({ address: endereco, hasHeaders: true })
+  });
+  if (!r3.ok) throw new Error('Falha ao criar a tabela da aba Config (' + r3.status + '): ' + (await r3.text()).slice(0, 300));
+  var criada = await r3.json();
+  var r4 = await fetch(configUrl(alvo, '/tables/' + criada.id), { method: 'PATCH', headers: hJson, body: JSON.stringify({ name: CONFIG_TABLE_NAME }) });
+  if (!r4.ok) throw new Error('Falha ao nomear a tabela como ' + CONFIG_TABLE_NAME + ' (' + r4.status + ').');
+}
+async function gravarSenhaConfig(novaSenha){
+  var token = await getToken();
+  var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+  await garantirTabelaConfig(token, alvo);
+  var saltBytes = crypto.getRandomValues(new Uint8Array(16));
+  var salt = Array.prototype.map.call(saltBytes, function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+  var hash = await hashSenha(salt, novaSenha);
+  var linha = [CONFIG_CHAVE_SENHA, 'sha256:' + salt + ':' + hash, agoraBR()];
+  var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+  var urlRows = configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')/rows");
+  var resp = await fetch(urlRows, { headers: { Authorization: 'Bearer ' + token } });
+  if (!resp.ok) throw new Error('Não foi possível ler a aba Config (' + resp.status + ').');
+  var existente = ((await resp.json()).value || []).filter(function(r){ return String(r.values[0][0]) === CONFIG_CHAVE_SENHA; })[0];
+  var r = existente
+    ? await fetch(urlRows + '/itemAt(index=' + existente.index + ')', { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [linha] }) })
+    : await fetch(urlRows, { method: 'POST', headers: hJson, body: JSON.stringify({ values: [linha] }) });
+  if (!r.ok) throw new Error('Falha ao gravar a senha (' + r.status + '): ' + (await r.text()).slice(0, 300));
+  senhaConfig = { salt: salt, hash: hash, atualizado: linha[2] };
+}
+function mostrarEstadoSenha(){
+  var el = document.getElementById('adm_senha_estado');
+  if (!el) return;
+  el.innerHTML = senhaConfig
+    ? 'Redefinida em ' + escHtml(senhaConfig.atualizado || '—') + '.'
+    : '<b style="color:var(--atrasado);">Ainda é a senha de fábrica, que está visível no código público do site — redefina.</b>';
+}
 var senhaCallback = null;
 function pedirSenha(mensagem, callback){
   senhaCallback = callback;
@@ -4384,10 +4482,10 @@ function fecharSenha(){
   document.getElementById('senhaOverlay').classList.remove('open');
   senhaCallback = null;
 }
-function confirmarSenha(){
+async function confirmarSenha(){
   var input = document.getElementById('senhaInput');
   var cb = senhaCallback;
-  if (input.value === SENHA_ACAO){
+  if (await senhaConfere(input.value)){
     fecharSenha();
     if (cb) cb(true);
   } else {
@@ -4713,6 +4811,7 @@ function renderFiltroChecklist(){
 
 async function carregarAdminPanel(){
   renderFiltroChecklist();
+  mostrarEstadoSenha();
   try {
     var token = await getToken();
     var usuarios = await buscarUsuariosGraph(token);
@@ -4828,6 +4927,32 @@ async function excluirUsuario(email){
     showToast('Erro ao excluir: ' + (e && e.message ? e.message : e));
   }
 }
+
+document.getElementById('adm_senha_salvar').addEventListener('click', function(){
+  var nova = document.getElementById('adm_senha_nova').value;
+  var conf = document.getElementById('adm_senha_conf').value;
+  if (nova.length < 4){ showToast('A nova senha precisa ter pelo menos 4 caracteres.'); return; }
+  if (nova !== conf){ showToast('As duas senhas não são iguais.'); return; }
+  if (!ehDono()){ showToast('Só o administrador pode redefinir a senha.'); return; }
+  pedirSenha('Digite a senha ATUAL para confirmar a troca:', function(ok){
+    if (!ok) return;
+    var btn = document.getElementById('adm_senha_salvar');
+    btn.disabled = true;
+    (async function(){
+      try {
+        await gravarSenhaConfig(nova);
+        document.getElementById('adm_senha_nova').value = '';
+        document.getElementById('adm_senha_conf').value = '';
+        mostrarEstadoSenha();
+        showToast('Senha redefinida. Já vale para todos.');
+      } catch (err) {
+        showToast('Erro ao redefinir a senha: ' + (err && err.message ? err.message : err));
+      } finally {
+        btn.disabled = false;
+      }
+    })();
+  });
+});
 
 document.getElementById('adm_conceder').addEventListener('click', function(){
   var nome = document.getElementById('adm_nome').value.trim();
