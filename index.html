@@ -1317,6 +1317,16 @@
     border:2px solid transparent;box-shadow:inset 0 0 0 2px var(--surface);
   }
   .acento-opt.active{border-color:var(--ink);}
+  /* Ajuste percentual das cores (clarear/escurecer). */
+  .ajuste-cores{margin-top:14px;}
+  .actions-drawer .ajuste-cores{margin-top:0;}
+  .ajuste-linha{display:grid;grid-template-columns:62px 1fr 46px;align-items:center;gap:8px;
+    font-size:12.9px;color:var(--ink-soft);margin-bottom:6px;}
+  .ajuste-linha input[type=range]{width:100%;accent-color:var(--chart);cursor:pointer;}
+  .ajuste-linha output{font:600 12.3px var(--num);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;}
+  .ajuste-reset{background:none;border:1px solid var(--border-strong);border-radius:6px;color:var(--ink-soft);
+    font:600 12px var(--sans);padding:4px 10px;cursor:pointer;margin-top:2px;}
+  .ajuste-reset:hover{color:var(--ink);border-color:var(--ink-soft);}
   .acento-opt:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
   /* O fundo some no celular (la a paleta e fixa), mas a cor de destaque vale e fica. */
   @media (max-width:640px){ .fundo-wrap.acento-wrap{display:block;} }
@@ -1393,6 +1403,51 @@
       if (a && /^[a-z]+$/.test(a) && a !== 'azul') document.documentElement.setAttribute('data-acento', a);
     } catch(e){}
   })();
+
+  /* Ajuste percentual das cores: parte dos tons do tema atual (fundo, cor de
+     destaque, celular ou computador) e clareia (+) ou escurece (-) cada um.
+     Mexe so nos tons de fundo e de destaque: texto e cores de status ficam como
+     estao. Precisa refazer a conta sempre que o tema muda, por isso apaga o
+     ajuste anterior antes de ler os tons de base. */
+  var CAP_AJUSTE_TOKENS = {
+    fundo: ['--bg','--bg-base','--tarja-a','--tarja-b','--tarja-c','--surface','--surface-2','--surface-3','--border','--border-strong'],
+    destaque: ['--chart','--chart-hover','--chart-fundo']
+  };
+  function lerAjusteCores(){
+    try { var aj = JSON.parse(localStorage.getItem('cap_ajuste_v1')); if (aj && typeof aj === 'object') return aj; } catch(e){}
+    return {};
+  }
+  function ajustarTom(valor, p){
+    var m = String(valor).trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i), c;
+    if (m){
+      var h = m[1].length === 3 ? m[1].replace(/./g, '$&$&') : m[1];
+      c = [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+    } else {
+      var r = String(valor).match(/rgba?\(\s*(\d+)[ ,]+(\d+)[ ,]+(\d+)/);
+      if (!r) return null;
+      c = [Number(r[1]), Number(r[2]), Number(r[3])];
+    }
+    return '#' + c.map(function(x){
+      var y = p > 0 ? x + (255 - x) * p : x * (1 + p);
+      return ('0' + Math.round(Math.max(0, Math.min(255, y))).toString(16)).slice(-2);
+    }).join('');
+  }
+  function aplicarAjusteCores(){
+    var el = document.documentElement, aj = lerAjusteCores();
+    Object.keys(CAP_AJUSTE_TOKENS).forEach(function(g){
+      CAP_AJUSTE_TOKENS[g].forEach(function(t){ el.style.removeProperty(t); });
+    });
+    var cs = getComputedStyle(el);
+    Object.keys(CAP_AJUSTE_TOKENS).forEach(function(g){
+      var p = Math.max(-30, Math.min(30, Number(aj[g]) || 0)) / 100;
+      if (!p) return;
+      CAP_AJUSTE_TOKENS[g].forEach(function(t){
+        var v = ajustarTom(cs.getPropertyValue(t), p);
+        if (v) el.style.setProperty(t, v);
+      });
+    });
+  }
+  try { aplicarAjusteCores(); } catch(e){}
 </script>
 
 <div class="report">
@@ -1428,6 +1483,12 @@
           <div class="acento-opts" id="acentoOptsTopo"></div>
           <div class="fundo-lbl">Fundo da tela</div>
           <div class="fundo-opts" id="fundoOptsTopo"></div>
+          <div class="ajuste-cores">
+          <div class="fundo-lbl">Ajuste das cores</div>
+          <label class="ajuste-linha"><span>Fundo</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="fundo" aria-label="Clarear ou escurecer o fundo"><output data-ajuste-val="fundo">0%</output></label>
+          <label class="ajuste-linha"><span>Destaque</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="destaque" aria-label="Clarear ou escurecer a cor de destaque"><output data-ajuste-val="destaque">0%</output></label>
+          <button type="button" class="ajuste-reset" data-ajuste-reset>Restaurar 0%</button>
+        </div>
         </div>
         <span class="uc-sep"></span>
         <div class="uc-clima" id="ucClima" title="Clima agora">
@@ -1504,6 +1565,14 @@
           <button type="button" class="acento-opt claro" data-acento-opt="branco" title="Branco" aria-label="Branco" aria-pressed="false" style="background:#f4f4f5"></button>
           <button type="button" class="acento-opt claro" data-acento-opt="gelo" title="Gelo" aria-label="Gelo" aria-pressed="false" style="background:#dbe5ef"></button>
           <button type="button" class="acento-opt claro" data-acento-opt="cinzaclaro" title="Cinza claro" aria-label="Cinza claro" aria-pressed="false" style="background:#c3c7cd"></button>
+        </div>
+      </div>
+      <div class="fundo-wrap acento-wrap">
+        <div class="ajuste-cores">
+          <div class="fundo-lbl">Ajuste das cores</div>
+          <label class="ajuste-linha"><span>Fundo</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="fundo" aria-label="Clarear ou escurecer o fundo"><output data-ajuste-val="fundo">0%</output></label>
+          <label class="ajuste-linha"><span>Destaque</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="destaque" aria-label="Clarear ou escurecer a cor de destaque"><output data-ajuste-val="destaque">0%</output></label>
+          <button type="button" class="ajuste-reset" data-ajuste-reset>Restaurar 0%</button>
         </div>
       </div>
       <div class="fundo-wrap">
@@ -2700,6 +2769,7 @@ function aplicarFundo(v){
   marcarFundo(v);
   /* Destaque claro sobre fundo claro nao aparece: volta para o azul. */
   if (claro && ACENTOS_CLAROS.indexOf(document.documentElement.getAttribute('data-acento')) >= 0) aplicarAcento('azul');
+  aplicarAjusteCores();
 }
 document.getElementById('fundoOpts').addEventListener('click', function(ev){
   var alvo = ev.target.closest ? ev.target.closest('[data-fundo-opt]') : null;
@@ -2725,6 +2795,7 @@ function aplicarAcento(v){
   else document.documentElement.setAttribute('data-acento', v);
   try { localStorage.setItem('cap_acento_v1', v); } catch(e){}
   marcarAcento(v);
+  aplicarAjusteCores();
 }
 document.getElementById('acentoOpts').addEventListener('click', function(ev){
   var alvo = ev.target.closest ? ev.target.closest('[data-acento-opt]') : null;
@@ -2762,6 +2833,41 @@ document.getElementById('ucCoresPop').addEventListener('click', function(ev){
 });
 document.addEventListener('click', fecharCoresTopo);
 document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') fecharCoresTopo(); });
+
+/* Os dois lugares (menu Acoes e paleta do topo) mostram os mesmos controles. */
+function mostrarAjusteCores(){
+  var aj = lerAjusteCores();
+  document.querySelectorAll('[data-ajuste]').forEach(function(r){ r.value = Number(aj[r.getAttribute('data-ajuste')]) || 0; });
+  document.querySelectorAll('[data-ajuste-val]').forEach(function(o){
+    var n = Number(aj[o.getAttribute('data-ajuste-val')]) || 0;
+    o.textContent = (n > 0 ? '+' : '') + n + '%';
+  });
+}
+function gravarAjusteCores(aj){
+  try { localStorage.setItem('cap_ajuste_v1', JSON.stringify(aj)); } catch(e){}
+  aplicarAjusteCores();
+  mostrarAjusteCores();
+}
+document.addEventListener('input', function(ev){
+  var r = ev.target;
+  if (!r.hasAttribute || !r.hasAttribute('data-ajuste')) return;
+  var aj = lerAjusteCores();
+  aj[r.getAttribute('data-ajuste')] = Number(r.value) || 0;
+  gravarAjusteCores(aj);
+});
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('[data-ajuste-reset]') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  gravarAjusteCores({});
+});
+/* Celular e computador tem paletas diferentes: ao cruzar a largura, refaz a conta. */
+(function(){
+  var mq = window.matchMedia('(max-width:640px)');
+  if (mq.addEventListener) mq.addEventListener('change', aplicarAjusteCores);
+  else if (mq.addListener) mq.addListener(aplicarAjusteCores);
+})();
+mostrarAjusteCores();
 
 document.getElementById('filtersManageBtn').addEventListener('click', function(ev){
   ev.stopPropagation();
