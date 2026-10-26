@@ -889,6 +889,21 @@
   .uc-refresh.girando svg{animation:uc-girar .8s linear infinite;}
   @keyframes uc-girar{to{transform:rotate(360deg);}}
   .uc-sep{width:1px;height:28px;background:var(--border);flex:none;}
+  .user-chip{position:relative;}
+  /* Paleta aberta pelo botao do cartao: as mesmas opcoes do menu Acoes. */
+  .uc-cores-pop{
+    display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:280px;
+    background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;
+    box-shadow:0 18px 40px rgba(0,0,0,.55);padding:12px 14px;cursor:default;
+  }
+  .uc-cores-pop.open{display:block;}
+  .uc-cores-pop .fundo-lbl{margin-bottom:8px;}
+  .uc-cores-pop .fundo-opts{margin-bottom:0;}
+  .uc-cores-pop .acento-opts{margin-bottom:14px;}
+  #ucCores.active{color:var(--ink);border-color:var(--chart);}
+  /* Com o Modelo F (ou a paleta do celular) e azul padrao, a cor de acao e cinza-claro:
+     a inicial precisa ser escura para aparecer. */
+  html[data-fundo="modelof"]:not([data-acento]) .uc-avatar{color:#1c1c1e;}
   .uc-clima{display:flex;align-items:center;gap:6px;white-space:nowrap;}
   .uc-clima .uc-icone{width:22px;height:22px;flex:none;}
   .uc-clima b{font:700 15px var(--sans);color:var(--ink);}
@@ -1208,6 +1223,7 @@
     .user-chip .uc-ola, .user-chip .uc-refresh, .user-chip .uc-sep,
     .user-chip .uc-clima, .user-chip .uc-hora{display:none;}
     .uc-avatar{width:44px;height:44px;}
+    html:not([data-acento]) .uc-avatar{color:#1c1c1e;}
 
     .kpis{display:none;}
     /* A faixa analitica vira uma coluna so. O quadro "Total por Despesa de" se
@@ -1341,6 +1357,15 @@
         <button type="button" class="uc-refresh" id="ucAtualizar" title="Atualizar dados" aria-label="Atualizar dados">
           <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
+        <button type="button" class="uc-refresh" id="ucCores" title="Cor do tema" aria-label="Cor do tema" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.7-.9 1.7-1.8 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H16a5 5 0 0 0 5-5c0-3.9-4-7-9-7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.3" fill="currentColor"/><circle cx="10" cy="7" r="1.3" fill="currentColor"/><circle cx="14.5" cy="7" r="1.3" fill="currentColor"/></svg>
+        </button>
+        <div class="uc-cores-pop" id="ucCoresPop" role="dialog" aria-label="Cor do tema">
+          <div class="fundo-lbl">Cor de destaque</div>
+          <div class="acento-opts" id="acentoOptsTopo"></div>
+          <div class="fundo-lbl">Fundo da tela</div>
+          <div class="fundo-opts" id="fundoOptsTopo"></div>
+        </div>
         <span class="uc-sep"></span>
         <div class="uc-clima" id="ucClima" title="Clima agora">
           <span id="ucIcone"></span>
@@ -2626,6 +2651,35 @@ document.getElementById('acentoOpts').addEventListener('click', function(ev){
   aplicarAcento(alvo.getAttribute('data-acento-opt'));
 });
 marcarAcento(document.documentElement.getAttribute('data-acento') || 'azul');
+
+/* A mesma paleta no cartao do topo: copia as bolinhas e os fundos do menu Acoes.
+   marcarAcento/marcarFundo marcam todos os [data-*-opt], entao os dois lugares
+   ficam sempre iguais. */
+document.getElementById('acentoOptsTopo').innerHTML = document.getElementById('acentoOpts').innerHTML;
+document.getElementById('fundoOptsTopo').innerHTML = document.getElementById('fundoOpts').innerHTML;
+function fecharCoresTopo(){
+  document.getElementById('ucCoresPop').classList.remove('open');
+  var b = document.getElementById('ucCores');
+  b.classList.remove('active');
+  b.setAttribute('aria-expanded', 'false');
+}
+document.getElementById('ucCores').addEventListener('click', function(ev){
+  ev.stopPropagation();
+  var pop = document.getElementById('ucCoresPop');
+  var abrir = !pop.classList.contains('open');
+  pop.classList.toggle('open', abrir);
+  this.classList.toggle('active', abrir);
+  this.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+});
+document.getElementById('ucCoresPop').addEventListener('click', function(ev){
+  ev.stopPropagation();
+  var a = ev.target.closest('[data-acento-opt]');
+  var f = ev.target.closest('[data-fundo-opt]');
+  if (a) aplicarAcento(a.getAttribute('data-acento-opt'));
+  if (f) aplicarFundo(f.getAttribute('data-fundo-opt'));
+});
+document.addEventListener('click', fecharCoresTopo);
+document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') fecharCoresTopo(); });
 
 document.getElementById('filtersManageBtn').addEventListener('click', function(ev){
   ev.stopPropagation();
@@ -4229,7 +4283,7 @@ document.getElementById('mLista').addEventListener('click', function(ev){
 /* No celular o avatar e o "Conta e configuracoes" do desenho: abre a gaveta de Acoes,
    onde fica o "Sair da conta". */
 document.getElementById('userChip').addEventListener('click', function(ev){
-  if (ev.target.closest('#ucAtualizar')) return;
+  if (ev.target.closest('#ucAtualizar, #ucCores, #ucCoresPop')) return;
   var celular = window.matchMedia('(max-width:640px)').matches;
   if (!celular && !ev.target.closest('#ucAvatar')) return;
   ev.stopPropagation();
