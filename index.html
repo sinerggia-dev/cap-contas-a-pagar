@@ -811,6 +811,13 @@
   }
   .row-edit:hover{background:var(--surface-3);color:var(--chart-soft);}
   .row-edit svg{width:13px;height:13px;}
+  .row-copy{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:6px;color:var(--ink-muted);
+    background:transparent;border:none;cursor:pointer;margin-right:2px;
+  }
+  .row-copy:hover{background:var(--surface-3);color:var(--chart-soft);}
+  .row-copy svg{width:13px;height:13px;}
 
   /* ---- add-entry toggle + form ---- */
   .back-btn{
@@ -913,7 +920,13 @@
     border-top:1px solid var(--border);flex:none;}
   .copia-resumo{flex:1 1 260px;font-size:13px;color:var(--ink-soft);}
   .copia-resumo b{color:var(--ink);}
-  .panel-head .copia-abrir{height:28px;padding:5px 10px;}
+  .copia-origem{flex:1 1 100%;font-size:13.4px;color:var(--ink-soft);line-height:1.5;}
+  .copia-origem b{color:var(--ink);font-size:14.6px;}
+  .copia-lista tr.pula td{color:var(--ink-muted);}
+  .copia-situacao{font-size:12.3px;font-weight:600;color:var(--positive);}
+  .copia-lista tr.pula .copia-situacao{color:var(--atrasado);}
+  .m-anexos .row-copy{width:30px;height:30px;}
+  .m-anexos .row-copy svg{width:15px;height:15px;}
   .entry-panel form{padding:16px;}
   .entry-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
   @media (max-width:760px){ .entry-grid{grid-template-columns:repeat(2,1fr);} }
@@ -1295,10 +1308,6 @@
         </button>
         <div class="filters-manage-menu" id="columnsManageMenu"></div>
       </div>
-      <button class="clear-btn" id="copiaBtnAcoes" type="button" style="display:none;" title="Copiar lançamentos de um mês e projetar para os meses seguintes">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        Copiar / projetar mês
-      </button>
       <button class="clear-btn" id="exportExcelBtn" type="button" title="Exportar para Excel">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0-4-4m4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Exportar Excel
@@ -1600,10 +1609,6 @@
     <div class="panel full">
           <div class="panel-head">
             <h2>Lançamentos</h2>
-            <button class="clear-btn copia-abrir" id="copiaBtn" type="button" style="display:none;" title="Copiar lançamentos de um mês e projetar para os meses seguintes">
-              <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-              Copiar / projetar
-            </button>
           </div>
           <div class="table-scroll">
             <table class="cap" id="capTable">
@@ -1735,16 +1740,11 @@
 <div class="copia-overlay" id="copiaOverlay">
   <div class="copia-modal" role="dialog" aria-modal="true" aria-labelledby="copiaTitulo">
     <div class="copia-head">
-      <h3 id="copiaTitulo">Copiar e projetar lançamentos</h3>
+      <h3 id="copiaTitulo">Copiar e projetar lançamento</h3>
       <button type="button" class="ebtn ghost" id="copiaFechar">Fechar</button>
     </div>
     <div class="copia-campos">
-      <label>Copiar do mês
-        <select id="copiaOrigem"></select>
-      </label>
-      <label>Despesa de
-        <select id="copiaPessoa"></select>
-      </label>
+      <div class="copia-origem" id="copiaOrigem"></div>
       <label>Começar em
         <select id="copiaInicio"></select>
       </label>
@@ -2116,8 +2116,6 @@ function mostrarSemAcesso(){
 
 function aplicarRestricoesPapel(){
   document.getElementById('addToggleBtn').style.display = currentUserRole === 'Editor' ? '' : 'none';
-  document.getElementById('copiaBtn').style.display = currentUserRole === 'Editor' ? '' : 'none';
-  document.getElementById('copiaBtnAcoes').style.display = currentUserRole === 'Editor' ? '' : 'none';
   document.getElementById('adminBtn').style.display = ehDono() ? '' : 'none';
   document.getElementById('emissaoBtn').style.display = ehDono() ? '' : 'none';
 }
@@ -2193,8 +2191,6 @@ function forcarSomenteLeitura(){
   if (currentUserRole !== 'Editor') return;
   currentUserRole = 'Visualizador';
   document.getElementById('addToggleBtn').style.display = 'none';
-  document.getElementById('copiaBtn').style.display = 'none';
-  document.getElementById('copiaBtnAcoes').style.display = 'none';
 }
 
 async function carregarDados(){
@@ -3013,11 +3009,12 @@ var COLUMNS = {
     if (currentUserRole !== 'Editor') return '';
     var editBtn = '<button class="row-edit" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Editar lançamento"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     var delBtn = '<button class="row-del" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Remover lançamento"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>';
-    return editBtn+delBtn;
+    var copyBtn = '<button class="row-copy" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Copiar e projetar para os próximos meses"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>';
+    return copyBtn+editBtn+delBtn;
   }}
 };
 var DEFAULT_COL_ORDER = ['dcto','doc','empresa','desc','tipo','parcela','venc','mesano','status','valor','juros','pago','obs','comp','acao'];
-var DEFAULT_COL_WIDTHS = {dcto:90,doc:56,empresa:150,desc:230,tipo:130,parcela:70,venc:100,mesano:90,status:130,valor:110,juros:90,pago:110,obs:220,comp:56,acao:64};
+var DEFAULT_COL_WIDTHS = {dcto:90,doc:56,empresa:150,desc:230,tipo:130,parcela:70,venc:100,mesano:90,status:130,valor:110,juros:90,pago:110,obs:220,comp:56,acao:92};
 
 var SORT_ACCESSORS = {
   dcto:    function(r){ return String(r.barra||r.id); },
@@ -3054,6 +3051,8 @@ function loadColumnWidths(){
     var saved = JSON.parse(localStorage.getItem('cap_col_widths_v1'));
     if (saved) Object.assign(widths, saved);
   } catch(e){}
+  /* A coluna de acoes ganhou o botao de copiar: largura salva antes dele cortaria um icone. */
+  if ((widths.acao || 0) < DEFAULT_COL_WIDTHS.acao) widths.acao = DEFAULT_COL_WIDTHS.acao;
   return widths;
 }
 function saveColumnWidths(widths){ try{ localStorage.setItem('cap_col_widths_v1', JSON.stringify(widths)); }catch(e){} }
@@ -3657,21 +3656,17 @@ document.addEventListener('click', function(ev){
 });
 
 
-/* ---- Copiar / projetar lancamentos ----
-   Pega os lancamentos de um mes e cria copias nos meses seguintes. Cada copia
-   nasce "A Vencer": mesmo dia de vencimento (ou o ultimo dia, se o mes for mais
-   curto), mesmo valor, tipo e observacao; sem pagamento, sem codigo de barras
-   (o boleto muda todo mes) e sem anexos. Parcela "3/10" vira 4/10, 5/10...
-   e para na ultima. O que ja existe no mes de destino (mesma pessoa, descricao
-   e parcela) e pulado, para nao duplicar se o botao for usado duas vezes. */
+/* ---- Copiar / projetar um lancamento ----
+   Botao em cada linha: copia AQUELE lancamento para o mes seguinte ou para
+   varios meses a frente. Cada copia nasce "A Vencer": mesmo dia de vencimento
+   (ou o ultimo dia, se o mes for mais curto), mesmo valor, tipo e observacao;
+   sem pagamento, sem codigo de barras (o boleto muda todo mes) e sem anexos.
+   Parcela "3/10" vira 4/10, 5/10... e para na ultima. Mes que ja tem o mesmo
+   lancamento (pessoa, descricao e parcela) e pulado, para nao duplicar. */
 var MESES_ABREV = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-var copiaMarcados = {};
+var copiaAlvo = null;
 
 function chaveMes(ano, mes){ return MESES_ABREV[mes] + '/' + ano; }
-function mesDaChave(ch){
-  var p = String(ch).split('/');
-  return { ano: Number(p[1]), mes: MESES_ABREV.indexOf(p[0]) };
-}
 function somarMeses(ano, mes, n){
   var t = ano * 12 + mes + n;
   return { ano: Math.floor(t / 12), mes: t % 12 };
@@ -3688,132 +3683,74 @@ function parcelaAvancada(parcela, n){
   if (m[2] && atual > Number(m[2])) return { texto: '', passou: true };
   return { texto: m[2] ? atual + '/' + m[2] : String(atual), passou: false };
 }
-function idCopia(r){ return r.id + '|' + r._rowIndex; }
 
-function preencherSelectsCopia(){
-  var hoje = new Date();
-  var anterior = somarMeses(hoje.getFullYear(), hoje.getMonth(), -1);
-  var meses = uniqueSorted('_mesano');
-  var origem = document.getElementById('copiaOrigem');
-  var padrao = chaveMes(anterior.ano, anterior.mes);
-  origem.innerHTML = meses.map(function(ch){
-    var d = mesDaChave(ch);
-    return '<option value="' + ch + '">' + rotuloMesLongo(d.ano, d.mes) + '</option>';
-  }).join('');
-  origem.value = meses.indexOf(padrao) !== -1 ? padrao : (meses[meses.length - 1] || '');
-  var pessoas = uniqueSorted('nome');
-  var pessoaSel = document.getElementById('copiaPessoa');
-  var filtroAtual = Array.isArray(state.nome) && state.nome.length === 1 ? state.nome[0] : '';
-  pessoaSel.innerHTML = '<option value="">Todas</option>' + pessoas.map(function(n){
-    return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>';
-  }).join('');
-  pessoaSel.value = filtroAtual;
-  preencherInicioCopia();
-}
-function preencherInicioCopia(){
-  var o = mesDaChave(document.getElementById('copiaOrigem').value);
-  var inicio = document.getElementById('copiaInicio');
-  var opts = [];
-  for (var i = 1; i <= 24; i++){
-    var d = somarMeses(o.ano, o.mes, i);
-    opts.push('<option value="' + i + '">' + rotuloMesLongo(d.ano, d.mes) + '</option>');
-  }
-  inicio.innerHTML = opts.join('');
-  inicio.value = '1';
-}
-
-function linhasOrigemCopia(){
-  var ch = document.getElementById('copiaOrigem').value;
-  var pessoa = document.getElementById('copiaPessoa').value;
-  return DATA.filter(function(r){ return r._mesano === ch && (!pessoa || r.nome === pessoa); })
-    .sort(function(a, b){ return (a.vencDate - b.vencDate) || String(a.desc).localeCompare(String(b.desc), 'pt-BR'); });
-}
-
-/* Monta o que sera criado, sem gravar nada: e o mesmo calculo da previa e do
-   "Criar", entao o que a tela mostra e exatamente o que vai para a planilha. */
+/* O que sera criado, sem gravar nada. A previa e o "Criar" usam o mesmo calculo,
+   entao o que a janela mostra e exatamente o que vai para a planilha. */
 function planoCopia(){
-  var o = mesDaChave(document.getElementById('copiaOrigem').value);
+  var r = copiaAlvo;
+  var ano = r.vencDate.getFullYear(), mes = r.vencDate.getMonth();
   var inicio = Number(document.getElementById('copiaInicio').value) || 1;
   var qtd = Math.max(1, Math.min(24, Number(document.getElementById('copiaQtd').value) || 1));
-  var origem = linhasOrigemCopia();
   var plano = [];
-  origem.forEach(function(r){
-    var item = { r: r, novos: [], pulados: [] };
-    if (copiaMarcados[idCopia(r)] === false){ plano.push(item); return; }
-    for (var k = 0; k < qtd; k++){
-      var n = inicio + k;
-      var d = somarMeses(o.ano, o.mes, n);
-      var ch = chaveMes(d.ano, d.mes);
-      var parc = parcelaAvancada(r.parcela, n);
-      if (parc.passou){ item.pulados.push(ch + ' (parcelas acabaram)'); continue; }
-      var jaExiste = DATA.some(function(x){
-        return x._mesano === ch && x.nome === r.nome && x.desc === r.desc && String(x.parcela || '') === parc.texto;
-      });
-      if (jaExiste){ item.pulados.push(ch + ' (já existe)'); continue; }
-      var ultimoDia = new Date(d.ano, d.mes + 1, 0).getDate();
-      var venc = new Date(d.ano, d.mes, Math.min(r.vencDate.getDate(), ultimoDia));
-      item.novos.push({ chave: ch, venc: venc, parcela: parc.texto });
-    }
-    plano.push(item);
-  });
+  for (var k = 0; k < qtd; k++){
+    var n = inicio + k;
+    var d = somarMeses(ano, mes, n);
+    var ch = chaveMes(d.ano, d.mes);
+    var parc = parcelaAvancada(r.parcela, n);
+    if (parc.passou){ plano.push({ chave: ch, d: d, motivo: 'Parcelas acabaram' }); break; }
+    var ultimoDia = new Date(d.ano, d.mes + 1, 0).getDate();
+    var venc = new Date(d.ano, d.mes, Math.min(r.vencDate.getDate(), ultimoDia));
+    var jaExiste = DATA.some(function(x){
+      return x._mesano === ch && x.nome === r.nome && x.desc === r.desc && String(x.parcela || '') === parc.texto;
+    });
+    plano.push({ chave: ch, d: d, venc: venc, parcela: parc.texto, motivo: jaExiste ? 'Já existe' : '' });
+  }
   return plano;
 }
 
 function desenharCopia(){
+  var r = copiaAlvo;
+  document.getElementById('copiaOrigem').innerHTML =
+    '<b>' + escHtml(r.desc || '(sem descrição)') + '</b>' + (r.parcela ? ' · parcela ' + escHtml(r.parcela) : '') + '<br>' +
+    escHtml(r.nome) + ' · vence ' + fmtDate(r.vencDate) + ' · ' + brl(r.valor) + ' · ' + escHtml(r.tipo || '');
   var plano = planoCopia();
-  var lista = document.getElementById('copiaLista');
-  if (!plano.length){
-    lista.innerHTML = '<div class="copia-vazio">Nenhum lançamento neste mês para essa pessoa.</div>';
-  } else {
-    var todosMarcados = plano.every(function(it){ return copiaMarcados[idCopia(it.r)] !== false; });
-    lista.innerHTML = '<table><thead><tr>' +
-      '<th><input type="checkbox" id="copiaTodos" aria-label="Marcar todos"' + (todosMarcados ? ' checked' : '') + '></th>' +
-      '<th>Despesa de</th><th>Descrição</th><th>Venc.</th><th class="num">Valor</th></tr></thead><tbody>' +
-      plano.map(function(it){
-        var r = it.r, marcado = copiaMarcados[idCopia(r)] !== false;
-        var nota = '';
-        if (marcado && it.novos.length){
-          nota = '<span class="copia-nota">Cria em: ' + it.novos.map(function(n){
-            return n.chave + (n.parcela ? ' (' + n.parcela + ')' : '');
-          }).join(', ') + '</span>';
-        }
-        if (marcado && it.pulados.length){
-          nota += '<span class="copia-nota aviso">Pula: ' + it.pulados.join(', ') + '</span>';
-        }
-        return '<tr class="' + (marcado && it.novos.length ? '' : 'sem-destino') + '">' +
-          '<td><input type="checkbox" data-copia-id="' + escHtml(idCopia(r)) + '"' + (marcado ? ' checked' : '') +
-            ' aria-label="Copiar ' + escHtml(r.desc || '') + '"></td>' +
-          '<td>' + escHtml(r.nome) + '</td>' +
-          '<td>' + escHtml(r.desc) + (r.parcela ? ' <span class="copia-nota" style="display:inline">· ' + escHtml(r.parcela) + '</span>' : '') + nota + '</td>' +
-          '<td>' + fmtDate(r.vencDate) + '</td>' +
-          '<td class="num">' + brl(r.valor) + '</td></tr>';
-      }).join('') + '</tbody></table>';
-  }
-  var novos = 0, valor = 0, pulados = 0;
-  plano.forEach(function(it){
-    if (copiaMarcados[idCopia(it.r)] === false) return;
-    novos += it.novos.length;
-    pulados += it.pulados.length;
-    valor += it.novos.length * (it.r.valor || 0);
-  });
+  document.getElementById('copiaLista').innerHTML = '<table><thead><tr>' +
+    '<th>Mês</th><th>Vencimento</th><th>Parcela</th><th class="num">Valor</th><th>Situação</th></tr></thead><tbody>' +
+    plano.map(function(it){
+      return '<tr class="' + (it.motivo ? 'pula' : '') + '">' +
+        '<td>' + rotuloMesLongo(it.d.ano, it.d.mes) + '</td>' +
+        '<td>' + (it.venc ? fmtDate(it.venc) : '—') + '</td>' +
+        '<td>' + (it.parcela ? escHtml(it.parcela) : '—') + '</td>' +
+        '<td class="num">' + (it.motivo ? '—' : brl(r.valor)) + '</td>' +
+        '<td><span class="copia-situacao">' + (it.motivo ? it.motivo + ' — fica de fora' : 'Será criado') + '</span></td></tr>';
+    }).join('') + '</tbody></table>';
+  var novos = plano.filter(function(it){ return !it.motivo; }).length;
+  var fora = plano.length - novos;
   document.getElementById('copiaResumo').innerHTML = novos
-    ? 'Serão criados <b>' + novos + '</b> lançamento' + (novos === 1 ? '' : 's') + ', somando <b>' + brl(valor) + '</b>.' +
-      (pulados ? ' ' + pulados + ' ' + (pulados === 1 ? 'fica de fora' : 'ficam de fora') + ' (já existem ou parcelas acabaram).' : '')
+    ? 'Serão criados <b>' + novos + '</b> lançamento' + (novos === 1 ? '' : 's') + ', somando <b>' + brl(novos * (r.valor || 0)) + '</b>.' +
+      (fora ? ' ' + fora + ' ' + (fora === 1 ? 'mês fica' : 'meses ficam') + ' de fora.' : '')
     : 'Nada para criar com essas opções.';
   document.getElementById('copiaConfirmar').disabled = !novos;
 }
 
-function abrirCopia(){
+function abrirCopia(rawId, rowIndex){
   if (currentUserRole !== 'Editor'){ showToast('Seu acesso é somente leitura (Visualizador).'); return; }
-  if (!DATA.length){ showToast('Ainda não há lançamentos carregados.'); return; }
-  fecharGavetaAcoes();
-  copiaMarcados = {};
+  var r = encontrarLancamento(rawId, rowIndex);
+  if (!r){ showToast('Lançamento não encontrado (Id ' + rawId + ' duplicado na planilha — corrija manualmente antes de copiar).'); return; }
+  copiaAlvo = r;
+  var inicio = document.getElementById('copiaInicio');
+  var opts = [];
+  for (var i = 1; i <= 24; i++){
+    var d = somarMeses(r.vencDate.getFullYear(), r.vencDate.getMonth(), i);
+    opts.push('<option value="' + i + '">' + rotuloMesLongo(d.ano, d.mes) + '</option>');
+  }
+  inicio.innerHTML = opts.join('');
+  inicio.value = '1';
   document.getElementById('copiaQtd').value = '1';
-  preencherSelectsCopia();
   desenharCopia();
   document.getElementById('copiaOverlay').classList.add('open');
 }
-function fecharCopia(){ document.getElementById('copiaOverlay').classList.remove('open'); }
+function fecharCopia(){ document.getElementById('copiaOverlay').classList.remove('open'); copiaAlvo = null; }
 
 async function adicionarLinhasGraph(token, linhas){
   var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
@@ -3827,7 +3764,9 @@ async function adicionarLinhasGraph(token, linhas){
 }
 
 async function executarCopia(){
-  var plano = planoCopia().filter(function(it){ return copiaMarcados[idCopia(it.r)] !== false && it.novos.length; });
+  var r = copiaAlvo;
+  if (!r) return;
+  var novos = planoCopia().filter(function(it){ return !it.motivo; });
   var btn = document.getElementById('copiaConfirmar');
   var rotulo = btn.textContent;
   btn.disabled = true;
@@ -3837,17 +3776,13 @@ async function executarCopia(){
     // Id lido da planilha AGORA, nao do que esta na tela: outra sessao pode ter lancado algo.
     var atuais = await buscarLinhasAtuaisGraph(token);
     var proximoId = atuais.reduce(function(m, row){ return Math.max(m, Number(row.values[0][0]) || 0); }, 0) + 1;
-    var linhas = [];
-    plano.forEach(function(it){
-      var r = it.r;
-      it.novos.forEach(function(n){
-        linhas.push([
-          proximoId++, '', '', r.nome + (r.doc ? ' - ' + r.doc : ''), 'Envio de Boleto',
-          ddmmyyyyToSerial(fmtDataBR(n.venc)), '',
-          r.desc + (n.parcela ? ' - Parcela ' + n.parcela : ''), r.tipo, 'A Vencer', '',
-          r.valor, '', '', '', '', r.obs || ''
-        ]);
-      });
+    var linhas = novos.map(function(n){
+      return [
+        proximoId++, '', '', r.nome + (r.doc ? ' - ' + r.doc : ''), 'Envio de Boleto',
+        ddmmyyyyToSerial(fmtDataBR(n.venc)), '',
+        r.desc + (n.parcela ? ' - Parcela ' + n.parcela : ''), r.tipo, 'A Vencer', '',
+        r.valor, '', '', '', '', r.obs || ''
+      ];
     });
     await adicionarLinhasGraph(token, linhas);
     fecharCopia();
@@ -3861,24 +3796,18 @@ async function executarCopia(){
   }
 }
 
-document.getElementById('copiaBtn').addEventListener('click', abrirCopia);
-document.getElementById('copiaBtnAcoes').addEventListener('click', function(ev){ ev.stopPropagation(); abrirCopia(); });
+/* Delegado no documento: o mesmo botao existe na linha da tabela e no cartao do celular. */
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.row-copy') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  abrirCopia(Number(b.getAttribute('data-rawid')), Number(b.getAttribute('data-rowidx')));
+});
 document.getElementById('copiaFechar').addEventListener('click', fecharCopia);
 document.getElementById('copiaCancelar').addEventListener('click', fecharCopia);
 document.getElementById('copiaOverlay').addEventListener('click', function(ev){ if (ev.target === this) fecharCopia(); });
-document.getElementById('copiaOrigem').addEventListener('change', function(){ copiaMarcados = {}; preencherInicioCopia(); desenharCopia(); });
-document.getElementById('copiaPessoa').addEventListener('change', desenharCopia);
 document.getElementById('copiaInicio').addEventListener('change', desenharCopia);
 document.getElementById('copiaQtd').addEventListener('input', desenharCopia);
-document.getElementById('copiaLista').addEventListener('change', function(ev){
-  var t = ev.target;
-  if (t.id === 'copiaTodos'){
-    linhasOrigemCopia().forEach(function(r){ copiaMarcados[idCopia(r)] = t.checked; });
-  } else if (t.hasAttribute('data-copia-id')){
-    copiaMarcados[t.getAttribute('data-copia-id')] = t.checked;
-  } else return;
-  desenharCopia();
-});
 document.getElementById('copiaConfirmar').addEventListener('click', function(){
   pedirSenha('Digite a senha para criar os lançamentos copiados:', function(ok){
     if (ok) executarCopia();
@@ -3987,7 +3916,9 @@ function renderMobile(rows, rowsSemStatus){
       : '<div class="m-abrir">' + miolo + '</div>';
     return '<div class="m-item ' + cls + '">' + abrir +
       '<div class="m-dir"><span class="m-val">' + brl(r.valor) + '</span>' +
-        '<span class="m-anexos">' + anexoMobile(r.anexo, 'Abrir boleto') + anexoMobile(r.anexoComprovante, 'Abrir comprovante') + '</span></div>' +
+        '<span class="m-anexos">' + anexoMobile(r.anexo, 'Abrir boleto') + anexoMobile(r.anexoComprovante, 'Abrir comprovante') +
+          (editor ? '<button type="button" class="row-copy" data-rawid="' + r.id + '" data-rowidx="' + r._rowIndex + '" aria-label="Copiar e projetar ' + escHtml(r.desc || 'lançamento') + '"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>' : '') +
+        '</span></div>' +
       '</div>';
   }).join('');
 }
@@ -4141,7 +4072,7 @@ document.getElementById('descRankGroupSel').addEventListener('change', function(
 });
 
 document.getElementById('tableBody').addEventListener('click', function(ev){
-  if (ev.target.closest('.row-edit, .row-del, .attach-file, .attach')) return;
+  if (ev.target.closest('.row-edit, .row-del, .row-copy, .attach-file, .attach')) return;
   var trEl = ev.target.closest('tr[data-nome]');
   if (!trEl) return;
   var nomeTbl = trEl.getAttribute('data-nome');
