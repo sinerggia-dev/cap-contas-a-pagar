@@ -876,6 +876,44 @@
   .senha-erro{display:none;margin:8px 0 0 !important;font-size:12.9px;color:var(--critical);}
   .senha-erro.show{display:block;}
   .senha-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+  /* ---- copiar / projetar lancamentos ---- */
+  .copia-overlay{
+    display:none;position:fixed;inset:0;background:rgba(5,6,10,.65);
+    align-items:center;justify-content:center;z-index:900;padding:16px;
+  }
+  .copia-overlay.open{display:flex;}
+  .copia-modal{
+    background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;
+    width:760px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden;
+  }
+  .copia-head{display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:14px 16px;border-bottom:1px solid var(--border);flex:none;}
+  .copia-head h3{margin:0;font:700 15.7px var(--sans);color:var(--ink);}
+  .copia-campos{display:flex;flex-wrap:wrap;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);flex:none;}
+  .copia-campos label{display:flex;flex-direction:column;gap:4px;font-size:11.2px;color:var(--ink-muted);
+    text-transform:uppercase;letter-spacing:.05em;flex:1 1 150px;}
+  .copia-campos select, .copia-campos input{
+    background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:7px;
+    font:500 13.4px var(--sans);padding:7px 9px;height:34px;text-transform:none;letter-spacing:0;
+  }
+  .copia-campos select:focus, .copia-campos input:focus{outline:2px solid var(--chart);outline-offset:1px;}
+  .copia-lista{overflow:auto;flex:1;min-height:120px;}
+  .copia-lista table{width:100%;border-collapse:collapse;font-size:13px;}
+  .copia-lista th{position:sticky;top:0;background:var(--surface-3);text-align:left;font-size:11px;
+    text-transform:uppercase;letter-spacing:.04em;color:var(--ink);padding:7px 10px;z-index:1;}
+  .copia-lista td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:top;}
+  .copia-lista td.num, .copia-lista th.num{text-align:right;font-family:var(--num);font-variant-numeric:tabular-nums;}
+  .copia-lista tr.sem-destino td{color:var(--ink-muted);}
+  .copia-lista input[type=checkbox]{width:15px;height:15px;accent-color:var(--chart);cursor:pointer;}
+  .copia-nota{display:block;font-size:11.8px;color:var(--ink-muted);margin-top:2px;}
+  .copia-nota.aviso{color:var(--atrasado);}
+  .copia-vazio{padding:24px 16px;text-align:center;color:var(--ink-muted);font-size:13.4px;}
+  .copia-rodape{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;
+    border-top:1px solid var(--border);flex:none;}
+  .copia-resumo{flex:1 1 260px;font-size:13px;color:var(--ink-soft);}
+  .copia-resumo b{color:var(--ink);}
+  .panel-head .copia-abrir{height:28px;padding:5px 10px;}
   .entry-panel form{padding:16px;}
   .entry-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
   @media (max-width:760px){ .entry-grid{grid-template-columns:repeat(2,1fr);} }
@@ -1257,6 +1295,10 @@
         </button>
         <div class="filters-manage-menu" id="columnsManageMenu"></div>
       </div>
+      <button class="clear-btn" id="copiaBtnAcoes" type="button" style="display:none;" title="Copiar lançamentos de um mês e projetar para os meses seguintes">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Copiar / projetar mês
+      </button>
       <button class="clear-btn" id="exportExcelBtn" type="button" title="Exportar para Excel">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0-4-4m4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Exportar Excel
@@ -1558,6 +1600,10 @@
     <div class="panel full">
           <div class="panel-head">
             <h2>Lançamentos</h2>
+            <button class="clear-btn copia-abrir" id="copiaBtn" type="button" style="display:none;" title="Copiar lançamentos de um mês e projetar para os meses seguintes">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              Copiar / projetar
+            </button>
           </div>
           <div class="table-scroll">
             <table class="cap" id="capTable">
@@ -1683,6 +1729,35 @@
     <p>Você entrou como <b id="semAcessoEmail"></b>, mas ainda não tem acesso liberado a este aplicativo. Peça para o administrador liberar seu e-mail.</p>
     <p id="semAcessoDetalhe" style="font-size:11.8px;color:var(--ink-muted);margin-top:-6px;word-break:break-word;"></p>
     <button type="button" class="ebtn ghost" id="semAcessoSairBtn" style="width:100%;padding:11px;">Sair</button>
+  </div>
+</div>
+
+<div class="copia-overlay" id="copiaOverlay">
+  <div class="copia-modal" role="dialog" aria-modal="true" aria-labelledby="copiaTitulo">
+    <div class="copia-head">
+      <h3 id="copiaTitulo">Copiar e projetar lançamentos</h3>
+      <button type="button" class="ebtn ghost" id="copiaFechar">Fechar</button>
+    </div>
+    <div class="copia-campos">
+      <label>Copiar do mês
+        <select id="copiaOrigem"></select>
+      </label>
+      <label>Despesa de
+        <select id="copiaPessoa"></select>
+      </label>
+      <label>Começar em
+        <select id="copiaInicio"></select>
+      </label>
+      <label>Quantos meses
+        <input type="number" id="copiaQtd" min="1" max="24" value="1" inputmode="numeric">
+      </label>
+    </div>
+    <div class="copia-lista" id="copiaLista"></div>
+    <div class="copia-rodape">
+      <span class="copia-resumo" id="copiaResumo"></span>
+      <button type="button" class="ebtn ghost" id="copiaCancelar">Cancelar</button>
+      <button type="button" class="ebtn primary" id="copiaConfirmar">Criar lançamentos</button>
+    </div>
   </div>
 </div>
 
@@ -2041,6 +2116,8 @@ function mostrarSemAcesso(){
 
 function aplicarRestricoesPapel(){
   document.getElementById('addToggleBtn').style.display = currentUserRole === 'Editor' ? '' : 'none';
+  document.getElementById('copiaBtn').style.display = currentUserRole === 'Editor' ? '' : 'none';
+  document.getElementById('copiaBtnAcoes').style.display = currentUserRole === 'Editor' ? '' : 'none';
   document.getElementById('adminBtn').style.display = ehDono() ? '' : 'none';
   document.getElementById('emissaoBtn').style.display = ehDono() ? '' : 'none';
 }
@@ -2116,6 +2193,8 @@ function forcarSomenteLeitura(){
   if (currentUserRole !== 'Editor') return;
   currentUserRole = 'Visualizador';
   document.getElementById('addToggleBtn').style.display = 'none';
+  document.getElementById('copiaBtn').style.display = 'none';
+  document.getElementById('copiaBtnAcoes').style.display = 'none';
 }
 
 async function carregarDados(){
@@ -3575,6 +3654,235 @@ document.addEventListener('click', function(ev){
   buildFilters();
   updateClearButton();
   render();
+});
+
+
+/* ---- Copiar / projetar lancamentos ----
+   Pega os lancamentos de um mes e cria copias nos meses seguintes. Cada copia
+   nasce "A Vencer": mesmo dia de vencimento (ou o ultimo dia, se o mes for mais
+   curto), mesmo valor, tipo e observacao; sem pagamento, sem codigo de barras
+   (o boleto muda todo mes) e sem anexos. Parcela "3/10" vira 4/10, 5/10...
+   e para na ultima. O que ja existe no mes de destino (mesma pessoa, descricao
+   e parcela) e pulado, para nao duplicar se o botao for usado duas vezes. */
+var MESES_ABREV = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+var copiaMarcados = {};
+
+function chaveMes(ano, mes){ return MESES_ABREV[mes] + '/' + ano; }
+function mesDaChave(ch){
+  var p = String(ch).split('/');
+  return { ano: Number(p[1]), mes: MESES_ABREV.indexOf(p[0]) };
+}
+function somarMeses(ano, mes, n){
+  var t = ano * 12 + mes + n;
+  return { ano: Math.floor(t / 12), mes: t % 12 };
+}
+function rotuloMesLongo(ano, mes){
+  var nome = MESES_LONGO[MESES_ABREV[mes]] || MESES_ABREV[mes];
+  return nome + ' ' + ano;
+}
+function parcelaAvancada(parcela, n){
+  if (!parcela) return { texto: '', passou: false };
+  var m = String(parcela).match(/^(\d+)(?:\/(\d+))?$/);
+  if (!m) return { texto: parcela, passou: false };
+  var atual = Number(m[1]) + n;
+  if (m[2] && atual > Number(m[2])) return { texto: '', passou: true };
+  return { texto: m[2] ? atual + '/' + m[2] : String(atual), passou: false };
+}
+function idCopia(r){ return r.id + '|' + r._rowIndex; }
+
+function preencherSelectsCopia(){
+  var hoje = new Date();
+  var anterior = somarMeses(hoje.getFullYear(), hoje.getMonth(), -1);
+  var meses = uniqueSorted('_mesano');
+  var origem = document.getElementById('copiaOrigem');
+  var padrao = chaveMes(anterior.ano, anterior.mes);
+  origem.innerHTML = meses.map(function(ch){
+    var d = mesDaChave(ch);
+    return '<option value="' + ch + '">' + rotuloMesLongo(d.ano, d.mes) + '</option>';
+  }).join('');
+  origem.value = meses.indexOf(padrao) !== -1 ? padrao : (meses[meses.length - 1] || '');
+  var pessoas = uniqueSorted('nome');
+  var pessoaSel = document.getElementById('copiaPessoa');
+  var filtroAtual = Array.isArray(state.nome) && state.nome.length === 1 ? state.nome[0] : '';
+  pessoaSel.innerHTML = '<option value="">Todas</option>' + pessoas.map(function(n){
+    return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>';
+  }).join('');
+  pessoaSel.value = filtroAtual;
+  preencherInicioCopia();
+}
+function preencherInicioCopia(){
+  var o = mesDaChave(document.getElementById('copiaOrigem').value);
+  var inicio = document.getElementById('copiaInicio');
+  var opts = [];
+  for (var i = 1; i <= 24; i++){
+    var d = somarMeses(o.ano, o.mes, i);
+    opts.push('<option value="' + i + '">' + rotuloMesLongo(d.ano, d.mes) + '</option>');
+  }
+  inicio.innerHTML = opts.join('');
+  inicio.value = '1';
+}
+
+function linhasOrigemCopia(){
+  var ch = document.getElementById('copiaOrigem').value;
+  var pessoa = document.getElementById('copiaPessoa').value;
+  return DATA.filter(function(r){ return r._mesano === ch && (!pessoa || r.nome === pessoa); })
+    .sort(function(a, b){ return (a.vencDate - b.vencDate) || String(a.desc).localeCompare(String(b.desc), 'pt-BR'); });
+}
+
+/* Monta o que sera criado, sem gravar nada: e o mesmo calculo da previa e do
+   "Criar", entao o que a tela mostra e exatamente o que vai para a planilha. */
+function planoCopia(){
+  var o = mesDaChave(document.getElementById('copiaOrigem').value);
+  var inicio = Number(document.getElementById('copiaInicio').value) || 1;
+  var qtd = Math.max(1, Math.min(24, Number(document.getElementById('copiaQtd').value) || 1));
+  var origem = linhasOrigemCopia();
+  var plano = [];
+  origem.forEach(function(r){
+    var item = { r: r, novos: [], pulados: [] };
+    if (copiaMarcados[idCopia(r)] === false){ plano.push(item); return; }
+    for (var k = 0; k < qtd; k++){
+      var n = inicio + k;
+      var d = somarMeses(o.ano, o.mes, n);
+      var ch = chaveMes(d.ano, d.mes);
+      var parc = parcelaAvancada(r.parcela, n);
+      if (parc.passou){ item.pulados.push(ch + ' (parcelas acabaram)'); continue; }
+      var jaExiste = DATA.some(function(x){
+        return x._mesano === ch && x.nome === r.nome && x.desc === r.desc && String(x.parcela || '') === parc.texto;
+      });
+      if (jaExiste){ item.pulados.push(ch + ' (já existe)'); continue; }
+      var ultimoDia = new Date(d.ano, d.mes + 1, 0).getDate();
+      var venc = new Date(d.ano, d.mes, Math.min(r.vencDate.getDate(), ultimoDia));
+      item.novos.push({ chave: ch, venc: venc, parcela: parc.texto });
+    }
+    plano.push(item);
+  });
+  return plano;
+}
+
+function desenharCopia(){
+  var plano = planoCopia();
+  var lista = document.getElementById('copiaLista');
+  if (!plano.length){
+    lista.innerHTML = '<div class="copia-vazio">Nenhum lançamento neste mês para essa pessoa.</div>';
+  } else {
+    var todosMarcados = plano.every(function(it){ return copiaMarcados[idCopia(it.r)] !== false; });
+    lista.innerHTML = '<table><thead><tr>' +
+      '<th><input type="checkbox" id="copiaTodos" aria-label="Marcar todos"' + (todosMarcados ? ' checked' : '') + '></th>' +
+      '<th>Despesa de</th><th>Descrição</th><th>Venc.</th><th class="num">Valor</th></tr></thead><tbody>' +
+      plano.map(function(it){
+        var r = it.r, marcado = copiaMarcados[idCopia(r)] !== false;
+        var nota = '';
+        if (marcado && it.novos.length){
+          nota = '<span class="copia-nota">Cria em: ' + it.novos.map(function(n){
+            return n.chave + (n.parcela ? ' (' + n.parcela + ')' : '');
+          }).join(', ') + '</span>';
+        }
+        if (marcado && it.pulados.length){
+          nota += '<span class="copia-nota aviso">Pula: ' + it.pulados.join(', ') + '</span>';
+        }
+        return '<tr class="' + (marcado && it.novos.length ? '' : 'sem-destino') + '">' +
+          '<td><input type="checkbox" data-copia-id="' + escHtml(idCopia(r)) + '"' + (marcado ? ' checked' : '') +
+            ' aria-label="Copiar ' + escHtml(r.desc || '') + '"></td>' +
+          '<td>' + escHtml(r.nome) + '</td>' +
+          '<td>' + escHtml(r.desc) + (r.parcela ? ' <span class="copia-nota" style="display:inline">· ' + escHtml(r.parcela) + '</span>' : '') + nota + '</td>' +
+          '<td>' + fmtDate(r.vencDate) + '</td>' +
+          '<td class="num">' + brl(r.valor) + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  var novos = 0, valor = 0, pulados = 0;
+  plano.forEach(function(it){
+    if (copiaMarcados[idCopia(it.r)] === false) return;
+    novos += it.novos.length;
+    pulados += it.pulados.length;
+    valor += it.novos.length * (it.r.valor || 0);
+  });
+  document.getElementById('copiaResumo').innerHTML = novos
+    ? 'Serão criados <b>' + novos + '</b> lançamento' + (novos === 1 ? '' : 's') + ', somando <b>' + brl(valor) + '</b>.' +
+      (pulados ? ' ' + pulados + ' ' + (pulados === 1 ? 'fica de fora' : 'ficam de fora') + ' (já existem ou parcelas acabaram).' : '')
+    : 'Nada para criar com essas opções.';
+  document.getElementById('copiaConfirmar').disabled = !novos;
+}
+
+function abrirCopia(){
+  if (currentUserRole !== 'Editor'){ showToast('Seu acesso é somente leitura (Visualizador).'); return; }
+  if (!DATA.length){ showToast('Ainda não há lançamentos carregados.'); return; }
+  fecharGavetaAcoes();
+  copiaMarcados = {};
+  document.getElementById('copiaQtd').value = '1';
+  preencherSelectsCopia();
+  desenharCopia();
+  document.getElementById('copiaOverlay').classList.add('open');
+}
+function fecharCopia(){ document.getElementById('copiaOverlay').classList.remove('open'); }
+
+async function adicionarLinhasGraph(token, linhas){
+  var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+  var url = GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/tables('" + TABLE_NAME + "')/rows";
+  var resp = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: linhas })
+  });
+  if (!resp.ok) { var t = await resp.text(); throw new Error('Falha ao gravar na planilha (' + resp.status + '): ' + t); }
+}
+
+async function executarCopia(){
+  var plano = planoCopia().filter(function(it){ return copiaMarcados[idCopia(it.r)] !== false && it.novos.length; });
+  var btn = document.getElementById('copiaConfirmar');
+  var rotulo = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Criando...';
+  try {
+    var token = await getToken();
+    // Id lido da planilha AGORA, nao do que esta na tela: outra sessao pode ter lancado algo.
+    var atuais = await buscarLinhasAtuaisGraph(token);
+    var proximoId = atuais.reduce(function(m, row){ return Math.max(m, Number(row.values[0][0]) || 0); }, 0) + 1;
+    var linhas = [];
+    plano.forEach(function(it){
+      var r = it.r;
+      it.novos.forEach(function(n){
+        linhas.push([
+          proximoId++, '', '', r.nome + (r.doc ? ' - ' + r.doc : ''), 'Envio de Boleto',
+          ddmmyyyyToSerial(fmtDataBR(n.venc)), '',
+          r.desc + (n.parcela ? ' - Parcela ' + n.parcela : ''), r.tipo, 'A Vencer', '',
+          r.valor, '', '', '', '', r.obs || ''
+        ]);
+      });
+    });
+    await adicionarLinhasGraph(token, linhas);
+    fecharCopia();
+    showToast(linhas.length + (linhas.length === 1 ? ' lançamento criado.' : ' lançamentos criados.'));
+    await carregarDados();
+  } catch (err) {
+    showToast('Erro ao copiar: ' + (err && err.message ? err.message : err));
+  } finally {
+    btn.textContent = rotulo;
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('copiaBtn').addEventListener('click', abrirCopia);
+document.getElementById('copiaBtnAcoes').addEventListener('click', function(ev){ ev.stopPropagation(); abrirCopia(); });
+document.getElementById('copiaFechar').addEventListener('click', fecharCopia);
+document.getElementById('copiaCancelar').addEventListener('click', fecharCopia);
+document.getElementById('copiaOverlay').addEventListener('click', function(ev){ if (ev.target === this) fecharCopia(); });
+document.getElementById('copiaOrigem').addEventListener('change', function(){ copiaMarcados = {}; preencherInicioCopia(); desenharCopia(); });
+document.getElementById('copiaPessoa').addEventListener('change', desenharCopia);
+document.getElementById('copiaInicio').addEventListener('change', desenharCopia);
+document.getElementById('copiaQtd').addEventListener('input', desenharCopia);
+document.getElementById('copiaLista').addEventListener('change', function(ev){
+  var t = ev.target;
+  if (t.id === 'copiaTodos'){
+    linhasOrigemCopia().forEach(function(r){ copiaMarcados[idCopia(r)] = t.checked; });
+  } else if (t.hasAttribute('data-copia-id')){
+    copiaMarcados[t.getAttribute('data-copia-id')] = t.checked;
+  } else return;
+  desenharCopia();
+});
+document.getElementById('copiaConfirmar').addEventListener('click', function(){
+  pedirSenha('Digite a senha para criar os lançamentos copiados:', function(ok){
+    if (ok) executarCopia();
+  });
 });
 
 function render(){
