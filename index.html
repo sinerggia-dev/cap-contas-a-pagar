@@ -818,6 +818,16 @@
   }
   .row-copy:hover{background:var(--surface-3);color:var(--chart-soft);}
   .row-copy svg{width:13px;height:13px;}
+  /* Selecao para excluir varios de uma vez. */
+  .row-sel, #selTodos{width:14px;height:14px;margin:0 6px 0 0;vertical-align:middle;accent-color:var(--critical);cursor:pointer;}
+  table.cap tbody tr.selecionado td{background:var(--critical-dim);}
+  #excluirSelBtn{border-color:var(--critical);color:var(--critical);height:28px;padding:5px 10px;}
+  #excluirSelBtn:hover{background:var(--critical-dim);}
+  .copia-valor{width:110px;text-align:right;background:var(--surface);border:1px solid var(--border);color:var(--ink);
+    border-radius:6px;font:600 13px var(--num);padding:4px 7px;font-variant-numeric:tabular-nums;}
+  .copia-valor:focus{outline:2px solid var(--chart);outline-offset:1px;}
+  .copia-valor.mudou{border-color:var(--warning);}
+  .copia-dica{flex:1 1 100%;font-size:12.3px;color:var(--ink-muted);margin-top:-4px;}
 
   /* ---- add-entry toggle + form ---- */
   .back-btn{
@@ -1618,6 +1628,10 @@
     <div class="panel full">
           <div class="panel-head">
             <h2>Lançamentos</h2>
+            <button class="clear-btn" id="excluirSelBtn" type="button" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              <span id="excluirSelTxt">Excluir selecionados</span>
+            </button>
           </div>
           <div class="table-scroll">
             <table class="cap" id="capTable">
@@ -1760,6 +1774,13 @@
       <label>Quantos meses
         <input type="number" id="copiaQtd" min="1" max="24" value="1" inputmode="numeric">
       </label>
+      <label>Valor das cópias (R$)
+        <input type="text" id="copiaValor" inputmode="decimal" autocomplete="off">
+      </label>
+      <label>Reajuste (%)
+        <input type="number" id="copiaReajuste" step="0.01" inputmode="decimal" placeholder="0">
+      </label>
+      <span class="copia-dica">Mudar o valor de um mês na tabela vale para ele e para os meses seguintes — útil para o reajuste anual.</span>
     </div>
     <div class="copia-lista" id="copiaLista"></div>
     <div class="copia-rodape">
@@ -3020,11 +3041,13 @@ var COLUMNS = {
     var editBtn = '<button class="row-edit" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Editar lançamento"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     var delBtn = '<button class="row-del" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Remover lançamento"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>';
     var copyBtn = '<button class="row-copy" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Copiar e projetar para os próximos meses"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>';
-    return copyBtn+editBtn+delBtn;
+    var chave = r.id + '|' + r._rowIndex;
+    var selBox = '<input type="checkbox" class="row-sel" data-sel="'+chave+'"'+(selecionados[chave] ? ' checked' : '')+' aria-label="Selecionar para excluir">';
+    return selBox+copyBtn+editBtn+delBtn;
   }}
 };
 var DEFAULT_COL_ORDER = ['dcto','doc','empresa','desc','tipo','parcela','venc','mesano','status','valor','juros','pago','obs','comp','acao'];
-var DEFAULT_COL_WIDTHS = {dcto:90,doc:56,empresa:150,desc:230,tipo:130,parcela:70,venc:100,mesano:90,status:130,valor:110,juros:90,pago:110,obs:220,comp:56,acao:92};
+var DEFAULT_COL_WIDTHS = {dcto:90,doc:56,empresa:150,desc:230,tipo:130,parcela:70,venc:100,mesano:90,status:130,valor:110,juros:90,pago:110,obs:220,comp:56,acao:118};
 
 var SORT_ACCESSORS = {
   dcto:    function(r){ return String(r.barra||r.id); },
@@ -3129,6 +3152,16 @@ function renderTableHead(){
     th.draggable = true;
     th.setAttribute('data-key', key);
 
+    if (key === 'acao'){
+      var selTodos = document.createElement('input');
+      selTodos.type = 'checkbox';
+      selTodos.id = 'selTodos';
+      selTodos.title = 'Selecionar todos os lançamentos da lista';
+      selTodos.setAttribute('aria-label', 'Selecionar todos os lançamentos da lista');
+      selTodos.addEventListener('click', function(ev){ ev.stopPropagation(); });
+      selTodos.addEventListener('change', function(){ marcarTodosVisiveis(selTodos.checked); });
+      th.appendChild(selTodos);
+    }
     var labelSpan = document.createElement('span');
     labelSpan.textContent = col.label;
     th.appendChild(labelSpan);
@@ -3675,6 +3708,8 @@ document.addEventListener('click', function(ev){
    lancamento (pessoa, descricao e parcela) e pulado, para nao duplicar. */
 var MESES_ABREV = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 var copiaAlvo = null;
+var copiaValorBase = 0;      // valor das copias (campo "Valor das copias" / reajuste)
+var copiaValoresMes = {};    // valor mudado na tabela, por mes ('fev/2027' -> 140.5)
 
 function chaveMes(ano, mes){ return MESES_ABREV[mes] + '/' + ano; }
 function somarMeses(ano, mes, n){
@@ -3713,7 +3748,8 @@ function planoCopia(){
     var jaExiste = DATA.some(function(x){
       return x._mesano === ch && x.nome === r.nome && x.desc === r.desc && String(x.parcela || '') === parc.texto;
     });
-    plano.push({ chave: ch, d: d, venc: venc, parcela: parc.texto, motivo: jaExiste ? 'Já existe' : '' });
+    var valor = copiaValoresMes.hasOwnProperty(ch) ? copiaValoresMes[ch] : copiaValorBase;
+    plano.push({ chave: ch, d: d, venc: venc, parcela: parc.texto, valor: valor, motivo: jaExiste ? 'Já existe' : '' });
   }
   return plano;
 }
@@ -3731,13 +3767,22 @@ function desenharCopia(){
         '<td>' + rotuloMesLongo(it.d.ano, it.d.mes) + '</td>' +
         '<td>' + (it.venc ? fmtDate(it.venc) : '—') + '</td>' +
         '<td>' + (it.parcela ? escHtml(it.parcela) : '—') + '</td>' +
-        '<td class="num">' + (it.motivo ? '—' : brl(r.valor)) + '</td>' +
+        '<td class="num">' + (it.motivo ? '—' :
+          '<input type="text" class="copia-valor' + (Math.abs(it.valor - r.valor) > 0.004 ? ' mudou' : '') + '" inputmode="decimal"' +
+          ' data-copia-mes="' + it.chave + '" value="' + valorParaCampo(it.valor) + '" aria-label="Valor em ' + rotuloMesLongo(it.d.ano, it.d.mes) + '">') + '</td>' +
         '<td><span class="copia-situacao">' + (it.motivo ? it.motivo + ' — fica de fora' : 'Será criado') + '</span></td></tr>';
     }).join('') + '</tbody></table>';
-  var novos = plano.filter(function(it){ return !it.motivo; }).length;
+  atualizarResumoCopia(plano);
+}
+function valorParaCampo(v){ return digitsToBRL(String(Math.round((v || 0) * 100))); }
+function atualizarResumoCopia(plano){
+  plano = plano || planoCopia();
+  var criados = plano.filter(function(it){ return !it.motivo; });
+  var novos = criados.length;
   var fora = plano.length - novos;
+  var soma = criados.reduce(function(t, it){ return t + (it.valor || 0); }, 0);
   document.getElementById('copiaResumo').innerHTML = novos
-    ? 'Serão criados <b>' + novos + '</b> lançamento' + (novos === 1 ? '' : 's') + ', somando <b>' + brl(novos * (r.valor || 0)) + '</b>.' +
+    ? 'Serão criados <b>' + novos + '</b> lançamento' + (novos === 1 ? '' : 's') + ', somando <b>' + brl(soma) + '</b>.' +
       (fora ? ' ' + fora + ' ' + (fora === 1 ? 'mês fica' : 'meses ficam') + ' de fora.' : '')
     : 'Nada para criar com essas opções.';
   document.getElementById('copiaConfirmar').disabled = !novos;
@@ -3757,6 +3802,10 @@ function abrirCopia(rawId, rowIndex){
   inicio.innerHTML = opts.join('');
   inicio.value = '1';
   document.getElementById('copiaQtd').value = '1';
+  copiaValorBase = r.valor || 0;
+  copiaValoresMes = {};
+  document.getElementById('copiaValor').value = valorParaCampo(copiaValorBase);
+  document.getElementById('copiaReajuste').value = '';
   desenharCopia();
   document.getElementById('copiaOverlay').classList.add('open');
 }
@@ -3791,7 +3840,7 @@ async function executarCopia(){
         proximoId++, '', '', r.nome + (r.doc ? ' - ' + r.doc : ''), 'Envio de Boleto',
         ddmmyyyyToSerial(fmtDataBR(n.venc)), '',
         r.desc + (n.parcela ? ' - Parcela ' + n.parcela : ''), r.tipo, 'A Vencer', '',
-        r.valor, '', '', '', '', r.obs || ''
+        n.valor, '', '', '', '', r.obs || ''
       ];
     });
     await adicionarLinhasGraph(token, linhas);
@@ -3818,9 +3867,131 @@ document.getElementById('copiaCancelar').addEventListener('click', fecharCopia);
 document.getElementById('copiaOverlay').addEventListener('click', function(ev){ if (ev.target === this) fecharCopia(); });
 document.getElementById('copiaInicio').addEventListener('change', desenharCopia);
 document.getElementById('copiaQtd').addEventListener('input', desenharCopia);
+/* Valor das copias e reajuste andam juntos: mudar um recalcula o outro. Os dois
+   refazem todos os meses, desfazendo o que foi mudado linha a linha. */
+document.getElementById('copiaValor').addEventListener('input', function(){
+  this.value = digitsToBRL(this.value);
+  copiaValorBase = parseBRL(this.value);
+  var orig = copiaAlvo ? copiaAlvo.valor : 0;
+  document.getElementById('copiaReajuste').value = orig ? (Math.round((copiaValorBase / orig - 1) * 10000) / 100) : '';
+  copiaValoresMes = {};
+  desenharCopia();
+});
+document.getElementById('copiaReajuste').addEventListener('input', function(){
+  var pct = parseFloat(String(this.value).replace(',', '.')) || 0;
+  copiaValorBase = Math.round((copiaAlvo ? copiaAlvo.valor : 0) * (1 + pct / 100) * 100) / 100;
+  document.getElementById('copiaValor').value = valorParaCampo(copiaValorBase);
+  copiaValoresMes = {};
+  desenharCopia();
+});
+/* Valor mudado num mes vale para ele e para os seguintes (o reajuste anual entra
+   num mes e fica). A tabela nao e redesenhada: so os campos abaixo mudam, para
+   o cursor nao sair de onde a pessoa esta digitando. */
+document.getElementById('copiaLista').addEventListener('input', function(ev){
+  var campo = ev.target;
+  if (!campo.classList || !campo.classList.contains('copia-valor')) return;
+  campo.value = digitsToBRL(campo.value);
+  var v = parseBRL(campo.value);
+  var campos = Array.prototype.slice.call(this.querySelectorAll('.copia-valor'));
+  var daqui = campos.indexOf(campo);
+  campos.forEach(function(c, i){
+    if (i < daqui) return;
+    copiaValoresMes[c.getAttribute('data-copia-mes')] = v;
+    if (c !== campo) c.value = campo.value;
+    c.classList.toggle('mudou', Math.abs(v - (copiaAlvo ? copiaAlvo.valor : 0)) > 0.004);
+  });
+  atualizarResumoCopia();
+});
 document.getElementById('copiaConfirmar').addEventListener('click', function(){
   pedirSenha('Digite a senha para criar os lançamentos copiados:', function(ok){
     if (ok) executarCopia();
+  });
+});
+
+/* ---- Excluir varios lancamentos ----
+   Caixa de selecao na coluna de acoes. So conta o que esta na lista: ao filtrar,
+   o que saiu da tela deixa de estar marcado, para nunca excluir algo que nao
+   se esta vendo. */
+var selecionados = {};
+
+function atualizarSelecao(rows){
+  var visiveis = {};
+  rows.forEach(function(r){ visiveis[r.id + '|' + r._rowIndex] = true; });
+  Object.keys(selecionados).forEach(function(k){ if (!visiveis[k]) delete selecionados[k]; });
+  var n = Object.keys(selecionados).length;
+  var editor = currentUserRole === 'Editor';
+  var btn = document.getElementById('excluirSelBtn');
+  btn.style.display = editor && n ? '' : 'none';
+  document.getElementById('excluirSelTxt').textContent = 'Excluir selecionados (' + n + ')';
+  var todos = document.getElementById('selTodos');
+  if (todos){
+    todos.style.display = editor ? '' : 'none';
+    todos.checked = !!rows.length && n === rows.length;
+    todos.indeterminate = n > 0 && n < rows.length;
+  }
+  document.querySelectorAll('#tableBody .row-sel').forEach(function(cb){
+    var tr = cb.closest('tr');
+    if (tr) tr.classList.toggle('selecionado', cb.checked);
+  });
+}
+function marcarTodosVisiveis(marcar){
+  var rows = filtered();
+  selecionados = {};
+  if (marcar) rows.forEach(function(r){ selecionados[r.id + '|' + r._rowIndex] = true; });
+  document.querySelectorAll('#tableBody .row-sel').forEach(function(cb){ cb.checked = marcar; });
+  atualizarSelecao(rows);
+}
+document.getElementById('tableBody').addEventListener('change', function(ev){
+  var cb = ev.target;
+  if (!cb.classList || !cb.classList.contains('row-sel')) return;
+  var k = cb.getAttribute('data-sel');
+  if (cb.checked) selecionados[k] = true; else delete selecionados[k];
+  atualizarSelecao(filtered());
+});
+
+async function excluirSelecionados(){
+  var chaves = Object.keys(selecionados);
+  if (!chaves.length) return;
+  var btn = document.getElementById('excluirSelBtn');
+  btn.disabled = true;
+  var removidos = 0;
+  try {
+    var token = await getToken();
+    // Resolve TODAS as posicoes atuais antes de apagar a primeira: se alguma nao
+    // bater (Id duplicado que mudou de lugar), nada e apagado.
+    var linhas = await buscarLinhasAtuaisGraph(token);
+    var indices = chaves.map(function(k){
+      var p = k.split('|'), id = Number(p[0]), esperado = Number(p[1]);
+      var cand = linhas.filter(function(row){ return Number(row.values[0][0]) === id; });
+      if (!cand.length) return null;
+      if (cand.length === 1) return cand[0].index;
+      var mesmo = cand.filter(function(row){ return row.index === esperado; })[0];
+      if (!mesmo) throw new Error('Id ' + id + ' está duplicado na planilha e mudou de posição — corrija na planilha antes de excluir.');
+      return mesmo.index;
+    }).filter(function(i){ return i !== null; });
+    // De baixo para cima: apagar uma linha sobe as de baixo, e as de cima ficam onde estao.
+    indices = indices.filter(function(v, i, a){ return a.indexOf(v) === i; }).sort(function(a, b){ return b - a; });
+    for (var i = 0; i < indices.length; i++){
+      await removerLinhaGraph(token, indices[i]);
+      removidos++;
+    }
+    if (editingId !== null && chaves.some(function(k){ return Number(k.split('|')[0]) === editingId; })){
+      editingId = null; editingRowIndex = null; setFormMode(false); togglePanel(false);
+    }
+    selecionados = {};
+    showToast(removidos + (removidos === 1 ? ' lançamento excluído.' : ' lançamentos excluídos.'));
+  } catch (err) {
+    showToast((removidos ? removidos + ' excluído(s); depois parou: ' : 'Erro ao excluir: ') + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
+    await carregarDados();
+  }
+}
+document.getElementById('excluirSelBtn').addEventListener('click', function(){
+  var n = Object.keys(selecionados).length;
+  if (!n) return;
+  pedirSenha('Digite a senha para EXCLUIR ' + n + (n === 1 ? ' lançamento' : ' lançamentos') + ' de vez:', function(ok){
+    if (ok) excluirSelecionados();
   });
 });
 
@@ -3832,6 +4003,7 @@ function render(){
   renderLegendas(filtered(['status']));
   renderDesempenho(rows);
   renderTable(rows);
+  atualizarSelecao(rows);
   renderMobile(rows, filtered(['status']));
   renderDescRanking(filtered());
   renderRanking(filtered(['nome','status']));
@@ -4082,7 +4254,7 @@ document.getElementById('descRankGroupSel').addEventListener('change', function(
 });
 
 document.getElementById('tableBody').addEventListener('click', function(ev){
-  if (ev.target.closest('.row-edit, .row-del, .row-copy, .attach-file, .attach')) return;
+  if (ev.target.closest('.row-edit, .row-del, .row-copy, .row-sel, .attach-file, .attach')) return;
   var trEl = ev.target.closest('tr[data-nome]');
   if (!trEl) return;
   var nomeTbl = trEl.getAttribute('data-nome');
