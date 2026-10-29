@@ -5719,9 +5719,7 @@ document.getElementById('adm_senha_salvar').addEventListener('click', function()
   /* Sem pedir a senha atual: este painel so abre para o dono, ja confirmado pelo
      login Microsoft. Pedir a atual travava a troca justamente quando ela foi
      esquecida ou gravada errada. */
-  if (!window.confirm('Redefinir a senha de autorização para todos os usuários?
-
-A senha antiga deixa de funcionar na hora.')) return;
+  if (!window.confirm('Redefinir a senha de autorização para todos os usuários?\n\nA senha antiga deixa de funcionar na hora.')) return;
   (function(){
     var btn = document.getElementById('adm_senha_salvar');
     btn.disabled = true;
