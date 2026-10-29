@@ -952,6 +952,20 @@
   .senha-erro{display:none;margin:8px 0 0 !important;font-size:12.9px;color:var(--critical);}
   .senha-erro.show{display:block;}
   .senha-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+  /* Recuperacao por e-mail: o mesmo modal troca de modo. */
+  .senha-link{background:none;border:0;padding:0;color:var(--chart-soft);font:600 12.9px var(--sans);cursor:pointer;}
+  .senha-link:hover{text-decoration:underline;}
+  .senha-link:disabled{opacity:.5;cursor:default;text-decoration:none;}
+  .senha-esqueci{margin:10px 0 0 !important;text-align:center;}
+  .senha-recup{display:none;}
+  .senha-recup input + input{margin-top:8px;}
+  .senha-modal.recuperando{width:320px;}
+  .senha-modal.recuperando .senha-recup{display:block;}
+  .senha-modal.recuperando #senhaInput,
+  .senha-modal.recuperando #senhaErro,
+  .senha-modal.recuperando #senhaMsg,
+  .senha-modal.recuperando .senha-esqueci{display:none !important;}
+  .senha-recup .senha-link{display:block;margin:10px auto 0;}
   /* ---- copiar / projetar lancamentos ---- */
   .copia-overlay{
     display:none;position:fixed;inset:0;background:rgba(5,6,10,.65);
@@ -1641,7 +1655,7 @@
       <div id="adm_lista"></div>
       <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border);">
         <h3 style="margin:0 0 4px;font:700 14.6px var(--sans);color:var(--ink);">Senha de autorização</h3>
-        <p style="font-size:12.9px;color:var(--ink-muted);margin:0 0 10px;">É a senha pedida para editar, excluir, copiar lançamentos e mexer em filtros e colunas. Vale para todos os usuários. <span id="adm_senha_estado"></span></p>
+        <p style="font-size:12.9px;color:var(--ink-muted);margin:0 0 10px;">É a senha pedida para editar, excluir, copiar lançamentos e mexer em filtros e colunas. Vale para todos os usuários. Esqueceu? Na janela que pede a senha, use "Esqueci a senha": chega um código no e-mail do administrador. <span id="adm_senha_estado"></span></p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
           <input type="password" id="adm_senha_nova" readonly data-sem-autofill placeholder="Nova senha" autocomplete="new-password" style="flex:1;min-width:160px;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:8px 10px;border-radius:7px;font:14.6px var(--sans);">
           <input type="password" id="adm_senha_conf" readonly data-sem-autofill placeholder="Repita a nova senha" autocomplete="new-password" style="flex:1;min-width:160px;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);padding:8px 10px;border-radius:7px;font:14.6px var(--sans);">
@@ -2085,6 +2099,15 @@
     <p id="senhaMsg">Digite a senha para continuar.</p>
     <input type="password" id="senhaInput" inputmode="numeric" autocomplete="off" placeholder="Senha">
     <p class="senha-erro" id="senhaErro">Senha incorreta. Tente novamente.</p>
+    <p class="senha-esqueci"><button type="button" class="senha-link" id="senhaEsqueci">Esqueci a senha</button></p>
+    <div class="senha-recup" id="senhaRecup">
+      <p id="recupMsg"></p>
+      <input type="text" id="recupCodigo" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Código do e-mail">
+      <input type="password" id="recupNova" readonly data-sem-autofill autocomplete="new-password" placeholder="Nova senha">
+      <input type="password" id="recupConf" readonly data-sem-autofill autocomplete="new-password" placeholder="Repita a nova senha">
+      <p class="senha-erro" id="recupErro"></p>
+      <button type="button" class="senha-link" id="recupReenviar">Enviar outro código</button>
+    </div>
     <div class="senha-actions">
       <button type="button" class="ebtn ghost" id="senhaCancelar">Cancelar</button>
       <button type="button" class="ebtn primary" id="senhaConfirmar">Confirmar</button>
@@ -5219,23 +5242,33 @@ async function garantirTabelaConfig(token, alvo){
   var r4 = await fetch(configUrl(alvo, '/tables/' + criada.id), { method: 'PATCH', headers: hJson, body: JSON.stringify({ name: CONFIG_TABLE_NAME }) });
   if (!r4.ok) throw new Error('Falha ao nomear a tabela como ' + CONFIG_TABLE_NAME + ' (' + r4.status + ').');
 }
+function hexAleatorio(bytes){
+  return Array.prototype.map.call(crypto.getRandomValues(new Uint8Array(bytes)), function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+}
+async function lerLinhasConfig(token, alvo){
+  var resp = await fetch(configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')/rows"), { headers: { Authorization: 'Bearer ' + token } });
+  if (!resp.ok) throw new Error('Não foi possível ler a aba Config (' + resp.status + ').');
+  return (await resp.json()).value || [];
+}
+/* Grava (ou troca) a linha da chave na aba Config. */
+async function gravarLinhaConfig(token, alvo, chave, valor){
+  var linha = [chave, valor, agoraBR()];
+  var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+  var urlRows = configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')/rows");
+  var existente = (await lerLinhasConfig(token, alvo)).filter(function(r){ return String(r.values[0][0]) === chave; })[0];
+  var r = existente
+    ? await fetch(urlRows + '/itemAt(index=' + existente.index + ')', { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [linha] }) })
+    : await fetch(urlRows, { method: 'POST', headers: hJson, body: JSON.stringify({ values: [linha] }) });
+  if (!r.ok) throw new Error('Falha ao gravar na aba Config (' + r.status + '): ' + (await r.text()).slice(0, 300));
+  return linha;
+}
 async function gravarSenhaConfig(novaSenha){
   var token = await getToken();
   var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
   await garantirTabelaConfig(token, alvo);
-  var saltBytes = crypto.getRandomValues(new Uint8Array(16));
-  var salt = Array.prototype.map.call(saltBytes, function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
+  var salt = hexAleatorio(16);
   var hash = await hashSenha(salt, novaSenha);
-  var linha = [CONFIG_CHAVE_SENHA, 'sha256:' + salt + ':' + hash, agoraBR()];
-  var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
-  var urlRows = configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')/rows");
-  var resp = await fetch(urlRows, { headers: { Authorization: 'Bearer ' + token } });
-  if (!resp.ok) throw new Error('Não foi possível ler a aba Config (' + resp.status + ').');
-  var existente = ((await resp.json()).value || []).filter(function(r){ return String(r.values[0][0]) === CONFIG_CHAVE_SENHA; })[0];
-  var r = existente
-    ? await fetch(urlRows + '/itemAt(index=' + existente.index + ')', { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [linha] }) })
-    : await fetch(urlRows, { method: 'POST', headers: hJson, body: JSON.stringify({ values: [linha] }) });
-  if (!r.ok) throw new Error('Falha ao gravar a senha (' + r.status + '): ' + (await r.text()).slice(0, 300));
+  var linha = await gravarLinhaConfig(token, alvo, CONFIG_CHAVE_SENHA, 'sha256:' + salt + ':' + hash);
   senhaConfig = { salt: salt, hash: hash, atualizado: linha[2] };
 }
 function mostrarEstadoSenha(){
@@ -5252,6 +5285,7 @@ function pedirSenha(mensagem, callback){
   document.getElementById('senhaErro').classList.remove('show');
   var input = document.getElementById('senhaInput');
   input.value = '';
+  sairRecuperacao();
   document.getElementById('senhaOverlay').classList.add('open');
   input.focus();
 }
@@ -5260,6 +5294,7 @@ function fecharSenha(){
   senhaCallback = null;
 }
 async function confirmarSenha(){
+  if (document.querySelector('.senha-modal').classList.contains('recuperando')) return redefinirPorCodigo();
   var input = document.getElementById('senhaInput');
   var cb = senhaCallback;
   if (await senhaConfere(input.value)){
@@ -5281,6 +5316,131 @@ document.getElementById('senhaCancelar').addEventListener('click', cancelarSenha
 document.getElementById('senhaInput').addEventListener('keydown', function(ev){
   if (ev.key === 'Enter'){ ev.preventDefault(); confirmarSenha(); }
   if (ev.key === 'Escape'){ ev.preventDefault(); cancelarSenha(); }
+});
+
+/* Esqueci a senha: um codigo de 6 digitos vai para o e-mail do administrador.
+   A aba Config guarda so o hash do codigo e a validade (linha senha_reset); com o
+   codigo certo dentro do prazo, grava a nova senha e invalida o codigo. O e-mail
+   sai pelo Graph com a conta de quem pediu, entao na primeira vez a Microsoft pede
+   a permissao de enviar e-mail (Mail.Send) — so nessa hora, nao no login. */
+var CONFIG_CHAVE_RESET = 'senha_reset';
+var RECUP_VALIDADE_MIN = 15;
+var RECUP_TENTATIVAS = 5;
+var recupTentativas = 0;
+
+async function tokenEmail(){
+  var pedido = { scopes: ['Mail.Send'], account: currentAccount, authority: 'https://login.microsoftonline.com/' + TENANT_ID };
+  try { return (await msalInstance.acquireTokenSilent(pedido)).accessToken; }
+  catch (e) { return (await msalInstance.acquireTokenPopup(pedido)).accessToken; }
+}
+async function enviarCodigoRecuperacao(){
+  if (!currentAccount) throw new Error('Entre com sua conta Microsoft primeiro.');
+  // Pede a permissao de e-mail primeiro: o popup precisa sair perto do clique,
+  // senao o navegador bloqueia.
+  var tokenMail = await tokenEmail();
+  var token = await getToken();
+  var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+  await garantirTabelaConfig(token, alvo);
+  var codigo = ('00000' + (crypto.getRandomValues(new Uint32Array(1))[0] % 1000000)).slice(-6);
+  var salt = hexAleatorio(16);
+  var validade = Date.now() + RECUP_VALIDADE_MIN * 60000;
+  await gravarLinhaConfig(token, alvo, CONFIG_CHAVE_RESET, 'sha256:' + salt + ':' + (await hashSenha(salt, codigo)) + ':' + validade);
+  var quem = escHtml(currentAccount.name || currentAccount.username || '');
+  var corpo = '<div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#1c1c1e;">'
+    + '<p>Foi pedido um código para redefinir a <b>senha de autorização</b> do CAP – Contas a Pagar.</p>'
+    + '<p style="font-size:28px;font-weight:700;letter-spacing:6px;margin:18px 0;">' + codigo + '</p>'
+    + '<p>Vale por ' + RECUP_VALIDADE_MIN + ' minutos. Digite-o na janela de senha do app, junto com a nova senha.</p>'
+    + '<p style="color:#5b626d;font-size:12px;">Pedido por ' + quem + ' em ' + escHtml(agoraBR()) + '. Se não foi você, ignore este e-mail: a senha atual continua valendo.</p>'
+    + '</div>';
+  var r = await fetch(GRAPH_BASE + '/me/sendMail', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + tokenMail, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: {
+      subject: 'CAP – código para redefinir a senha de autorização',
+      body: { contentType: 'HTML', content: corpo },
+      toRecipients: [{ emailAddress: { address: DONO_EMAIL } }]
+    }, saveToSentItems: false })
+  });
+  if (!r.ok) throw new Error('Falha ao enviar o e-mail (' + r.status + '): ' + (await r.text()).slice(0, 300));
+  recupTentativas = 0;
+}
+function erroRecup(msg){
+  var el = document.getElementById('recupErro');
+  el.textContent = msg;
+  el.classList.toggle('show', !!msg);
+}
+function sairRecuperacao(){
+  document.querySelector('.senha-modal').classList.remove('recuperando');
+  ['recupCodigo', 'recupNova', 'recupConf'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('recupNova').setAttribute('readonly', '');
+  document.getElementById('recupConf').setAttribute('readonly', '');
+  erroRecup('');
+  document.getElementById('senhaConfirmar').textContent = 'Confirmar';
+}
+async function pedirCodigo(botao){
+  botao.disabled = true;
+  var textoOriginal = botao.textContent;
+  botao.textContent = 'Enviando…';
+  erroRecup('');
+  try {
+    await enviarCodigoRecuperacao();
+    document.querySelector('.senha-modal').classList.add('recuperando');
+    document.getElementById('recupMsg').textContent = 'Enviamos um código para ' + DONO_EMAIL + ' (vale ' + RECUP_VALIDADE_MIN + ' min). Digite-o e escolha a nova senha.';
+    document.getElementById('senhaConfirmar').textContent = 'Redefinir';
+    document.getElementById('recupCodigo').focus();
+  } catch (err) {
+    var msg = err && err.message ? err.message : String(err);
+    if (document.querySelector('.senha-modal').classList.contains('recuperando')) erroRecup(msg);
+    else showToast('Não foi possível enviar o código: ' + msg);
+  } finally {
+    botao.disabled = false;
+    botao.textContent = textoOriginal;
+  }
+}
+async function redefinirPorCodigo(){
+  var codigo = document.getElementById('recupCodigo').value.trim();
+  var nova = document.getElementById('recupNova').value;
+  var conf = document.getElementById('recupConf').value;
+  if (!/^\d{6}$/.test(codigo)) return erroRecup('O código tem 6 números.');
+  if (nova.length < 4) return erroRecup('A nova senha precisa ter pelo menos 4 caracteres.');
+  if (nova !== conf) return erroRecup('As duas senhas não são iguais.');
+  if (recupTentativas >= RECUP_TENTATIVAS) return erroRecup('Tentativas esgotadas. Peça outro código.');
+  var btn = document.getElementById('senhaConfirmar');
+  btn.disabled = true;
+  erroRecup('');
+  try {
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    var linha = (await lerLinhasConfig(token, alvo)).map(function(r){ return r.values[0]; })
+      .filter(function(v){ return String(v[0]) === CONFIG_CHAVE_RESET; })[0];
+    var m = linha ? String(linha[1]).match(/^sha256:([0-9a-f]+):([0-9a-f]{64}):(\d+)$/) : null;
+    if (!m) return erroRecup('Nenhum código ativo. Peça outro código.');
+    if (Date.now() > Number(m[3])) return erroRecup('O código venceu. Peça outro código.');
+    if ((await hashSenha(m[1], codigo)) !== m[2]){
+      recupTentativas++;
+      return erroRecup(recupTentativas >= RECUP_TENTATIVAS ? 'Tentativas esgotadas. Peça outro código.' : 'Código incorreto.');
+    }
+    await gravarSenhaConfig(nova);
+    await gravarLinhaConfig(token, alvo, CONFIG_CHAVE_RESET, '');   // codigo usado nao vale de novo
+    mostrarEstadoSenha();
+    showToast('Senha redefinida. Já vale para todos.');
+    // Quem provou o codigo esta autorizado: segue a acao que pediu a senha.
+    var cb = senhaCallback;
+    fecharSenha();
+    if (cb) cb(true);
+  } catch (err) {
+    erroRecup('Erro ao redefinir: ' + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
+  }
+}
+document.getElementById('senhaEsqueci').addEventListener('click', function(){ pedirCodigo(this); });
+document.getElementById('recupReenviar').addEventListener('click', function(){ pedirCodigo(this); });
+['recupCodigo', 'recupNova', 'recupConf'].forEach(function(id){
+  document.getElementById(id).addEventListener('keydown', function(ev){
+    if (ev.key === 'Enter'){ ev.preventDefault(); confirmarSenha(); }
+    if (ev.key === 'Escape'){ ev.preventDefault(); cancelarSenha(); }
+  });
 });
 
 function encontrarLancamento(rawId, rowIndex){
