@@ -341,20 +341,20 @@
 "values": [
 [
 15,
-"24/03/2026 19:45",
-"24/03/2026 19:46",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"30/10/2026",
-"",
+46325,
+46325,
 "IPTU Casa Gravatá - Parcela 7",
 "IPTU",
 "A Vencer",
 "81670000001 0 24051715202 3 61030000000 3 00009988602 0",
-"124,05",
+124.05,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/SinergiaFinanceiro/Documentos%20Compartilhados/Aplicativos/Microsoft%20Forms/Envio%20de%20Boletos%20e%20Comprovantes/Pergunta/BOLETO%20-%20IPTU%20RESULT%20VISION%20CASA%20GRAVAT%C3%81_Part_Natanael%20Silva%206.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-15-1793392709827.jpeg",
 "",
 "Cadastro: 31933 - Inscrição Municipal: 01.05.164.04.0704.001 - Nosso Número (Núm. Dam): 24/000000009988596-6"
 ]
@@ -898,15 +898,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46326,
-"",
+46325,
 "Terreno Ivanilda",
 "Financiamento",
-"A Vencer",
+"Pago",
 "03399.41114 15000.000198 61778.001018 6 16050000057479",
 574.79,
 "",
-"https://sinerggiacombr.sharepoint.com/sites/SinergiaFinanceiro/Documentos%20Compartilhados/Aplicativos/Microsoft%20Forms/Envio%20de%20Boletos%20e%20Comprovantes/Pergunta/20.10.2026%20-%20Terreno%20Bezerros%20IvanildaP%C3%A1ginas_Natanael%20Silva.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-39-1793392768398.jpeg",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-39-1793392748678.jpeg",
 "",
 ""
 ]
@@ -1786,15 +1786,15 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46327,
-"",
+46325,
 "Cartão Ivanilda - Xp",
 "Cartão de Crédito",
 "A Vencer",
 2,
-3000,
+2585.89,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-83-1793394599670.jpeg",
 "",
 "Lançamento Projetado - Novembro"
 ]
@@ -2722,17 +2722,17 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46327,
-"",
+46325,
 "Soluções - PicPay - 05.505.693/0001-98 - Parcela 1/25",
 "Negociação",
-"A Vencer",
+"Pago",
 "",
 1647,
 "",
 "",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-121-1793393867223.jpeg",
 "",
-"",
-""
+"Valor pago R$ 1.647,00"
 ]
 ]
 },
@@ -2842,7 +2842,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46323,
-"",
+46323,
 "Soluções - Cartão Parcelado Bradesco - 05.505.693/0001-98",
 "Cartão de Crédito",
 "A Vencer",
@@ -2852,7 +2852,7 @@
 "",
 "",
 "",
-""
+"PAGO POR IVANILDA HOZANA"
 ]
 ]
 },
@@ -4431,9 +4431,9 @@
 "Parcelamento",
 "A Vencer",
 "",
-308.18,
+314.6,
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-201-1793396624807.pdf",
 "",
 "",
 ""
@@ -5242,7 +5242,7 @@
 "Felipe Hozana",
 "Envio de Boleto",
 46320,
-"",
+46325,
 "Claro Apto 201 - 136-411619680",
 "Telefone/Internet",
 "A Vencer",
@@ -5250,7 +5250,7 @@
 128.46,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-239-1793363264165.png",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-239-1793394650817.pdf",
 "",
 ""
 ]
