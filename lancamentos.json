@@ -2223,7 +2223,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-446.27,
+523.25,
 "",
 "",
 "",
@@ -2391,7 +2391,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-98.62,
+375.62,
 "",
 "",
 "",
@@ -4671,7 +4671,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-1070.55,
+1250.92,
 "",
 "",
 "",
@@ -5871,7 +5871,7 @@
 "Cartão de Crédito",
 "A Vencer",
 "",
-86.5,
+120.59,
 "",
 "",
 "",
@@ -6285,6 +6285,102 @@
 "",
 "",
 "Lançamento Projetado - Dezembro"
+]
+]
+},
+{
+"index": 262,
+"values": [
+[
+283,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46341,
+"",
+"Cartão Novo Atacarejo",
+"",
+"A Vencer",
+"",
+525.77,
+"",
+"",
+"",
+"",
+"Total 525,77 - GRAVATA 33615 1/3 - 182,52"
+]
+]
+},
+{
+"index": 263,
+"values": [
+[
+284,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46371,
+"",
+"Cartão Novo Atacarejo - Parcela 2/3",
+"Cartão de Crédito",
+"A Vencer",
+"",
+182.52,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 264,
+"values": [
+[
+285,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46402,
+"",
+"Cartão Novo Atacarejo - Parcela 3/3",
+"Cartão de Crédito",
+"A Vencer",
+"",
+182.52,
+"",
+"",
+"",
+"",
+""
+]
+]
+},
+{
+"index": 265,
+"values": [
+[
+286,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46342,
+"",
+"Cartão Melius - Seguro S10",
+"Cartão de Crédito",
+"A Vencer",
+"",
+589.47,
+"",
+"",
+"",
+"",
+""
 ]
 ]
 }
