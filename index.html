@@ -1347,12 +1347,26 @@
     .m-anexos{display:flex;gap:2px;}
     .m-anexos .attach{width:30px;height:30px;color:var(--ink-soft);}
     .m-item.venc{border-color:#5c2a27;}
-    .m-item.venc .m-dia, .m-item.venc .m-st{color:#ff8a80;}
+    .m-item.venc .m-dia{color:#ff8a80;}
     .m-item.hoje{background:#333335;border-color:#4a4a4c;}
-    .m-item.hoje .m-st{color:#f2f2f2;}
-    .m-item.pago{background:#222224;border-color:#2c2c2e;}
-    .m-item.pago .m-dia, .m-item.pago .m-st{color:#8e8e93;}
-    .m-item.pago .m-desc, .m-item.pago .m-val{color:#a1a1a6;}
+    /* Status em destaque: etiqueta colorida + faixa na borda esquerda, uma cor por
+       situacao (pago verde, vencido vermelho, hoje laranja, 1-3 dias amarelo, a
+       vencer azul). O nome fica fora da etiqueta, em cinza. */
+    .m-item{border-left-width:4px;}
+    .m-tag{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:999px;
+      font-size:11.5px;font-weight:700;flex:none;}
+    .m-nome{color:#a1a1a6;overflow:hidden;text-overflow:ellipsis;}
+    .m-item.pago{border-left-color:#30d158;}
+    .m-item.pago .m-tag{background:rgba(48,209,88,.16);color:#4ade80;}
+    .m-item.pago .m-dia{color:#4ade80;}
+    .m-item.venc{border-left-color:#ff453a;}
+    .m-item.venc .m-tag{background:rgba(255,69,58,.18);color:#ff8a80;}
+    .m-item.hoje{border-left-color:#ff9f0a;}
+    .m-item.hoje .m-tag{background:rgba(255,159,10,.18);color:#ffb340;}
+    .m-item.avencer.breve{border-left-color:#ffd60a;}
+    .m-item.avencer.breve .m-tag{background:rgba(255,214,10,.16);color:#ffd60a;}
+    .m-item.avencer{border-left-color:#0a84ff;}
+    .m-item.avencer .m-tag{background:rgba(10,132,255,.18);color:#64b5ff;}
   }
   /* ---- Cor de destaque ----
      Troca so a cor de acao (botoes, selecao, barras, foco). Os tons de status
@@ -4754,13 +4768,14 @@ function renderMobile(rows, rowsSemStatus){
   var accessor = SORT_ACCESSORS[sortState.key] || SORT_ACCESSORS.venc;
   var editor = currentUserRole === 'Editor';
   lista.innerHTML = rows.slice().sort(function(a, b){ return compareValues(accessor(a), accessor(b)) * sortState.dir; }).map(function(r){
-    var cls = r.status === 'vencido' ? 'venc' : r.status;
+    var cls = (r.status === 'vencido' ? 'venc' : r.status) + (r.status === 'avencer' && r.dias <= 3 ? ' breve' : '');
     var nome = String(r.nome || '').split(' ')[0];
     var miolo =
       '<span class="m-data"><span class="m-dia">' + String(r.vencDate.getDate()).padStart(2, '0') + '</span>' +
         '<span class="m-mes">' + MESES_CURTO[r.vencDate.getMonth()] + '</span></span>' +
       '<span class="m-meio"><span class="m-desc">' + escHtml(r.desc || '(sem descrição)') + '</span>' +
-        '<span class="m-st">' + (r.status === 'pago' ? SVG_CHECK : '') + escHtml(statusTextoMobile(r) + (nome ? ' · ' + nome : '')) + '</span></span>';
+        '<span class="m-st"><span class="m-tag">' + (r.status === 'pago' ? SVG_CHECK : '') + escHtml(statusTextoMobile(r)) + '</span>' +
+          (nome ? '<span class="m-nome">' + escHtml(nome) + '</span>' : '') + '</span></span>';
     var abrir = editor
       ? '<button type="button" class="m-abrir" data-rawid="' + r.id + '" data-rowidx="' + r._rowIndex + '" aria-label="Editar ' + escHtml(r.desc || 'lançamento') + '">' + miolo + '</button>'
       : '<div class="m-abrir">' + miolo + '</div>';
