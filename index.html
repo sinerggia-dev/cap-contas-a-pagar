@@ -1366,6 +1366,13 @@
     .m-card .v{font:500 16px var(--num);font-variant-numeric:tabular-nums;}
     .m-card.venc{border-color:#5c2a27;}
     .m-card.venc .k{color:#ff8a80;}
+    /* Cada cartao do resumo na cor da sua situacao: degrade + borda. */
+    .m-card-big{background:linear-gradient(145deg,#4a4a4e 0%,#2c2c2f 55%,#1f1f21 100%);border-color:#5a5a5e;}
+    .m-card.pago{background:linear-gradient(145deg,rgba(48,209,88,.32) 0%,rgba(48,209,88,.10) 55%,rgba(48,209,88,.03) 100%);
+      border-color:#2f8f4a;}
+    .m-card.pago .k{color:#7ee2a0;}
+    .m-card.venc{background:linear-gradient(145deg,rgba(255,69,58,.32) 0%,rgba(255,69,58,.10) 55%,rgba(255,69,58,.03) 100%);
+      border-color:#a8382f;}
     /* Os tres cartoes numa linha so: a letra encolhe com a largura da tela
        (clamp) em vez de o "Em aberto" ocupar uma linha inteira sozinho. */
     .m-resumo{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
@@ -4837,7 +4844,7 @@ function renderMobile(rows, rowsSemStatus){
     '<div class="m-card-big"><div><span class="k">Em aberto' + (umMes ? ' no mês' : '') + '</span>' +
       '<span class="v">' + brl(aberto) + '</span></div>' +
       '<span class="de">de ' + brl(total) + '</span></div>' +
-    '<div class="m-card"><span class="k">Pago · ' + pagos.length + '</span>' +
+    '<div class="m-card pago"><span class="k">Pago · ' + pagos.length + '</span>' +
       '<span class="v">' + brl(sum(pagos, function(r){ return pago(r); })) + '</span></div>' +
     '<div class="m-card venc"><span class="k">Vencido · ' + venc.length + '</span>' +
       '<span class="v">' + brl(sum(venc, function(r){ return r.valor; })) + '</span></div>';
