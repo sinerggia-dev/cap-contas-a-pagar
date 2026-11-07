@@ -1412,6 +1412,9 @@
     .m-st{font-size:12px;font-weight:500;color:#a1a1a6;display:flex;align-items:center;gap:4px;
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .m-st svg{width:13px;height:13px;flex:none;}
+    /* Observacao do lancamento: ate duas linhas, em italico, abaixo do status. */
+    .m-obs{font-size:12px;font-style:italic;color:#c7c7cc;line-height:1.35;margin-top:2px;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;}
     .m-dir{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
     .m-val{font:600 14px var(--num);font-variant-numeric:tabular-nums;}
     .m-anexos{display:flex;gap:2px;}
@@ -4882,7 +4885,9 @@ function renderMobile(rows, rowsSemStatus){
         '<span class="m-mes">' + MESES_CURTO[r.vencDate.getMonth()] + '</span></span>' +
       '<span class="m-meio"><span class="m-desc">' + escHtml(r.desc || '(sem descrição)') + '</span>' +
         '<span class="m-st"><span class="m-tag">' + (r.status === 'pago' ? SVG_CHECK : '') + escHtml(statusTextoMobile(r)) + '</span>' +
-          (nome ? '<span class="m-nome">' + escHtml(nome) + '</span>' : '') + '</span></span>';
+          (nome ? '<span class="m-nome">' + escHtml(nome) + '</span>' : '') + '</span>' +
+        (String(r.obs || '').trim() ? '<span class="m-obs" title="' + escHtml(r.obs) + '">' + escHtml(String(r.obs).trim()) + '</span>' : '') +
+        '</span>';
     var abrir = editor
       ? '<button type="button" class="m-abrir" data-rawid="' + r.id + '" data-rowidx="' + r._rowIndex + '" aria-label="Editar ' + escHtml(r.desc || 'lançamento') + '">' + miolo + '</button>'
       : '<div class="m-abrir">' + miolo + '</div>';
