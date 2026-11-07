@@ -1288,8 +1288,10 @@
     .bottom.analitico > .filters-drawer:not(.open){display:none;}
     .panel-head.barra-ferramentas{order:1;border:0;padding:0;background:none;gap:10px;}
     .barra-ferramentas h2, .barra-ferramentas .count{display:none;}
-    .barra-ferramentas .busca-wrap{flex:1 1 100%;}
-    .barra-ferramentas .busca-wrap input{height:48px;border-radius:14px;font-size:15px;padding-left:36px;}
+    /* Busca e lista de nomes dividem a mesma linha. */
+    .barra-ferramentas .busca-wrap{flex:1 1 0;min-width:0;}
+    .barra-ferramentas .busca-wrap input{height:44px;border-radius:14px;font-size:15px;padding-left:36px;}
+    .barra-ferramentas .nome-sel{flex:0 0 40%;min-width:0;max-width:none;height:44px;border-radius:14px;font-size:14px;}
     .barra-ferramentas .busca-wrap > svg{left:14px;width:16px;height:16px;}
     .periodo-wrap input{height:40px;border-radius:12px;}
     .barra-botoes{width:100%;}
