@@ -1379,6 +1379,11 @@
     .m-chip{flex:none;height:40px;padding:0 14px;border-radius:20px;border:1px solid #3a3a3c;
       background:transparent;color:var(--ink-soft);font:500 13px var(--sans);cursor:pointer;}
     .m-chip.on{background:#e5e5e5;border-color:#e5e5e5;color:#1c1c1e;font-weight:600;}
+    /* Os quatro chips cabem na largura, sem barra de rolagem: dividem a linha em
+       partes iguais e a letra encolhe com a tela. */
+    .m-chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;overflow:visible;margin-right:0;padding-right:0;}
+    .m-chip{min-width:0;height:36px;padding:0 4px;border-radius:18px;font-size:clamp(10.5px,3.2vw,14px);
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
 
     .m-lista{display:flex;flex-direction:column;gap:8px;}
     .m-vazio{padding:20px 8px;text-align:center;color:var(--ink-muted);font-size:14px;}
