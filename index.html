@@ -650,6 +650,10 @@
   @media (max-width:760px){ .bottom{grid-template-columns:1fr;}
     .bottom.analitico{grid-template-rows:none;}
     .bottom.analitico > .filters-drawer{grid-row:auto;height:auto;min-height:0;}
+    /* A regra de cima perdia para `.bottom.analitico > .filters-drawer.open` (height:0;
+       min-height:100%), que e mais especifica: a gaveta abria com altura zero e so a
+       borda aparecia. Repete o .open aqui para valer na tela estreita. */
+    .bottom.analitico > .filters-drawer.open{height:auto;min-height:0;max-height:70vh;width:100%;margin:0;}
     .zona > .panel{flex:none;width:auto;margin:0 0 14px;height:auto;min-height:0;}
     .bottom.analitico .panel.full{grid-column:1/-1;} }
 
