@@ -1307,8 +1307,24 @@
     /* Mesmo peso de seletor que `.panel-head.barra-ferramentas .busca-wrap` (1 1 260px),
        senao a busca pede 260px e empurra a lista para a linha de baixo. */
     .panel-head.barra-ferramentas .busca-wrap{flex:1 1 0;min-width:0;order:2;}
-    .panel-head.barra-ferramentas .busca-wrap input{height:44px;border-radius:14px;font-size:15px;padding-left:36px;}
-    .panel-head.barra-ferramentas .nome-sel{order:1;flex:1 1 0;min-width:0;max-width:none;height:44px;border-radius:14px;font-size:14px;}
+    .panel-head.barra-ferramentas .busca-wrap input{padding-left:36px;}
+    .panel-head.barra-ferramentas .nome-sel{order:1;flex:1 1 0;min-width:0;max-width:none;}
+    /* Todas as caixas da barra com a mesma altura, borda, canto e fundo do botao
+       Filtros, para a barra ler como um bloco so. */
+    .panel-head.barra-ferramentas .busca-wrap input,
+    .panel-head.barra-ferramentas .nome-sel,
+    .panel-head.barra-ferramentas .periodo-wrap input,
+    .panel-head.barra-ferramentas .barra-botoes .clear-btn{
+      height:40px;box-sizing:border-box;border-radius:12px;border:1px solid var(--border);
+      background-color:var(--surface);font-size:15px;
+    }
+    .panel-head.barra-ferramentas .busca-wrap input,
+    .panel-head.barra-ferramentas .nome-sel{font-weight:600;}
+    .panel-head.barra-ferramentas .periodo-wrap input.ativo,
+    .panel-head.barra-ferramentas .nome-sel.ativo,
+    .panel-head.barra-ferramentas .busca-wrap.tem-texto input{border-color:var(--chart);}
+    .panel-head.barra-ferramentas .barra-botoes .clear-btn.has-filters{border-color:var(--critical);}
+    .panel-head.barra-ferramentas .barra-botoes .clear-btn.mes-ativo{background-color:var(--select);border-color:var(--chart);}
     .barra-ferramentas .busca-wrap > svg{left:14px;width:16px;height:16px;}
     .periodo-wrap{order:3;}
     .periodo-wrap input{height:40px;border-radius:12px;}
