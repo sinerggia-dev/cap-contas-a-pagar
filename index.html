@@ -1313,6 +1313,14 @@
     .m-card .v{font:500 16px var(--num);font-variant-numeric:tabular-nums;}
     .m-card.venc{border-color:#5c2a27;}
     .m-card.venc .k{color:#ff8a80;}
+    /* Os tres cartoes numa linha so: a letra encolhe com a largura da tela
+       (clamp) em vez de o "Em aberto" ocupar uma linha inteira sozinho. */
+    .m-resumo{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+    .m-card-big, .m-card{grid-column:auto;padding:10px 7px;border-radius:14px;
+      display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:3px;min-width:0;}
+    .m-card-big .k, .m-card .k{font-size:clamp(10px,2.9vw,12px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .m-card-big .v, .m-card .v{font:600 clamp(10px,3vw,16px) var(--num);letter-spacing:-.03em;white-space:nowrap;}
+    .m-card-big .de{font-size:clamp(9px,2.5vw,11px);padding:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
     .m-chips{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;margin-right:-16px;padding-right:16px;}
     .m-chip{flex:none;height:40px;padding:0 14px;border-radius:20px;border:1px solid #3a3a3c;
