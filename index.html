@@ -1347,7 +1347,8 @@
     .barra-botoes{width:100%;order:4;}
     .barra-botoes .clear-btn{flex:1 1 0;justify-content:center;height:40px;border-radius:12px;}
     #filtersDrawer{order:2;}
-    #mResumo{order:3;} #mChips{order:4;} #mLista{order:5;}
+    /* Resumo e chips de status primeiro, depois Usuario/busca e os demais filtros. */
+    #mResumo{order:-2;} #mChips{order:-1;} #mLista{order:5;}
     #rankBody{order:6;background:var(--surface);border:1px solid var(--border);border-radius:16px;}
     #rankBody::before{content:'Total por Despesa de';display:block;font-size:15px;font-weight:600;
       color:var(--ink);padding:0 0 4px 6px;}
