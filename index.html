@@ -1289,12 +1289,15 @@
     .panel-head.barra-ferramentas{order:1;border:0;padding:0;background:none;gap:10px;}
     .barra-ferramentas h2, .barra-ferramentas .count{display:none;}
     /* Busca e lista de nomes dividem a mesma linha. */
-    .barra-ferramentas .busca-wrap{flex:1 1 0;min-width:0;}
-    .barra-ferramentas .busca-wrap input{height:44px;border-radius:14px;font-size:15px;padding-left:36px;}
-    .barra-ferramentas .nome-sel{flex:0 0 40%;min-width:0;max-width:none;height:44px;border-radius:14px;font-size:14px;}
+    /* Mesmo peso de seletor que `.panel-head.barra-ferramentas .busca-wrap` (1 1 260px),
+       senao a busca pede 260px e empurra a lista para a linha de baixo. */
+    .panel-head.barra-ferramentas .busca-wrap{flex:1 1 0;min-width:0;order:2;}
+    .panel-head.barra-ferramentas .busca-wrap input{height:44px;border-radius:14px;font-size:15px;padding-left:36px;}
+    .panel-head.barra-ferramentas .nome-sel{order:1;flex:0 0 38%;min-width:0;max-width:none;height:44px;border-radius:14px;font-size:14px;}
     .barra-ferramentas .busca-wrap > svg{left:14px;width:16px;height:16px;}
+    .periodo-wrap{order:3;}
     .periodo-wrap input{height:40px;border-radius:12px;}
-    .barra-botoes{width:100%;}
+    .barra-botoes{width:100%;order:4;}
     .barra-botoes .clear-btn{flex:1 1 0;justify-content:center;height:40px;border-radius:12px;}
     #filtersDrawer{order:2;}
     #mResumo{order:3;} #mChips{order:4;} #mLista{order:5;}
@@ -1916,12 +1919,12 @@
           <div class="busca-wrap" id="buscaWrap">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             <input type="text" id="buscaGeral" autocomplete="off" spellcheck="false"
-                   placeholder="Buscar em tudo: pessoa, descrição, tipo, documento, valor, data…"
+                   placeholder="Buscar em tudo"
                    aria-label="Buscar em todos os campos dos lançamentos">
             <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
           </div>
           <select class="nome-sel" id="filtroNome" title="Filtrar por nome (Despesa de)" aria-label="Filtrar por nome">
-            <option value="">Todos os nomes</option>
+            <option value="">Usuário</option>
           </select>
           <div class="periodo-wrap" id="periodoWrap" title="Filtrar pelo vencimento">
             <label for="periodoDe">De:</label>
@@ -3356,7 +3359,7 @@ function sincronizarFiltroNome(){
   var lista = nomes.join('\n') + '|' + (sel.length > 1 ? sel.length : '');
   if (lista !== filtroNomeLista){
     filtroNomeLista = lista;
-    filtroNome.innerHTML = '<option value="">Todos os nomes</option>'
+    filtroNome.innerHTML = '<option value="">Usuário</option>'
       + (sel.length > 1 ? '<option value="__varios">Vários nomes (' + sel.length + ')</option>' : '')
       + nomes.map(function(n){ return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>'; }).join('');
   }
