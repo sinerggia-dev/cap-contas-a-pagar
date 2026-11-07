@@ -702,12 +702,15 @@
      rotulos cortavam. Como barra, a altura ja diz o tamanho do mes e o rotulo sai
      do caminho. Escopado por #mesRankBody: o "Total por Despesa de" usa as mesmas
      classes, tem 5 colunas e continua em texto. */
+  /* Cada mes tem largura minima para o valor (R$ 29.698,32) e o rotulo (mar/2026)
+     caberem inteiros; com muitos meses, o grafico rola de lado em vez de espremer
+     as colunas ate os textos se sobreporem. */
   #mesRankBody .mes-graf{
-    display:flex;align-items:flex-end;gap:10px;overflow-x:visible;
-    height:230px;padding:14px 16px 10px;
+    position:relative;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;overflow-y:hidden;
+    height:240px;padding:14px 16px 10px;scrollbar-width:thin;
   }
   #mesRankBody .rank-col{
-    flex:1 1 0;min-width:0;padding:3px;height:100%;
+    flex:1 0 104px;min-width:104px;padding:3px;height:100%;
     display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
     border-left:0;border-radius:8px;
   }
@@ -4061,7 +4064,20 @@ function renderMesRanking(rows){
       '<span class="rank-col-name'+(mesSelecionado?' active':'')+'" data-mes="'+mesAttr+'" title="Clique para filtrar por '+mesAttr+'">'+e.mes+'</span>'+
       '</div>';
   }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
+  // So reposiciona quando a lista de meses muda: clicar num mes nao faz o grafico pular.
+  var chave = entries.map(function(e){ return e.mes; }).join(',');
+  if (chave !== mesGrafChave){
+    mesGrafChave = chave;
+    var graf = document.querySelector('#mesRankBody .mes-graf');
+    if (graf && graf.scrollWidth > graf.clientWidth){
+      var hoje = new Date(), ordHoje = hoje.getFullYear()*12 + hoje.getMonth();
+      var idx = entries.findIndex(function(e){ return e.ord >= ordHoje; });
+      var col = graf.children[idx < 0 ? entries.length - 1 : idx];
+      if (col) graf.scrollLeft = Math.max(0, col.offsetLeft - 3 * col.offsetWidth);
+    }
+  }
 }
+var mesGrafChave = null;
 
 /* ---- legenda que filtra ----
    Era so uma lista de cores. Virou a barra de atalho do status: cada chip mostra
@@ -4568,8 +4584,9 @@ function render(){
   atualizarSelecao(rows);
   renderMobile(rows, filtered(['status']));
   renderDescRanking(filtered());
-  renderRanking(filtered(['nome','status']));
-  renderMesRanking(filtered(['_mesano','status']));
+  // Qualquer filtro vale para todos os visuais, inclusive mes e status.
+  renderRanking(rows);
+  renderMesRanking(rows);
 }
 
 /* ---- Modelo F no celular ----
