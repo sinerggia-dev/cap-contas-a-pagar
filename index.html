@@ -1376,10 +1376,11 @@
     /* Os tres cartoes numa linha so: a letra encolhe com a largura da tela
        (clamp) em vez de o "Em aberto" ocupar uma linha inteira sozinho. */
     .m-resumo{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
-    .m-card-big, .m-card{grid-column:auto;padding:10px 7px;border-radius:14px;
+    .m-card-big, .m-card{grid-column:auto;padding:11px 7px;border-radius:14px;
       display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:3px;min-width:0;}
-    .m-card-big .k, .m-card .k{font-size:clamp(10px,2.9vw,12px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .m-card-big .v, .m-card .v{font:600 clamp(10px,3vw,16px) var(--num);letter-spacing:-.03em;white-space:nowrap;}
+    .m-card-big .k, .m-card .k{font-size:clamp(11px,3.2vw,14px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .m-card-big .v, .m-card .v{font:700 clamp(12px,3.8vw,20px) var(--num);letter-spacing:-.04em;white-space:nowrap;}
+    .m-rs{font-size:.6em;font-weight:600;opacity:.75;margin-right:2px;letter-spacing:0;}
     .m-card-big .de{font-size:clamp(9px,2.5vw,11px);padding:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
     .m-chips{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;margin-right:-16px;padding-right:16px;}
@@ -4832,6 +4833,10 @@ function anexoMobile(url, rotulo){
     '<svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.6"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6"/></svg></a>';
 }
 
+/* "R$" pequeno na frente: o numero ganha o espaco e pode ser maior no cartao. */
+function valorCartaoM(v){
+  return '<small class="m-rs">R$</small>' + escHtml(brl(v).replace(/^R\$\s*/, ''));
+}
 function renderMobile(rows, rowsSemStatus){
   document.getElementById('brandMes').textContent = rotuloPeriodoMobile();
 
@@ -4842,12 +4847,12 @@ function renderMobile(rows, rowsSemStatus){
   var umMes = Array.isArray(state._mesano) && state._mesano.length === 1;
   document.getElementById('mResumo').innerHTML =
     '<div class="m-card-big"><div><span class="k">Em aberto' + (umMes ? ' no mês' : '') + '</span>' +
-      '<span class="v">' + brl(aberto) + '</span></div>' +
+      '<span class="v">' + valorCartaoM(aberto) + '</span></div>' +
       '<span class="de">de ' + brl(total) + '</span></div>' +
     '<div class="m-card pago"><span class="k">Pago · ' + pagos.length + '</span>' +
-      '<span class="v">' + brl(sum(pagos, function(r){ return pago(r); })) + '</span></div>' +
+      '<span class="v">' + valorCartaoM(sum(pagos, function(r){ return pago(r); })) + '</span></div>' +
     '<div class="m-card venc"><span class="k">Vencido · ' + venc.length + '</span>' +
-      '<span class="v">' + brl(sum(venc, function(r){ return r.valor; })) + '</span></div>';
+      '<span class="v">' + valorCartaoM(sum(venc, function(r){ return r.valor; })) + '</span></div>';
 
   document.getElementById('mChips').innerHTML = M_CHIPS.map(function(c, i){
     var n = c.st ? rowsSemStatus.filter(function(r){ return c.st.indexOf(r.status) !== -1; }).length : rowsSemStatus.length;
