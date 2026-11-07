@@ -273,6 +273,15 @@
   .clear-btn:disabled:hover{border-color:var(--border);color:var(--ink-soft);}
   .clear-btn.has-filters{border-color:var(--critical);color:var(--critical);}
   .clear-btn.has-filters:hover{background:var(--critical-dim);}
+  /* Mes Atual ligado: fica marcado e mostra o mes por extenso. */
+  .clear-btn.mes-ativo{background:var(--select);border-color:var(--chart);color:var(--select-ink);font-weight:700;}
+  .clear-btn.mes-ativo:hover{background:var(--select);color:var(--select-ink);border-color:var(--chart);}
+  /* Etiqueta ao lado de "Lancamentos": que recorte de tempo esta na tela. */
+  .periodo-tag{
+    display:none;margin-left:10px;margin-right:auto;padding:3px 10px;border-radius:999px;
+    background:var(--select);color:var(--select-ink);font:600 12.9px var(--sans);white-space:nowrap;
+  }
+  .periodo-tag.show{display:inline-block;}
 
   /* Busca geral: varre todos os campos da linha de uma vez, sem escolher
      coluna antes. Convive com os filtros — ela restringe o que eles já
@@ -1899,7 +1908,7 @@
           <div class="barra-botoes" style="display:flex;align-items:center;gap:10px;">
             <button class="clear-btn" id="mesAtualBtn" type="button" title="Filtrar pelo mês atual">
               <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-              Mês Atual
+              <span id="mesAtualTxt">Mês Atual</span>
             </button>
             <button class="clear-btn" id="filtersIconBtn" type="button" title="Filtros">
               <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -1919,6 +1928,7 @@
     <div class="panel full">
           <div class="panel-head">
             <h2>Lançamentos</h2>
+            <span class="periodo-tag" id="periodoTag"></span>
             <button class="clear-btn" id="excluirSelBtn" type="button" style="display:none;">
               <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
               <span id="excluirSelTxt">Excluir selecionados</span>
@@ -3337,6 +3347,35 @@ filtroNome.addEventListener('change', function(){
   render();
 });
 
+/* Deixa claro qual mes esta sendo analisado: o botao Mes Atual fica marcado e
+   troca o texto pelo mes por extenso, e a etiqueta ao lado de "Lancamentos"
+   repete o recorte (meses escolhidos em qualquer lugar e/ou De/Ate). */
+var NOMES_MES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function mesPorExtenso(chave){
+  var m = String(chave).match(/^([a-z]{3})\/(\d{4})$/);
+  var i = m ? ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'].indexOf(m[1]) : -1;
+  return i >= 0 ? NOMES_MES[i] + '/' + m[2] : String(chave);
+}
+function dataIsoBR(iso){ var p = String(iso).split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso; }
+function mostrarPeriodoAtivo(){
+  var chaveAtual = mesAno(new Date());
+  var meses = Array.isArray(state._mesano) ? state._mesano : [];
+  var ehMesAtual = meses.length === 1 && meses[0] === chaveAtual;
+  var btn = document.getElementById('mesAtualBtn');
+  btn.classList.toggle('mes-ativo', ehMesAtual);
+  btn.setAttribute('aria-pressed', ehMesAtual ? 'true' : 'false');
+  btn.title = ehMesAtual ? 'Mostrando ' + mesPorExtenso(chaveAtual) + ' — clique para ver todos os meses' : 'Filtrar pelo mês atual (' + mesPorExtenso(chaveAtual) + ')';
+  document.getElementById('mesAtualTxt').textContent = ehMesAtual ? mesPorExtenso(chaveAtual) : 'Mês Atual';
+  var partes = [];
+  if (meses.length) partes.push((meses.length === 1 ? 'Mês: ' : 'Meses: ') + meses.map(mesPorExtenso).join(', '));
+  if (periodo.de || periodo.ate){
+    partes.push('Vencimento ' + (periodo.de ? 'de ' + dataIsoBR(periodo.de) + ' ' : '') + (periodo.ate ? 'até ' + dataIsoBR(periodo.ate) : 'em diante'));
+  }
+  var tag = document.getElementById('periodoTag');
+  tag.textContent = partes.join(' · ');
+  tag.classList.toggle('show', partes.length > 0);
+}
+
 document.getElementById('mesAtualBtn').addEventListener('click', function(){
   var chaveAtual = mesAno(new Date());
   var jaAtivo = Array.isArray(state._mesano) && state._mesano.length === 1 && state._mesano[0] === chaveAtual;
@@ -4616,6 +4655,7 @@ document.getElementById('excluirSelBtn').addEventListener('click', function(){
 function render(){
   var rows = filtered();
   sincronizarFiltroNome();
+  mostrarPeriodoAtivo();
   renderKpis(rows);
   // Sem o proprio status no calculo: senao ligar um chip zera todos os outros,
   // e a barra deixa de servir justamente para trocar de recorte.
