@@ -914,6 +914,9 @@
     background:var(--chart);color:#fff;font:700 14px var(--sans);display:flex;align-items:center;justify-content:center;
   }
   .uc-avatar:hover{background:var(--chart-hover);}
+  /* Com foto do perfil Microsoft, a foto cobre as iniciais. */
+  .uc-avatar.com-foto{background-size:cover;background-position:center;}
+  .uc-avatar.com-foto span{visibility:hidden;}
   .uc-ola{display:flex;flex-direction:column;line-height:1.2;min-width:0;}
   .uc-ola span{font-size:11.8px;color:var(--ink-muted);}
   .uc-ola b{font-size:14px;color:var(--ink);font-weight:700;white-space:nowrap;}
@@ -1267,15 +1270,24 @@
     .brand{min-width:0;}
     .brand h1, .brand p{display:none;}
     .brand-m{display:flex;flex-direction:column;gap:2px;min-width:0;}
-    .brand-kicker{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);}
-    .brand-mes{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);
+    .brand-kicker{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .brand-mes{font-size:17px;font-weight:700;letter-spacing:-.01em;color:var(--ink);
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .brand{flex:1 1 auto;}
+    .head-right{flex:none;}
     .quick-icons{display:none;}
-    /* No celular o cartao vira so o avatar do desenho (Modelo F). */
-    .user-chip{padding:0;border:0;background:none;gap:0;}
-    .user-chip .uc-ola, .user-chip .uc-refresh, .user-chip .uc-sep,
-    .user-chip .uc-clima, .user-chip .uc-hora{display:none;}
-    .uc-avatar{width:44px;height:44px;}
+    /* No celular o cartao fica compacto: foto, saudacao com nome, atualizar e
+       data/hora. Clima e paleta ficam so no computador. */
+    .user-chip{padding:4px 10px 4px 4px;gap:8px;border-radius:24px;}
+    .user-chip .uc-clima, .user-chip .uc-clima + .uc-sep, .user-chip #ucCores{display:none;}
+    .user-chip .uc-sep{height:26px;}
+    .uc-avatar{width:36px;height:36px;font-size:13px;}
+    .uc-ola span{font-size:10.5px;}
+    .uc-ola b{font-size:12.5px;}
+    .uc-refresh{width:26px;height:26px;}
+    .uc-hora span{font-size:10px;}
+    .uc-hora b{font-size:15px;}
     html:not([data-acento]) .uc-avatar{color:#1c1c1e;}
 
     .kpis{display:none;}
@@ -2340,6 +2352,33 @@ function primeiroNome(account){
   var parte = user.split('@')[0].split('.')[0];
   return parte ? parte.charAt(0).toUpperCase() + parte.slice(1).toLowerCase() : '';
 }
+/* Primeiro e ultimo nome ("Natanael Silva"): cabe no cartao e identifica melhor. */
+function nomeCurto(account){
+  var nome = currentUserNome || (account && account.name) || '';
+  var partes = String(nome).trim().split(/\s+/).filter(Boolean);
+  if (partes.length < 2) return primeiroNome(account);
+  return partes[0] + ' ' + partes[partes.length - 1];
+}
+/* Foto do perfil Microsoft no avatar. Sem foto, sem permissao ou conta pessoal:
+   ficam as iniciais, sem aviso. Busca uma vez por conta. */
+var fotoPerfilDe = null;
+async function carregarFotoPerfil(){
+  var conta = currentAccount && currentAccount.username;
+  if (!conta || fotoPerfilDe === conta) return;
+  fotoPerfilDe = conta;
+  var av = document.getElementById('ucAvatar');
+  av.classList.remove('com-foto');
+  av.style.backgroundImage = '';
+  try {
+    var token = await getToken();
+    var resp = await fetch(GRAPH_BASE + '/me/photos/96x96/$value', { headers: { Authorization: 'Bearer ' + token } });
+    if (!resp.ok) return;
+    var url = URL.createObjectURL(await resp.blob());
+    if (fotoPerfilDe !== conta) return;
+    av.style.backgroundImage = 'url("' + url + '")';
+    av.classList.add('com-foto');
+  } catch (e) {}
+}
 function iniciais(account){
   var nome = currentUserNome || (account && account.name) || String((account && account.username) || '').split('@')[0];
   var partes = String(nome || '').trim().split(/[\s._-]+/).filter(Boolean);
@@ -2350,8 +2389,9 @@ function atualizarEstadoLogin(){
   var logado = !!currentAccount;
   document.getElementById('loginOverlay').classList.toggle('open', !logado);
   document.getElementById('userChip').style.display = logado ? 'flex' : 'none';
-  if (logado) document.getElementById('userName').textContent = primeiroNome(currentAccount);
+  if (logado) document.getElementById('userName').textContent = nomeCurto(currentAccount);
   if (logado) document.getElementById('userIni').textContent = iniciais(currentAccount);
+  if (logado) carregarFotoPerfil();
 }
 
 function ehDono(){
