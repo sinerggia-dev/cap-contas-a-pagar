@@ -5357,7 +5357,7 @@ async function confirmarSenha(){
   var cb = senhaCallback;
   if (await senhaConfere(input.value)){
     fecharSenha();
-    if (cb) cb(true);
+    if (cb) cb(true, input.value);
   } else {
     document.getElementById('senhaErro').classList.add('show');
     input.value = '';
@@ -5485,7 +5485,7 @@ async function redefinirPorCodigo(){
     // Quem provou o codigo esta autorizado: segue a acao que pediu a senha.
     var cb = senhaCallback;
     fecharSenha();
-    if (cb) cb(true);
+    if (cb) cb(true, nova);
   } catch (err) {
     erroRecup('Erro ao redefinir: ' + (err && err.message ? err.message : err));
   } finally {
@@ -5711,6 +5711,7 @@ function renderAdminLista(usuarios){
         '<button type="button" class="ebtn" data-editar="'+u.email.replace(/"/g,'&quot;')+'" data-nome="'+(u.nome||'').replace(/"/g,'&quot;')+'" data-papel="'+u.papel+'" data-restricao="'+restricao.join(',').replace(/"/g,'&quot;')+'" style="padding:5px 10px;font-size:12.3px;flex:none;">Editar</button>'+
         '<button type="button" class="ebtn" data-toggle-papel="'+u.email.replace(/"/g,'&quot;')+'" data-papel-atual="'+u.papel+'" data-restricao="'+restricao.join(',').replace(/"/g,'&quot;')+'" style="padding:5px 10px;font-size:12.3px;flex:none;width:110px;" title="Trocar para '+(u.papel==='Editor'?'Visualizador':'Editor')+'">'+u.papel+' ⇄</button>'+
         '<button type="button" class="ebtn" data-toggle-status="'+u.email.replace(/"/g,'&quot;')+'" data-status-atual="'+u.status+'" data-nome="'+(u.nome||'').replace(/"/g,'&quot;')+'" data-papel="'+u.papel+'" data-restricao="'+restricao.join(',').replace(/"/g,'&quot;')+'" title="'+(ativo ? 'Bloqueia o acesso, mas mantém o cadastro pra ativar depois' : 'Restaura o acesso real de verdade')+'" style="padding:5px 10px;font-size:12.3px;flex:none;">'+(ativo ? 'Desabilitar' : 'Ativar')+'</button>'+
+        '<button type="button" class="ebtn" data-whats="'+u.email.replace(/"/g,'&quot;')+'" data-nome="'+(u.nome||'').replace(/"/g,'&quot;')+'" data-papel="'+u.papel+'" title="Enviar link, usuário e senha pelo WhatsApp" style="padding:5px 10px;font-size:12.3px;flex:none;color:#25a35a;">WhatsApp</button>'+
         '<button type="button" class="ebtn" data-excluir="'+u.email.replace(/"/g,'&quot;')+'" title="Remove o cadastro por completo" style="padding:5px 10px;font-size:12.3px;flex:none;color:var(--critical);">Excluir</button>'+
       '</div>'+
     '</div>';
@@ -5738,6 +5739,28 @@ function renderAdminLista(usuarios){
             showToast('Erro ao ativar: ' + (err && err.message ? err.message : err));
           }
         })();
+      });
+    });
+  });
+  /* Compartilhar pelo WhatsApp: monta a mensagem com o link do app, o e-mail de
+     login e a senha de autorizacao, e abre o WhatsApp para escolher o contato.
+     A planilha so guarda o hash da senha, entao ela e digitada aqui e conferida
+     antes de ir na mensagem (senha errada nao chega ao usuario). */
+  el.querySelectorAll('[data-whats]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var email = btn.getAttribute('data-whats');
+      var nome = btn.getAttribute('data-nome') || '';
+      var papel = btn.getAttribute('data-papel');
+      pedirSenha('Digite a senha de autorização que vai na mensagem para ' + (nome || email) + ':', function(ok, senha){
+        if (!ok) return;
+        var texto = 'Olá' + (nome ? ', ' + nome : '') + '! Seu acesso ao *CAP – Contas a Pagar* foi liberado.\n\n'
+          + '🔗 *Link:* ' + location.origin + location.pathname + '\n'
+          + '👤 *Usuário:* ' + email + '\n'
+          + '🔑 *Senha de autorização:* ' + senha + '\n'
+          + '📋 *Perfil:* ' + (papel === 'Editor' ? 'Editor (vê e altera)' : 'Visualizador (só vê)') + '\n\n'
+          + 'Para entrar, clique em "Entrar com Microsoft" e use o e-mail acima com a senha da sua conta Microsoft. '
+          + 'A senha de autorização é pedida só para editar, excluir ou mexer em filtros.';
+        window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
       });
     });
   });
