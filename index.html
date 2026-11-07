@@ -1285,6 +1285,7 @@
     .uc-avatar{width:36px;height:36px;font-size:13px;}
     .uc-ola span{font-size:10.5px;}
     .uc-ola b{font-size:12.5px;}
+    .uc-ola .un-resto{display:none;}
     .uc-refresh{width:26px;height:26px;}
     .uc-hora span{font-size:10px;}
     .uc-hora b{font-size:15px;}
@@ -2389,7 +2390,12 @@ function atualizarEstadoLogin(){
   var logado = !!currentAccount;
   document.getElementById('loginOverlay').classList.toggle('open', !logado);
   document.getElementById('userChip').style.display = logado ? 'flex' : 'none';
-  if (logado) document.getElementById('userName').textContent = nomeCurto(currentAccount);
+  if (logado){
+    // O sobrenome fica num span a parte: no celular ele some e sobra espaco para o titulo.
+    var nc = nomeCurto(currentAccount), sp = nc.indexOf(' ');
+    document.getElementById('userName').innerHTML = sp < 0 ? escHtml(nc)
+      : escHtml(nc.slice(0, sp)) + '<span class="un-resto">' + escHtml(nc.slice(sp)) + '</span>';
+  }
   if (logado) document.getElementById('userIni').textContent = iniciais(currentAccount);
   if (logado) carregarFotoPerfil();
 }
