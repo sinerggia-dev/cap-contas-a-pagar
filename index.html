@@ -1352,7 +1352,14 @@
     .barra-botoes .clear-btn{flex:1 1 0;justify-content:center;height:40px;border-radius:12px;}
     #filtersDrawer{order:2;}
     /* Resumo e chips de status primeiro, depois Usuario/busca e os demais filtros. */
-    #mResumo{order:-2;} #mChips{order:-1;} #mLista{order:5;}
+    #mResumo{order:-2;} #mChips{order:-1;} #mNovoBtn{order:4;} #mLista{order:5;}
+    /* "Novo lancamento" escrito, logo acima da lista: o "+" da barra de baixo
+       sozinho nao dizia o que fazia. */
+    .m-novo{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:12px;
+      border:0;background:var(--chart);color:#1c1c1e;font:700 15px var(--sans);cursor:pointer;}
+    html[data-acento] .m-novo{color:#fff;}
+    html[data-acento="branco"] .m-novo, html[data-acento="gelo"] .m-novo, html[data-acento="cinzaclaro"] .m-novo{color:#1c1c1e;}
+    .m-novo svg{width:20px;height:20px;}
     #rankBody{order:6;background:var(--surface);border:1px solid var(--border);border-radius:16px;}
     #rankBody::before{content:'Total por Despesa de';display:block;font-size:15px;font-weight:600;
       color:var(--ink);padding:0 0 4px 6px;}
@@ -1977,6 +1984,10 @@
     <!-- So no celular (Modelo F): resumo, chips de status e a lista em cartoes. -->
     <section class="m-resumo mobile-only" id="mResumo" aria-label="Resumo"></section>
     <div class="m-chips mobile-only" id="mChips" role="group" aria-label="Status"></div>
+    <button type="button" class="m-novo mobile-only" id="mNovoBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Novo lançamento
+    </button>
     <section class="m-lista mobile-only" id="mLista" aria-label="Lançamentos"></section>
 
     <div class="panel">
@@ -2142,7 +2153,13 @@
     function sincronizarNovo(){
       /* Visualizador nao lanca: o app esconde o "Novo" por style inline; espelhamos. */
       novo.style.visibility = addBtn.style.display === 'none' ? 'hidden' : 'visible';
+      document.getElementById('mNovoBtn').style.display = addBtn.style.display === 'none' ? 'none' : '';
     }
+    document.getElementById('mNovoBtn').addEventListener('click', function(ev){
+      ev.stopPropagation();
+      addBtn.click();
+      document.body.scrollTo({top:0, behavior:'smooth'});
+    });
     sincronizarNovo();
     new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
     var acoes = {
