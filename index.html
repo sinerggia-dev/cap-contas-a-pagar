@@ -312,6 +312,15 @@
   }
   .lote-box #loteValor{flex:1 1 220px;min-width:0;}
   .lote-aviso{font:500 12px var(--sans);color:var(--ink-muted);flex:1 1 100%;}
+  /* Lista suspensa de nome: atalho do filtro "Despesa de:" do menu Filtros. */
+  .nome-sel{
+    height:31px;box-sizing:border-box;flex:0 1 210px;min-width:150px;max-width:240px;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:7px;
+    color:var(--ink);font:500 12.8px var(--sans);padding:0 8px;cursor:pointer;
+  }
+  .nome-sel:focus{outline:2px solid var(--chart);outline-offset:1px;border-color:transparent;}
+  .nome-sel.ativo{border-color:var(--chart);}
+  .nome-sel option{background:var(--surface-2);color:var(--ink);}
   .periodo-wrap{display:flex;align-items:center;gap:6px;flex:none;}
   .periodo-wrap label{color:var(--ink-muted);font:500 12.5px var(--sans);}
   .periodo-wrap input{
@@ -1192,6 +1201,7 @@
     /* Linha propria abaixo da busca, os dois campos dividindo a largura. */
     .periodo-wrap{display:flex;flex:1 1 100%;}
     .periodo-wrap input{flex:1 1 0;min-width:0;}
+    .nome-sel{flex:1 1 100%;max-width:none;}
   }
   /* ---- Modelo F: barra de navegacao inferior (so no celular) ---- */
   .nav-mobile{display:none;}
@@ -1877,6 +1887,9 @@
                    aria-label="Buscar em todos os campos dos lançamentos">
             <button type="button" id="buscaLimparBtn" title="Limpar busca" aria-label="Limpar busca">&times;</button>
           </div>
+          <select class="nome-sel" id="filtroNome" title="Filtrar por nome (Despesa de)" aria-label="Filtrar por nome">
+            <option value="">Todos os nomes</option>
+          </select>
           <div class="periodo-wrap" id="periodoWrap" title="Filtrar pelo vencimento">
             <label for="periodoDe">De:</label>
             <input type="date" id="periodoDe" aria-label="Vencimento a partir de">
@@ -3297,6 +3310,33 @@ periodoAte.addEventListener('change', aplicarPeriodo);
    ninguem ver. Agora os campos aparecem nos dois tamanhos, e zerar ao girar o aparelho
    seria perder o filtro sem motivo. */
 
+/* Filtro de nome na barra: usa o mesmo state.nome do menu Filtros e do clique no
+   "Total por Despesa de", entao os tres ficam sempre de acordo. Varios nomes
+   escolhidos por la aparecem aqui como "Varios nomes". */
+var filtroNome = document.getElementById('filtroNome');
+var filtroNomeLista = '';
+function sincronizarFiltroNome(){
+  var nomes = DATA.map(function(r){ return r.nome; }).filter(function(n, i, a){ return n && a.indexOf(n) === i; })
+    .sort(function(a, b){ return a.localeCompare(b, 'pt-BR'); });
+  var sel = Array.isArray(state.nome) ? state.nome : [];
+  var lista = nomes.join('\n') + '|' + (sel.length > 1 ? sel.length : '');
+  if (lista !== filtroNomeLista){
+    filtroNomeLista = lista;
+    filtroNome.innerHTML = '<option value="">Todos os nomes</option>'
+      + (sel.length > 1 ? '<option value="__varios">Vários nomes (' + sel.length + ')</option>' : '')
+      + nomes.map(function(n){ return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>'; }).join('');
+  }
+  filtroNome.value = sel.length > 1 ? '__varios' : (sel[0] || '');
+  filtroNome.classList.toggle('ativo', sel.length > 0);
+}
+filtroNome.addEventListener('change', function(){
+  if (this.value === '__varios') return;
+  state.nome = this.value ? [this.value] : 'todos';
+  buildFilters();
+  updateClearButton();
+  render();
+});
+
 document.getElementById('mesAtualBtn').addEventListener('click', function(){
   var chaveAtual = mesAno(new Date());
   var jaAtivo = Array.isArray(state._mesano) && state._mesano.length === 1 && state._mesano[0] === chaveAtual;
@@ -4575,6 +4615,7 @@ document.getElementById('excluirSelBtn').addEventListener('click', function(){
 
 function render(){
   var rows = filtered();
+  sincronizarFiltroNome();
   renderKpis(rows);
   // Sem o proprio status no calculo: senao ligar um chip zera todos os outros,
   // e a barra deixa de servir justamente para trocar de recorte.
