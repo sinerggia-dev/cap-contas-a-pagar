@@ -1075,6 +1075,9 @@
   }
   .efield input:focus, .efield select:focus, .efield textarea:focus{outline:2px solid var(--chart);outline-offset:1px;border-color:transparent;}
   .efield textarea{resize:vertical;min-height:48px;font-family:var(--sans);}
+  /* Lista suspensa + campo de texto que so aparece com "Outra…". */
+  .efield .campo-lista-txt{display:none;margin-top:6px;}
+  .efield.com-outra .campo-lista-txt{display:block;}
   .efield input[type="file"]{padding:7px 8px;font-size:13.4px;color:var(--ink-soft);}
   .efield .hint{font-size:11.8px;color:var(--ink-muted);}
   .filedrop{
@@ -2036,16 +2039,19 @@
         <div class="edivider">Identificação</div>
         <div class="efield span2">
           <label>Despesa de: <span class="req">*</span></label>
-          <input type="text" id="nf_nome" list="empresaList" placeholder="Ex.: Ivanilda Hozana" required>
+          <select id="nf_nome_sel" class="campo-lista-sel" aria-label="Despesa de"></select>
+          <input type="text" id="nf_nome" class="campo-lista-txt" placeholder="Ex.: Ivanilda Hozana" autocomplete="off">
           <datalist id="empresaList"></datalist>
         </div>
         <div class="efield span2">
-          <label>Descrição do Documento <span class="req">*</span></label>
-          <input type="text" id="nf_desc" placeholder="Ex.: Aluguel Sala 1104" required>
+          <label>Descrição da Despesa <span class="req">*</span></label>
+          <select id="nf_desc_sel" class="campo-lista-sel" aria-label="Descrição da despesa"></select>
+          <input type="text" id="nf_desc" class="campo-lista-txt" placeholder="Digite a nova descrição" autocomplete="off">
         </div>
         <div class="efield">
           <label>Tipo de Despesa</label>
-          <input type="text" id="nf_tipo" list="tipoList" placeholder="Ex.: Cartão de Crédito" autocomplete="off">
+          <select id="nf_tipo_sel" class="campo-lista-sel" aria-label="Tipo de despesa"></select>
+          <input type="text" id="nf_tipo" class="campo-lista-txt" placeholder="Digite o novo tipo" autocomplete="off">
           <datalist id="tipoList"></datalist>
         </div>
         <div class="efield">
@@ -5585,6 +5591,68 @@ EMPRESAS_CONHECIDAS.forEach(function(e){
   dlist.appendChild(opt);
 });
 
+/* ---- Listas suspensas do formulario ----
+   Despesa de, Descricao da Despesa e Tipo de Despesa viram listas com o que ja
+   existe na planilha. Descricao e Tipo tem "Outra…", que abre o campo de texto
+   para digitar um valor novo; Despesa de so aceita quem ja existe. O valor de
+   verdade continua nos inputs nf_nome/nf_desc/nf_tipo (o resto do codigo le e
+   grava neles); a lista so espelha. A Descricao mostra as da pessoa escolhida. */
+var CAMPOS_LISTA = {
+  nf_nome: { outra: false, placeholder: 'Selecione…' },
+  nf_desc: { outra: true,  placeholder: 'Selecione…' },
+  nf_tipo: { outra: true,  placeholder: 'Selecione…' }
+};
+function unicosOrdenados(lista){
+  return lista.filter(function(v, i, a){ return v && a.indexOf(v) === i; })
+    .sort(function(a, b){ return a.localeCompare(b, 'pt-BR'); });
+}
+function opcoesCampoLista(id){
+  if (id === 'nf_nome') return unicosOrdenados(DATA.map(function(r){ return r.nome; }));
+  if (id === 'nf_tipo') return unicosOrdenados(DATA.map(function(r){ return r.tipo; }).concat(TIPOS_DESPESA_CONHECIDOS));
+  var nome = document.getElementById('nf_nome').value;
+  return unicosOrdenados(DATA.filter(function(r){ return !nome || r.nome === nome; }).map(function(r){ return r.desc; }));
+}
+/* Redesenha a lista e coloca nela o valor que esta no input. */
+function sincronizarCampoLista(id){
+  var cfg = CAMPOS_LISTA[id];
+  var inp = document.getElementById(id), sel = document.getElementById(id + '_sel');
+  var ops = opcoesCampoLista(id), v = inp.value;
+  sel.innerHTML = '<option value="">' + cfg.placeholder + '</option>' +
+    ops.map(function(o){ return '<option value="' + escHtml(o) + '">' + escHtml(o) + '</option>'; }).join('') +
+    (cfg.outra ? '<option value="__outra">Outra…</option>' : '');
+  var naLista = !!v && ops.indexOf(v) !== -1;
+  var outra = cfg.outra && !!v && !naLista;
+  if (!cfg.outra && v && !naLista){
+    // Nome que nao esta na lista (raro): entra como opcao para nao se perder.
+    sel.insertAdjacentHTML('beforeend', '<option value="' + escHtml(v) + '">' + escHtml(v) + '</option>');
+    naLista = true;
+  }
+  sel.value = naLista ? v : (outra ? '__outra' : '');
+  inp.closest('.efield').classList.toggle('com-outra', outra);
+}
+function sincronizarListasForm(){
+  sincronizarCampoLista('nf_nome');
+  sincronizarCampoLista('nf_desc');
+  sincronizarCampoLista('nf_tipo');
+}
+Object.keys(CAMPOS_LISTA).forEach(function(id){
+  document.getElementById(id + '_sel').addEventListener('change', function(){
+    var inp = document.getElementById(id);
+    var wrap = inp.closest('.efield');
+    if (this.value === '__outra'){
+      inp.value = '';
+      wrap.classList.add('com-outra');
+      inp.focus();
+    } else {
+      inp.value = this.value;
+      wrap.classList.remove('com-outra');
+    }
+    // Trocou a pessoa: a lista de descricoes passa a ser a dela.
+    if (id === 'nf_nome') sincronizarCampoLista('nf_desc');
+  });
+});
+document.getElementById('entryForm').addEventListener('reset', function(){ setTimeout(sincronizarListasForm, 0); });
+
 function atualizarTipoList(){
   var tlist = document.getElementById('tipoList');
   var tipos = TIPOS_DESPESA_CONHECIDOS.slice();
@@ -5751,7 +5819,7 @@ function setFormMode(editing){
 function togglePanel(open){
   entryPanel.classList.toggle('open', open);
   atualizarBotaoVoltar();
-  if (open) document.getElementById('nf_nome').focus();
+  if (open){ sincronizarListasForm(); document.getElementById('nf_nome_sel').focus(); }
 }
 
 /* Anexo ja salvo que o usuario mandou tirar. So vale ao clicar em Salvar: ate la,
@@ -6145,6 +6213,7 @@ function abrirParaEdicao(rawId, rowIndex){
   document.getElementById('nf_nome').value = entry.nome || '';
   document.getElementById('nf_desc').value = entry.desc || '';
   document.getElementById('nf_tipo').value = entry.tipo || 'Outras';
+  sincronizarListasForm();
   document.getElementById('nf_status').value = entry.pag ? 'Pago' : 'A Vencer';
   document.getElementById('nf_venc').value = entry.venc ? isoToDDMMYYYY(entry.venc) : '';
   document.getElementById('nf_valor').value = (entry.valor != null ? digitsToBRL(String(Math.round(entry.valor*100))) : '');
@@ -6296,6 +6365,7 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
       } else if (!wasEditing) {
         document.getElementById('nf_nome').value = keepNome;
         document.getElementById('nf_tipo').value = 'Outras';
+        sincronizarListasForm();
         document.getElementById('nf_status').value = 'A Vencer';
         document.getElementById('nf_desc').focus();
       } else {
