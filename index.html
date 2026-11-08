@@ -2194,7 +2194,7 @@
   <!-- A gaveta de filtros e uma COLUNA da zona inteira: desce ao lado da tabela e do
        Desempenho. Antes ela vivia dentro do .middle e parava na altura da tabela,
        cortando os campos a partir do Status. -->
-  <div class="zona">
+  <div class="zona" id="zonaGraficos">
     <div class="panel">
       <div class="panel-head">
         <div class="panel-head-title">
@@ -2245,8 +2245,8 @@
   <button type="button" data-nav="lancamentos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Lista
   </button>
-  <button type="button" data-nav="acoes">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>Mais
+  <button type="button" data-nav="graficos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>Gráficos
   </button>
 </nav>
 <script>
@@ -2268,7 +2268,8 @@
       filtros: function(){ document.getElementById('filtersIconBtn').click(); },
       novo: function(){ addBtn.click(); document.body.scrollTo({top:0, behavior:'smooth'}); },
       lancamentos: function(){ document.getElementById('mLista').scrollIntoView({behavior:'smooth', block:'start'}); },
-      acoes: function(){ document.getElementById('actionsIconBtn').click(); }
+      // "Mais" saiu: o menu Acoes ja abre pelo cartao do usuario, no topo.
+      graficos: function(){ document.getElementById('zonaGraficos').scrollIntoView({behavior:'smooth', block:'start'}); }
     };
     document.getElementById('navMobile').addEventListener('click', function(ev){
       var b = ev.target.closest('[data-nav]');
