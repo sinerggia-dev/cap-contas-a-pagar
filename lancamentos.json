@@ -917,17 +917,17 @@
 "values": [
 [
 40,
-"25/06/2026 21:29",
-"25/06/2026 21:30",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"20/11/2026",
+46356,
 "",
 "Terreno Ivanilda",
 "Financiamento",
 "A Vencer",
 "03399.41114 15000.000198 61779.801010 5 16360000057479",
-"574,79",
+574.79,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/SinergiaFinanceiro/Documentos%20Compartilhados/Aplicativos/Microsoft%20Forms/Envio%20de%20Boletos%20e%20Comprovantes/Pergunta/20.11.2026%20-%20Terreno%20Bezerros%20IvanildaP%C3%A1ginas_Natanael%20Silva.pdf",
 "",
@@ -6381,6 +6381,222 @@
 "",
 "",
 ""
+]
+]
+},
+{
+"index": 266,
+"values": [
+[
+287,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46343,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 1/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+329.15,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 267,
+"values": [
+[
+288,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46373,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 2/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 268,
+"values": [
+[
+289,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46404,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 3/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 269,
+"values": [
+[
+290,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46435,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 4/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 270,
+"values": [
+[
+291,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46463,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 5/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 271,
+"values": [
+[
+292,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46494,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 6/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 272,
+"values": [
+[
+293,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46524,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 7/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 273,
+"values": [
+[
+294,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46555,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 8/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
+]
+]
+},
+{
+"index": 274,
+"values": [
+[
+295,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46585,
+"",
+"Cartão Magazine Luiz 4566 - Parcela 9/9",
+"Cartão de Crédito",
+"A Vencer",
+"",
+306.17,
+"",
+"",
+"",
+"",
+"COLCHÃO E GUARDA ROUPA - ADRIELMA"
 ]
 ]
 }
