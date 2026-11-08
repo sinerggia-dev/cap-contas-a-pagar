@@ -5607,7 +5607,12 @@ function unicosOrdenados(lista){
     .sort(function(a, b){ return a.localeCompare(b, 'pt-BR'); });
 }
 function opcoesCampoLista(id){
-  if (id === 'nf_nome') return unicosOrdenados(DATA.map(function(r){ return r.nome; }));
+  if (id === 'nf_nome'){
+    // So o administrador lanca para qualquer pessoa; os demais, so para si.
+    var meu = !ehDono() ? meuNomeDespesa() : '';
+    if (meu) return [meu];
+    return unicosOrdenados(DATA.map(function(r){ return r.nome; }));
+  }
   if (id === 'nf_tipo') return unicosOrdenados(DATA.map(function(r){ return r.tipo; }).concat(TIPOS_DESPESA_CONHECIDOS));
   var nome = document.getElementById('nf_nome').value;
   return unicosOrdenados(DATA.filter(function(r){ return !nome || r.nome === nome; }).map(function(r){ return r.desc; }));
@@ -5630,7 +5635,26 @@ function sincronizarCampoLista(id){
   sel.value = naLista ? v : (outra ? '__outra' : '');
   inp.closest('.efield').classList.toggle('com-outra', outra);
 }
+/* Nome da pessoa logada como aparece em "Despesa de". Procura pelo nome da conta
+   Microsoft e pelas partes do e-mail (ivanilda.hozana@… -> "Ivanilda Hozana"). */
+function normNome(t){ return semAcento(String(t || '')).toLowerCase(); }
+function meuNomeDespesa(){
+  if (!currentAccount) return '';
+  var nomes = unicosOrdenados(DATA.map(function(r){ return r.nome; }));
+  var conta = normNome(currentAccount.name);
+  var exato = nomes.filter(function(n){ return normNome(n) === conta; })[0];
+  if (exato) return exato;
+  var partes = normNome(String(currentAccount.username || '').split('@')[0]).split(/[._\-]+/).filter(function(p){ return p.length > 1; });
+  if (!partes.length) return '';
+  return nomes.filter(function(n){
+    var palavras = normNome(n).split(/\s+/);
+    return partes.every(function(p){ return palavras.indexOf(p) !== -1; });
+  })[0] || '';
+}
 function sincronizarListasForm(){
+  // Lancamento novo de quem nao e administrador ja vem com o proprio nome.
+  var inpNome = document.getElementById('nf_nome');
+  if (!ehDono() && !inpNome.value && editingId === null){ inpNome.value = meuNomeDespesa(); }
   sincronizarCampoLista('nf_nome');
   sincronizarCampoLista('nf_desc');
   sincronizarCampoLista('nf_tipo');
