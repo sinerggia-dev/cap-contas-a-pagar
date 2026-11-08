@@ -1435,6 +1435,13 @@
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
 
     .m-lista{display:flex;flex-direction:column;gap:8px;}
+    /* Rolagem propria da lista (4 cartoes visiveis; altura calculada em
+       limitarListaMobile). A barra fica visivel para mostrar que ha mais. */
+    #mLista{max-height:390px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+      padding-right:6px;margin-right:-6px;scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent;}
+    #mLista > *{flex:none;}
+    #mLista::-webkit-scrollbar{width:4px;}
+    #mLista::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
     .m-vazio{padding:20px 8px;text-align:center;color:var(--ink-muted);font-size:14px;}
     .m-item{display:flex;align-items:center;gap:10px;min-height:64px;padding:10px 14px;border-radius:16px;
       background:var(--surface-2);border:1px solid var(--border-strong);color:var(--ink);}
@@ -5120,7 +5127,22 @@ function renderMobile(rows, rowsSemStatus){
         '</span></div>' +
       '</div>';
   }).join('');
+  limitarListaMobile();
 }
+/* A lista rola por dentro, mostrando 4 lancamentos de cada vez: o topo (resumo,
+   chips e filtros) fica parado na tela enquanto se percorre a lista. A altura e
+   medida nos proprios cartoes, porque os com observacao sao mais altos. */
+function limitarListaMobile(){
+  var lista = document.getElementById('mLista');
+  lista.style.maxHeight = '';
+  var itens = lista.children;
+  if (itens.length <= 4 || !lista.offsetHeight) return;
+  var topo = itens[0].getBoundingClientRect().top;
+  var fim = itens[3].getBoundingClientRect().bottom;
+  lista.style.maxHeight = Math.ceil(fim - topo + 2) + 'px';
+  lista.scrollTop = 0;
+}
+window.addEventListener('resize', limitarListaMobile);
 
 document.getElementById('mChips').addEventListener('click', function(ev){
   var b = ev.target.closest('[data-m-chip]');
