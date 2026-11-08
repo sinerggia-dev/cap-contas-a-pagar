@@ -1278,8 +1278,21 @@
     }
     .ebtn.primary, .add-btn, .ss-opt.selected, .date-cal-grid button.selected,
     .nav-mobile .nav-novo .nav-novo-ic{color:#1c1c1e;}
-    /* O seletor de fundo nao muda nada no celular; esconder evita a duvida. */
+    /* Fundo do celular: escolha propria (data-fundo-m), separada da do computador,
+       so com tons escuros — o desenho do celular foi feito para fundo escuro. */
+    html[data-fundo-m="preto"]{--bg:#000000; --bg-base:#000000; --tarja-a:#000000; --tarja-b:#000000; --tarja-c:#0a0a0b;
+      --surface:#121214; --surface-2:#18181b; --surface-3:#222225; --border:#26262a; --border-strong:#3a3a3f;}
+    html[data-fundo-m="azul"]{--bg:#0b1220; --bg-base:#0b1220; --tarja-a:#0b1220; --tarja-b:#0b1220; --tarja-c:#08101c;
+      --surface:#121c2e; --surface-2:#17233a; --surface-3:#1e2c46; --border:#24324c; --border-strong:#34466a;}
+    html[data-fundo-m="verde"]{--bg:#0c1712; --bg-base:#0c1712; --tarja-a:#0c1712; --tarja-b:#0c1712; --tarja-c:#08120d;
+      --surface:#12201a; --surface-2:#172820; --surface-3:#1e3329; --border:#22382c; --border-strong:#33503f;}
+    html[data-fundo-m="vinho"]{--bg:#1a0e12; --bg-base:#1a0e12; --tarja-a:#1a0e12; --tarja-b:#1a0e12; --tarja-c:#14090d;
+      --surface:#24141a; --surface-2:#2c1820; --surface-3:#361e28; --border:#3a2230; --border-strong:#553244;}
+    html[data-fundo-m="roxo"]{--bg:#140f1f; --bg-base:#140f1f; --tarja-a:#140f1f; --tarja-b:#140f1f; --tarja-c:#0f0b18;
+      --surface:#1c1530; --surface-2:#221a3a; --surface-3:#2a2146; --border:#2e2448; --border-strong:#43376a;}
+    /* O seletor de fundo do computador nao vale aqui; o do celular aparece no lugar. */
     .fundo-wrap{display:none;}
+    .actions-drawer-body .fundo-wrap.fundo-m-wrap{display:block;}
 
     body{padding:12px 16px;}
     .report{border:0;box-shadow:none;padding:4px 0 24px;border-radius:0;}
@@ -1417,7 +1430,7 @@
     .m-lista{display:flex;flex-direction:column;gap:8px;}
     .m-vazio{padding:20px 8px;text-align:center;color:var(--ink-muted);font-size:14px;}
     .m-item{display:flex;align-items:center;gap:10px;min-height:64px;padding:10px 14px;border-radius:16px;
-      background:#2a2a2c;border:1px solid #3a3a3c;color:var(--ink);}
+      background:var(--surface-2);border:1px solid var(--border-strong);color:var(--ink);}
     .m-abrir{flex:1;min-width:0;display:flex;align-items:center;gap:14px;background:none;border:0;padding:0;
       color:inherit;font:inherit;text-align:left;}
     button.m-abrir{cursor:pointer;}
@@ -1438,7 +1451,7 @@
     .m-anexos .attach{width:30px;height:30px;color:var(--ink-soft);}
     .m-item.venc{border-color:#5c2a27;}
     .m-item.venc .m-dia{color:#ff8a80;}
-    .m-item.hoje{background:#333335;border-color:#4a4a4c;}
+    .m-item.hoje{background:var(--surface-3);border-color:var(--border-strong);}
     /* Status em destaque: etiqueta colorida + faixa na borda esquerda, uma cor por
        situacao (pago verde, vencido vermelho, hoje laranja, 1-3 dias amarelo, a
        vencer azul). O nome fica fora da etiqueta, em cinza. */
@@ -1492,6 +1505,12 @@
   .acento-opt:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
   /* O fundo some no celular (la a paleta e fixa), mas a cor de destaque vale e fica. */
   @media (max-width:640px){ .fundo-wrap.acento-wrap{display:block;} }
+  .fundo-m-wrap{display:none;}
+  .fundo-m-opts{display:flex;flex-wrap:wrap;gap:8px;}
+  .fundo-m-opt{flex:1 1 calc(33% - 8px);display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;
+    border:1px solid var(--border-strong);background:transparent;color:var(--ink-soft);font:600 12.9px var(--sans);cursor:pointer;}
+  .fundo-m-opt span{width:18px;height:18px;border-radius:50%;flex:none;border:1px solid rgba(255,255,255,.25);}
+  .fundo-m-opt.active{border-color:var(--chart);color:var(--ink);background:var(--surface-3);}
   /* ---- Fundos claros (so no computador: no celular a paleta Grafite e fixa) ----
      Tema claro de verdade: alem das superficies, os tons de status escurecem,
      porque o amarelo de "em atraso" e o verde de "pago", feitos para fundo
@@ -1563,6 +1582,8 @@
       if (['branco','gelo','cinzaclaro'].indexOf(f) >= 0) document.documentElement.setAttribute('data-claro', '');
       var a = localStorage.getItem('cap_acento_v1');
       if (a && /^[a-z]+$/.test(a) && a !== 'azul') document.documentElement.setAttribute('data-acento', a);
+      var fm = localStorage.getItem('cap_fundo_m_v1');
+      if (fm && /^[a-z]+$/.test(fm) && fm !== 'grafite') document.documentElement.setAttribute('data-fundo-m', fm);
     } catch(e){}
   })();
 
@@ -1727,6 +1748,17 @@
           <button type="button" class="acento-opt claro" data-acento-opt="branco" title="Branco" aria-label="Branco" aria-pressed="false" style="background:#f4f4f5"></button>
           <button type="button" class="acento-opt claro" data-acento-opt="gelo" title="Gelo" aria-label="Gelo" aria-pressed="false" style="background:#dbe5ef"></button>
           <button type="button" class="acento-opt claro" data-acento-opt="cinzaclaro" title="Cinza claro" aria-label="Cinza claro" aria-pressed="false" style="background:#c3c7cd"></button>
+        </div>
+      </div>
+      <div class="fundo-wrap fundo-m-wrap">
+        <div class="fundo-lbl">Fundo da tela</div>
+        <div class="fundo-m-opts" id="fundoMOpts">
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="grafite" aria-pressed="false"><span style="background:#2a2a2c"></span>Grafite</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="preto" aria-pressed="false"><span style="background:#18181b"></span>Preto</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="azul" aria-pressed="false"><span style="background:#17233a"></span>Azul-marinho</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="verde" aria-pressed="false"><span style="background:#172820"></span>Verde-musgo</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="vinho" aria-pressed="false"><span style="background:#2c1820"></span>Vinho</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="roxo" aria-pressed="false"><span style="background:#221a3a"></span>Roxo</button>
         </div>
       </div>
       <div class="fundo-wrap acento-wrap">
@@ -3027,6 +3059,27 @@ function aplicarFundo(v){
   if (claro && ACENTOS_CLAROS.indexOf(document.documentElement.getAttribute('data-acento')) >= 0) aplicarAcento('azul');
   aplicarAjusteCores();
 }
+/* Fundo do celular: guardado a parte do fundo do computador. */
+function aplicarFundoM(v){
+  if (!/^[a-z]+$/.test(v || '')) v = 'grafite';
+  if (v === 'grafite') document.documentElement.removeAttribute('data-fundo-m');
+  else document.documentElement.setAttribute('data-fundo-m', v);
+  try { localStorage.setItem('cap_fundo_m_v1', v); } catch(e){}
+  document.querySelectorAll('[data-fundo-m-opt]').forEach(function(b){
+    var ligado = b.getAttribute('data-fundo-m-opt') === v;
+    b.classList.toggle('active', ligado);
+    b.setAttribute('aria-pressed', ligado ? 'true' : 'false');
+  });
+  aplicarAjusteCores();
+}
+document.getElementById('fundoMOpts').addEventListener('click', function(ev){
+  var alvo = ev.target.closest('[data-fundo-m-opt]');
+  if (!alvo) return;
+  ev.stopPropagation();
+  aplicarFundoM(alvo.getAttribute('data-fundo-m-opt'));
+});
+aplicarFundoM(document.documentElement.getAttribute('data-fundo-m') || 'grafite');
+
 document.getElementById('fundoOpts').addEventListener('click', function(ev){
   var alvo = ev.target.closest ? ev.target.closest('[data-fundo-opt]') : null;
   if (!alvo) return;
