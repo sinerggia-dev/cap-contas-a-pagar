@@ -2510,6 +2510,15 @@ document.getElementById('instalarAppBtn').addEventListener('click', function(ev)
   }
   document.addEventListener('click', pedirTelaCheia, true);
 })();
+/* Login por redirect (a pagina vai a Microsoft e volta) em vez de popup: no app
+   instalado e em QUALQUER celular. No iPhone, link aberto pelo WhatsApp/Instagram
+   abre num navegador interno que nao deixa o popup carregar — ficava em
+   "about:blank". */
+function usarRedirect(){
+  var ua = navigator.userAgent || '';
+  return modoApp() || /iPhone|iPad|iPod|Android/i.test(ua) ||
+    (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+}
 function modoApp(){
   return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
 }
@@ -2595,7 +2604,7 @@ async function initAuth(){
 
 async function entrar(){
   try {
-    if (modoApp()){ await msalInstance.loginRedirect({ scopes: GRAPH_SCOPES, prompt: 'select_account' }); return; }
+    if (usarRedirect()){ await msalInstance.loginRedirect({ scopes: GRAPH_SCOPES, prompt: 'select_account' }); return; }
     var result = await msalInstance.loginPopup({ scopes: GRAPH_SCOPES, prompt: 'select_account' });
     currentAccount = result.account;
     msalInstance.setActiveAccount(currentAccount);
@@ -2868,7 +2877,7 @@ async function getToken(){
     var result = await msalInstance.acquireTokenSilent({ scopes: GRAPH_SCOPES, account: currentAccount, authority: authority });
     return result.accessToken;
   } catch (e) {
-    if (modoApp()){
+    if (usarRedirect()){
       await msalInstance.acquireTokenRedirect({ scopes: GRAPH_SCOPES, account: currentAccount, authority: authority });
       throw new Error('Renovando o login…');
     }
@@ -6269,7 +6278,8 @@ function renderAdminLista(usuarios){
           + '🔑 *Senha de autorização:* ' + senha + '\n'
           + '📋 *Perfil:* ' + (papel === 'Editor' ? 'Editor (vê e altera)' : 'Visualizador (só vê)') + '\n\n'
           + 'Para entrar, clique em "Entrar com Microsoft" e use o e-mail acima com a senha da sua conta Microsoft. '
-          + 'A senha de autorização é pedida só para editar, excluir ou mexer em filtros.';
+          + 'A senha de autorização é pedida só para editar, excluir ou mexer em filtros.\n\n'
+          + 'Dica: abra o link no Safari (iPhone) ou no Chrome (Android) e, de lá, adicione à tela inicial para usar como aplicativo.';
         window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
       });
     });
