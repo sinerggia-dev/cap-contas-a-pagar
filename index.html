@@ -506,6 +506,13 @@
   /* O .middle deixou de hospedar a gaveta: agora e so a faixa da tabela. */
   .middle{margin-bottom:14px;flex:1 1 auto;min-height:230px;max-height:330px;display:flex;flex-direction:row;}
   .middle .panel{flex:1;display:flex;flex-direction:column;min-height:0;min-width:0;}
+  .mes-periodo{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px 0;}
+  .mes-periodo button, .mes-periodo select{
+    height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--border-strong);background:transparent;
+    color:var(--ink-soft);font:600 12.5px var(--sans);cursor:pointer;
+  }
+  .mes-periodo select{padding:0 8px;background:var(--surface-2);}
+  .mes-periodo .on{background:var(--select);border-color:var(--select);color:var(--select-ink);}
   @media (max-width:760px){ .zona{grid-template-columns:1fr;} .middle{flex-direction:column;} .table-scroll{max-height:195px;} }
 
   .panel{
@@ -740,7 +747,7 @@
      as colunas ate os textos se sobreporem. */
   #mesRankBody .mes-graf{
     position:relative;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;overflow-y:hidden;
-    height:240px;padding:14px 16px 10px;scrollbar-width:thin;
+    height:212px;padding:12px 16px 8px;scrollbar-width:thin;
   }
   #mesRankBody .rank-col{
     flex:1 0 104px;min-width:104px;padding:3px;height:100%;
@@ -1450,6 +1457,10 @@
     #mesRankBody .mes-barra{order:2;height:18px !important;width:var(--pct) !important;max-width:none;min-height:0;min-width:4px;
       flex-direction:row;border-radius:5px;}
     #mesRankBody .rank-col-item{height:auto !important;width:var(--seg);min-height:0;min-width:2px;}
+    body[data-aba="mensal"] .zona-corpo .middle{max-height:none;min-height:0;}
+    #mesRankBody{overflow-y:auto;overscroll-behavior:contain;}
+    .mes-periodo{padding:10px 12px 0;}
+    .mes-periodo button, .mes-periodo select{flex:1 1 auto;height:34px;font-size:13px;}
     #mesRankBody .mes-val{order:3;margin:0;font-size:12.5px;color:var(--ink);text-align:right;}
     /* ---- Abas da barra de baixo ---- */
     body[data-aba] .zona{display:none;}
@@ -2249,6 +2260,13 @@
         <h2>Total por Mês/Ano</h2>
         <span class="count" id="mesRankCount"></span>
       </div>
+      <div class="mes-periodo" id="mesPeriodo" role="group" aria-label="Período do gráfico">
+        <button type="button" data-mp="todos" class="on">Todos</button>
+        <button type="button" data-mp="3">3 meses</button>
+        <button type="button" data-mp="6">6 meses</button>
+        <button type="button" data-mp="9">9 meses</button>
+        <select id="mesAnoSel" aria-label="Ano"><option value="">Ano</option></select>
+      </div>
       <div class="rank-body" id="mesRankBody"></div>
     </div>
       </div>
@@ -2312,6 +2330,7 @@
       if (aba === 'contas' && typeof limitarListaMobile === 'function') limitarListaMobile();
       // O grafico mensal rola ate o mes atual, mas so consegue medir visivel.
       if (aba === 'mensal' && typeof renderMesRanking === 'function'){ mesGrafChave = null; renderMesRanking(filtered()); }
+      if (typeof ajustarAlturaMensal === 'function') ajustarAlturaMensal();
     }
     window.irParaAba = irParaAba;
     document.getElementById('navMobile').addEventListener('click', function(ev){
@@ -4474,6 +4493,20 @@ function renderMesRanking(rows){
     var b = byMes[k];
     return {mes:k, ord:b.ord, total:b.total, pago:b.pago, vencido:b.vencido, hoje:b.hoje, avencer:b.avencer};
   }).sort(function(a,b){ return a.ord - b.ord; });
+  /* Periodo so deste grafico (nao mexe nos filtros da tela): Ano escolhido, ou
+     3/6/9 meses a partir do mes atual. */
+  var anos = entries.map(function(e){ return Math.floor(e.ord / 12); }).filter(function(a, i, l){ return l.indexOf(a) === i; });
+  var selAno = document.getElementById('mesAnoSel');
+  selAno.innerHTML = '<option value="">Ano</option>' + anos.map(function(a){ return '<option value="' + a + '">' + a + '</option>'; }).join('');
+  selAno.value = mesPeriodo.modo === 'ano' ? String(mesPeriodo.ano) : '';
+  selAno.classList.toggle('on', mesPeriodo.modo === 'ano');
+  document.querySelectorAll('#mesPeriodo [data-mp]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-mp') === mesPeriodo.modo); });
+  var ordAtual = new Date().getFullYear() * 12 + new Date().getMonth();
+  if (mesPeriodo.modo === 'ano') entries = entries.filter(function(e){ return Math.floor(e.ord / 12) === mesPeriodo.ano; });
+  else if (mesPeriodo.modo !== 'todos'){
+    var n = Number(mesPeriodo.modo);
+    entries = entries.filter(function(e){ return e.ord >= ordAtual && e.ord < ordAtual + n; });
+  }
   document.getElementById('mesRankCount').textContent = entries.length + (entries.length===1 ? ' mês' : ' meses');
   var STATUS_LBL = {pago:'Pago', vencido:'Em atraso', hoje:'Vence hoje', avencer:'A vencer'};
   var mesAtivo = Array.isArray(state._mesano) ? state._mesano : null;
@@ -4521,6 +4554,31 @@ function renderMesRanking(rows){
   }
 }
 var mesGrafChave = null;
+var mesPeriodo = { modo: 'todos', ano: null };
+document.getElementById('mesPeriodo').addEventListener('click', function(ev){
+  var b = ev.target.closest('[data-mp]');
+  if (!b) return;
+  mesPeriodo = { modo: b.getAttribute('data-mp'), ano: null };
+  mesGrafChave = null;
+  renderMesRanking(filtered());
+});
+document.getElementById('mesAnoSel').addEventListener('change', function(){
+  mesPeriodo = this.value ? { modo: 'ano', ano: Number(this.value) } : { modo: 'todos', ano: null };
+  mesGrafChave = null;
+  renderMesRanking(filtered());
+});
+/* Aba Mensal no celular: o quadro desce ate a barra de baixo; os meses que
+   passarem disso rolam dentro dele. */
+function ajustarAlturaMensal(){
+  var meio = document.querySelector('#painelMesAno').parentNode;
+  meio.style.height = '';
+  if (document.body.getAttribute('data-aba') !== 'mensal' || !window.matchMedia('(max-width:640px)').matches) return;
+  var nav = document.getElementById('navMobile');
+  var fim = nav ? nav.getBoundingClientRect().top : window.innerHeight;
+  var h = fim - meio.getBoundingClientRect().top - 12;
+  meio.style.height = Math.max(260, Math.floor(h)) + 'px';
+}
+window.addEventListener('resize', ajustarAlturaMensal);
 
 /* ---- legenda que filtra ----
    Era so uma lista de cores. Virou a barra de atalho do status: cada chip mostra
