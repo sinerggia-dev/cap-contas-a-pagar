@@ -1448,13 +1448,14 @@
     body[data-aba="graficos"] #mLista{display:none !important;}
     body[data-aba="graficos"] #rankBody{display:block;}
     body[data-aba="graficos"] .zona{display:grid;}
-    body[data-aba="graficos"] .zona-corpo .bottom{display:none;}
+    body[data-aba="graficos"] .zona-corpo{display:none;}
+    body[data-aba="mensal"] .bottom.analitico{display:none;}
+    body[data-aba="mensal"] .zona{display:grid;}
+    body[data-aba="mensal"] .zona > .panel, body[data-aba="mensal"] .zona-corpo .bottom{display:none;}
     body[data-aba="desempenho"] .bottom.analitico{display:none;}
     body[data-aba="desempenho"] .zona{display:grid;}
     body[data-aba="desempenho"] .zona > .panel, body[data-aba="desempenho"] .zona-corpo .middle{display:none;}
-    body[data-aba="lista"] #mResumo, body[data-aba="lista"] .barra-ferramentas,
-    body[data-aba="lista"] #filtersDrawer{display:none !important;}
-    body[data-aba="lista"] #mLista{max-height:none !important;overflow:visible;}
+
     #mLista::-webkit-scrollbar{width:4px;}
     #mLista::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
     .m-vazio{padding:20px 8px;text-align:center;color:var(--ink-muted);font-size:14px;}
@@ -2255,8 +2256,8 @@
 </div>
 
 <nav class="nav-mobile" id="navMobile" aria-label="Navegação principal">
-  <button type="button" class="ativo" data-nav="topo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Contas
+  <button type="button" data-nav="mensal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4M8 17v-3M12 17v-5M16 17v-2"/></svg>Mensal
   </button>
   <button type="button" data-nav="desempenho">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Desempenho
@@ -2286,11 +2287,11 @@
     sincronizarNovo();
     new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
     /* Cada botao da barra e uma TELA (aba), nao uma rolagem: troca o que aparece
-       e volta ao topo. Contas = resumo, filtros e lista; Lista = so a lista, sem
-       limite de altura; Graficos = "Total por" (pessoa, tipo/descricao) e
-       Mes/Ano; Desempenho = so o Desempenho. O que cada aba mostra esta no CSS
+       e volta ao topo. Lista = tela principal (resumo, filtros e lista); Mensal =
+       grafico Total por Mes/Ano; Graficos = "Total por" (pessoa, tipo/descricao);
+       Desempenho = so o Desempenho. O que cada aba mostra esta no CSS
        (body[data-aba]). */
-    var ABA_DO_BOTAO = { topo: 'contas', lancamentos: 'lista', graficos: 'graficos', desempenho: 'desempenho' };
+    var ABA_DO_BOTAO = { mensal: 'mensal', lancamentos: 'contas', graficos: 'graficos', desempenho: 'desempenho' };
     function irParaAba(aba){
       document.body.setAttribute('data-aba', aba);
       var bs = document.querySelectorAll('#navMobile [data-nav]');
@@ -2298,6 +2299,8 @@
       document.body.scrollTo(0, 0);
       window.scrollTo(0, 0);
       if (aba === 'contas' && typeof limitarListaMobile === 'function') limitarListaMobile();
+      // O grafico mensal rola ate o mes atual, mas so consegue medir visivel.
+      if (aba === 'mensal' && typeof renderMesRanking === 'function'){ mesGrafChave = null; renderMesRanking(filtered()); }
     }
     window.irParaAba = irParaAba;
     document.getElementById('navMobile').addEventListener('click', function(ev){
