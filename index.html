@@ -1471,6 +1471,61 @@
     .m-item.avencer{border-left-color:#0a84ff;}
     .m-item.avencer .m-tag{background:rgba(10,132,255,.18);color:#64b5ff;}
   }
+
+  /* ---- Fundos claros no celular ----
+     Alem do fundo, TODO texto e cor de status escurece: o desenho do celular usa
+     tons claros feitos para fundo escuro, que somem sobre branco. Tudo aqui so
+     vale com data-fundo-m-claro (Branco, Gelo, Cinza claro escolhidos no celular). */
+  @media (max-width:640px){
+    html[data-fundo-m="branco"]{--bg:#f4f4f6; --bg-base:#f4f4f6; --tarja-a:#f4f4f6; --tarja-b:#f4f4f6; --tarja-c:#ffffff;
+      --surface:#ffffff; --surface-2:#ffffff; --surface-3:#ececf0; --border:#e2e2e7; --border-strong:#c9c9d0;}
+    html[data-fundo-m="gelo"]{--bg:#eaf0f6; --bg-base:#eaf0f6; --tarja-a:#eaf0f6; --tarja-b:#eaf0f6; --tarja-c:#f8fbfd;
+      --surface:#fbfcfd; --surface-2:#ffffff; --surface-3:#e1e8f0; --border:#d6dfe9; --border-strong:#b9c7d8;}
+    html[data-fundo-m="cinzaclaro"]{--bg:#e3e4e7; --bg-base:#e3e4e7; --tarja-a:#e3e4e7; --tarja-b:#e3e4e7; --tarja-c:#f2f3f5;
+      --surface:#f4f5f6; --surface-2:#fafafb; --surface-3:#dadce0; --border:#cdd1d7; --border-strong:#b1b7c0;}
+    html[data-fundo-m-claro]{
+      color-scheme:light;
+      --ink:#16181d; --ink-soft:#3d434d; --ink-muted:#5b626d; --ink-faint:#5f6670;
+      --chart:#1c1c1e; --chart-soft:#1c1c1e; --chart-hover:#000000; --chart-fundo:#d1d1d6;
+      --select:#1c1c1e; --select-ink:#ffffff;
+      --critical:#b91c1c; --critical-dim:#fde2e2;
+      --atrasado:#946200; --atrasado-dim:#fdf1c7;
+      --warning:#b4470f; --warning-dim:#ffe8d6;
+      --positive:#147a3d; --positive-dim:#d9f5e3;
+      --neutral-dim:#e9ecf0;
+      --urgente:#b91c1c; --urgente-dim:#fde2e2;
+      --alerta2:#b4470f; --alerta2-dim:#ffe8d6;
+      --alerta3:#946200; --alerta3-dim:#fdf1c7;
+    }
+    html[data-fundo-m-claro] .ebtn.primary, html[data-fundo-m-claro] .add-btn, html[data-fundo-m-claro] .ss-opt.selected, html[data-fundo-m-claro] .date-cal-grid button.selected,
+    html[data-fundo-m-claro] .nav-mobile .nav-novo .nav-novo-ic, html[data-fundo-m-claro]:not([data-acento]) .uc-avatar{color:#ffffff;}
+    html[data-fundo-m-claro] .periodo-wrap input, html[data-fundo-m-claro] input[type=date]{color-scheme:light;}
+    html[data-fundo-m-claro] .acento-opt.claro{display:none;}
+    /* resumo */
+    html[data-fundo-m-claro] .m-card-big{background:linear-gradient(145deg,#ffffff 0%,#f1f2f4 60%,#e6e8eb 100%);border-color:#c9cdd3;}
+    html[data-fundo-m-claro] .m-card.pago{background:linear-gradient(145deg,rgba(22,163,74,.24) 0%,rgba(22,163,74,.09) 55%,rgba(22,163,74,.03) 100%);border-color:#58b97a;}
+    html[data-fundo-m-claro] .m-card.pago .k{color:#147a3d;}
+    html[data-fundo-m-claro] .m-card.venc{background:linear-gradient(145deg,rgba(220,38,38,.20) 0%,rgba(220,38,38,.07) 55%,rgba(220,38,38,.02) 100%);border-color:#e0928b;}
+    html[data-fundo-m-claro] .m-card.venc .k{color:#b91c1c;}
+    /* chips de status */
+    html[data-fundo-m-claro] .m-chip{border-color:var(--border-strong);color:var(--ink-soft);}
+    html[data-fundo-m-claro] .m-chip.on{background:#1c1c1e;border-color:#1c1c1e;color:#ffffff;}
+    /* lista */
+    html[data-fundo-m-claro] .m-item{box-shadow:0 1px 2px rgba(15,23,42,.06);}
+    html[data-fundo-m-claro] .m-mes, html[data-fundo-m-claro] .m-st, html[data-fundo-m-claro] .m-nome{color:var(--ink-muted);}
+    html[data-fundo-m-claro] .m-obs{color:var(--ink-soft);}
+    html[data-fundo-m-claro] .m-item.venc{border-color:#e6b4ae;}
+    html[data-fundo-m-claro] .m-item.venc .m-dia{color:#b91c1c;}
+    html[data-fundo-m-claro] .m-item.pago .m-dia{color:#147a3d;}
+    html[data-fundo-m-claro] .m-item.pago .m-tag{background:rgba(22,163,74,.14);color:#147a3d;}
+    html[data-fundo-m-claro] .m-item.venc .m-tag{background:rgba(220,38,38,.12);color:#b91c1c;}
+    html[data-fundo-m-claro] .m-item.hoje .m-tag{background:rgba(234,88,12,.14);color:#b4470f;}
+    html[data-fundo-m-claro] .m-item.avencer.breve .m-tag{background:rgba(202,138,4,.18);color:#7a5600;}
+    html[data-fundo-m-claro] .m-item.avencer .m-tag{background:rgba(37,99,235,.12);color:#1d4ed8;}
+    html[data-fundo-m-claro] .m-item.avencer.breve{border-left-color:#e0a800;}
+    html[data-fundo-m-claro] .user-chip{box-shadow:0 1px 2px rgba(15,23,42,.06);}
+    html[data-fundo-m-claro] .data-campo::after{filter:brightness(.55);}
+  }
   /* ---- Cor de destaque ----
      Troca so a cor de acao (botoes, selecao, barras, foco). Os tons de status
      (pago, atrasado, vence hoje) nao mudam: eles tem significado. Vem por ultimo
@@ -1584,6 +1639,7 @@
       if (a && /^[a-z]+$/.test(a) && a !== 'azul') document.documentElement.setAttribute('data-acento', a);
       var fm = localStorage.getItem('cap_fundo_m_v1');
       if (fm && /^[a-z]+$/.test(fm) && fm !== 'grafite') document.documentElement.setAttribute('data-fundo-m', fm);
+      if (['branco','gelo','cinzaclaro'].indexOf(fm) >= 0) document.documentElement.setAttribute('data-fundo-m-claro', '');
     } catch(e){}
   })();
 
@@ -1759,6 +1815,9 @@
           <button type="button" class="fundo-m-opt" data-fundo-m-opt="verde" aria-pressed="false"><span style="background:#172820"></span>Verde-musgo</button>
           <button type="button" class="fundo-m-opt" data-fundo-m-opt="vinho" aria-pressed="false"><span style="background:#2c1820"></span>Vinho</button>
           <button type="button" class="fundo-m-opt" data-fundo-m-opt="roxo" aria-pressed="false"><span style="background:#221a3a"></span>Roxo</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="branco" aria-pressed="false"><span style="background:#f4f4f6;border-color:#b1b7c0"></span>Branco</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="gelo" aria-pressed="false"><span style="background:#eaf0f6;border-color:#b1b7c0"></span>Gelo</button>
+          <button type="button" class="fundo-m-opt" data-fundo-m-opt="cinzaclaro" aria-pressed="false"><span style="background:#e3e4e7;border-color:#b1b7c0"></span>Cinza claro</button>
         </div>
       </div>
       <div class="fundo-wrap acento-wrap">
@@ -3064,7 +3123,12 @@ function aplicarFundoM(v){
   if (!/^[a-z]+$/.test(v || '')) v = 'grafite';
   if (v === 'grafite') document.documentElement.removeAttribute('data-fundo-m');
   else document.documentElement.setAttribute('data-fundo-m', v);
+  var claroM = FUNDOS_CLAROS.indexOf(v) >= 0;
+  if (claroM) document.documentElement.setAttribute('data-fundo-m-claro', '');
+  else document.documentElement.removeAttribute('data-fundo-m-claro');
   try { localStorage.setItem('cap_fundo_m_v1', v); } catch(e){}
+  /* Destaque claro sobre fundo claro nao aparece: volta para o azul. */
+  if (claroM && ACENTOS_CLAROS.indexOf(document.documentElement.getAttribute('data-acento')) >= 0) aplicarAcento('azul');
   document.querySelectorAll('[data-fundo-m-opt]').forEach(function(b){
     var ligado = b.getAttribute('data-fundo-m-opt') === v;
     b.classList.toggle('active', ligado);
