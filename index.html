@@ -1440,6 +1440,21 @@
     #mLista{max-height:390px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
       padding-right:6px;margin-right:-6px;scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent;}
     #mLista > *{flex:none;}
+    /* ---- Abas da barra de baixo ---- */
+    body[data-aba] .zona{display:none;}
+    body[data-aba] #rankBody{display:none;}
+    body[data-aba="graficos"] #mResumo, body[data-aba="graficos"] #mChips,
+    body[data-aba="graficos"] .barra-ferramentas, body[data-aba="graficos"] #filtersDrawer,
+    body[data-aba="graficos"] #mLista{display:none !important;}
+    body[data-aba="graficos"] #rankBody{display:block;}
+    body[data-aba="graficos"] .zona{display:grid;}
+    body[data-aba="graficos"] .zona-corpo .bottom{display:none;}
+    body[data-aba="desempenho"] .bottom.analitico{display:none;}
+    body[data-aba="desempenho"] .zona{display:grid;}
+    body[data-aba="desempenho"] .zona > .panel, body[data-aba="desempenho"] .zona-corpo .middle{display:none;}
+    body[data-aba="lista"] #mResumo, body[data-aba="lista"] .barra-ferramentas,
+    body[data-aba="lista"] #filtersDrawer{display:none !important;}
+    body[data-aba="lista"] #mLista{max-height:none !important;overflow:visible;}
     #mLista::-webkit-scrollbar{width:4px;}
     #mLista::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
     .m-vazio{padding:20px 8px;text-align:center;color:var(--ink-muted);font-size:14px;}
@@ -2270,26 +2285,30 @@
     }
     sincronizarNovo();
     new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
-    var acoes = {
-      topo: function(){ document.body.scrollTo({top:0, behavior:'smooth'}); },
-      // Filtros saiu da barra: o botao Filtros ja esta na tela, junto da busca.
-      desempenho: function(){ document.getElementById('painelDesempenho').scrollIntoView({behavior:'smooth', block:'start'}); },
-      novo: function(){ addBtn.click(); document.body.scrollTo({top:0, behavior:'smooth'}); },
-      lancamentos: function(){ document.getElementById('mLista').scrollIntoView({behavior:'smooth', block:'start'}); },
-      // "Mais" saiu: o menu Acoes ja abre pelo cartao do usuario, no topo.
-      graficos: function(){ document.getElementById('zonaGraficos').scrollIntoView({behavior:'smooth', block:'start'}); }
-    };
+    /* Cada botao da barra e uma TELA (aba), nao uma rolagem: troca o que aparece
+       e volta ao topo. Contas = resumo, filtros e lista; Lista = so a lista, sem
+       limite de altura; Graficos = "Total por" (pessoa, tipo/descricao) e
+       Mes/Ano; Desempenho = so o Desempenho. O que cada aba mostra esta no CSS
+       (body[data-aba]). */
+    var ABA_DO_BOTAO = { topo: 'contas', lancamentos: 'lista', graficos: 'graficos', desempenho: 'desempenho' };
+    function irParaAba(aba){
+      document.body.setAttribute('data-aba', aba);
+      var bs = document.querySelectorAll('#navMobile [data-nav]');
+      for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('ativo', ABA_DO_BOTAO[bs[i].getAttribute('data-nav')] === aba);
+      document.body.scrollTo(0, 0);
+      window.scrollTo(0, 0);
+      if (aba === 'contas' && typeof limitarListaMobile === 'function') limitarListaMobile();
+    }
+    window.irParaAba = irParaAba;
     document.getElementById('navMobile').addEventListener('click', function(ev){
       var b = ev.target.closest('[data-nav]');
       if (!b) return;
       ev.stopPropagation();
       var k = b.getAttribute('data-nav');
-      if (acoes[k]) acoes[k]();
-      if (k === 'topo' || k === 'lancamentos'){
-        var bs = this.querySelectorAll('[data-nav]');
-        for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('ativo', bs[i] === b);
-      }
+      if (k === 'novo'){ irParaAba('contas'); addBtn.click(); return; }
+      if (ABA_DO_BOTAO[k]) irParaAba(ABA_DO_BOTAO[k]);
     });
+    irParaAba('contas');
   })();
 </script>
 <div class="toast" id="toast"></div>
