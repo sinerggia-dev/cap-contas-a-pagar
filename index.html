@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CAP - Contas a Pagar</title>
+<!-- App instalavel (tela inicial do Android e do iPhone): abre em tela cheia, sem a
+     barra de endereco. O Android le o manifest; o iPhone le as metas apple-*. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1c1c1e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="CAP">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiM3YzNhZWQiLz48dGV4dCB4PSIzMiIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4kPC90ZXh0Pjwvc3ZnPgo=">
 <body><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2311,6 +2320,12 @@ var USERS_ITEM_ID = '01ZF6ARXVGGGKKJ2IAPVCJR6FXIOB5XP35';
 var ANEXOS_PATH = 'Gestão Financeira Claude/Anexos';
 
 var msalInstance = new msal.PublicClientApplication(MSAL_CONFIG);
+/* Aberto pelo icone da tela inicial (sem barra de endereco). Ai a janela de login
+   da Microsoft nao pode ser popup: no iPhone ela abre fora do app e nunca volta.
+   Nesse modo o login vai e volta pela propria pagina (redirect). */
+function modoApp(){
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+}
 var currentAccount = null;
 
 function encodePath(path){
@@ -2376,7 +2391,8 @@ function lerContaAtivaSalva(){
 async function initAuth(){
   try {
     await msalInstance.initialize();
-    await msalInstance.handleRedirectPromise();
+    var voltaLogin = await msalInstance.handleRedirectPromise();
+    if (voltaLogin && voltaLogin.account) salvarContaAtiva(voltaLogin.account.homeAccountId);
     var accounts = msalInstance.getAllAccounts();
     if (accounts.length > 0){
       var idSalvo = lerContaAtivaSalva();
@@ -2392,6 +2408,7 @@ async function initAuth(){
 
 async function entrar(){
   try {
+    if (modoApp()){ await msalInstance.loginRedirect({ scopes: GRAPH_SCOPES, prompt: 'select_account' }); return; }
     var result = await msalInstance.loginPopup({ scopes: GRAPH_SCOPES, prompt: 'select_account' });
     currentAccount = result.account;
     msalInstance.setActiveAccount(currentAccount);
@@ -2664,6 +2681,10 @@ async function getToken(){
     var result = await msalInstance.acquireTokenSilent({ scopes: GRAPH_SCOPES, account: currentAccount, authority: authority });
     return result.accessToken;
   } catch (e) {
+    if (modoApp()){
+      await msalInstance.acquireTokenRedirect({ scopes: GRAPH_SCOPES, account: currentAccount, authority: authority });
+      throw new Error('Renovando o login…');
+    }
     var result2 = await msalInstance.acquireTokenPopup({ scopes: GRAPH_SCOPES, account: currentAccount, authority: authority });
     return result2.accessToken;
   }

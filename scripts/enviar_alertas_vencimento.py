@@ -52,6 +52,8 @@ ITEM_ID = "01ZF6ARXTIQSWRHIKDQVHIHZRFMV5YVCAD"
 
 REMETENTE_EMAIL = "natanael.silva@sinerggia.com.br"
 DONO_NOME = "Natanael Silva"  # precisa bater com o Nome cadastrado em TabelaContatos
+# Recebem o mesmo e-mail do alerta, em cópia junto com o dono (só e-mail, não WhatsApp).
+EMAILS_EXTRAS = ["ivanilda.hozana@sinerggia.com.br"]
 LINK_DASHBOARD = "https://sinerggia-dev.github.io/cap-contas-a-pagar/"
 
 GRAPH = "https://graph.microsoft.com/v1.0"
@@ -268,11 +270,12 @@ def baixar_anexo(headers, url):
     return nome_arquivo, conteudo_resp.content
 
 
-def enviar_email(headers, destino, assunto, corpo, anexo=None):
+def enviar_email(headers, destinos, assunto, corpo, anexo=None):
+    """destinos: lista de e-mails — todos vão no Para da mesma mensagem."""
     message = {
         "subject": assunto,
         "body": {"contentType": "Text", "content": corpo},
-        "toRecipients": [{"emailAddress": {"address": destino}}],
+        "toRecipients": [{"emailAddress": {"address": d}} for d in destinos],
     }
     if anexo:
         nome_arquivo, conteudo_bytes = anexo
@@ -350,14 +353,17 @@ def main():
         except Exception as exc:
             print(f"Aviso: falha ao baixar anexo de '{item_com_anexo['desc']}': {exc}")
 
-    if contato["email"]:
+    destinos = ([contato["email"]] if contato["email"] else []) + [
+        e for e in EMAILS_EXTRAS if e.lower() != contato["email"].lower()
+    ]
+    if destinos:
         try:
-            enviar_email(headers, contato["email"], "CAP - Contas a vencer", texto, anexo=anexo)
-            print(f"E-mail enviado para {contato['email']}.")
+            enviar_email(headers, destinos, "CAP - Contas a vencer", texto, anexo=anexo)
+            print(f"E-mail enviado para {', '.join(destinos)}.")
         except Exception as exc:
             print(f"ERRO ao enviar e-mail: {exc}")
     else:
-        print("Dono sem e-mail cadastrado — pulando e-mail.")
+        print("Nenhum e-mail cadastrado — pulando e-mail.")
 
     if contato["whatsapp_numero"] and contato["whatsapp_apikey"]:
         blocos = montar_blocos_alerta(agrupado)
