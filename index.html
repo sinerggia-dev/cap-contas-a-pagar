@@ -2136,7 +2136,7 @@
       </div>
       <div class="entry-actions-bottom" style="display:flex;justify-content:flex-end;gap:10px;padding:16px;border-top:1px solid var(--border);">
         <button type="button" class="ebtn ghost" id="cancelEntryBtn">Cancelar</button>
-        <button type="submit" class="ebtn primary" id="entrySubmitBtn">Adicionar lançamento</button>
+        <button type="submit" class="ebtn primary" id="entrySubmitBtn">Adicionar</button>
       </div>
     </form>
   </div>
@@ -5837,7 +5837,7 @@ function setFormMode(editing){
   var panelTitle = document.querySelector('#entryPanel .panel-head h2');
   var submitBtn = document.getElementById('entrySubmitBtn');
   if (panelTitle) panelTitle.textContent = editing ? 'Editar lançamento' : 'Novo lançamento';
-  if (submitBtn) submitBtn.textContent = editing ? 'Salvar alterações' : 'Adicionar lançamento';
+  if (submitBtn) submitBtn.textContent = editing ? 'Salvar alterações' : 'Adicionar';
 }
 
 function togglePanel(open){
