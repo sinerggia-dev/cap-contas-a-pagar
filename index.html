@@ -887,6 +887,11 @@
     border-radius:6px;font:600 13px var(--num);padding:4px 7px;font-variant-numeric:tabular-nums;}
   .copia-valor:focus{outline:2px solid var(--chart);outline-offset:1px;}
   .copia-valor.mudou{border-color:var(--warning);}
+  .copia-data{background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:6px;
+    font:600 13px var(--num);padding:3px 6px;color-scheme:dark;}
+  html[data-claro] .copia-data, html[data-fundo-m-claro] .copia-data{color-scheme:light;}
+  .copia-data:focus{outline:2px solid var(--chart);outline-offset:1px;}
+  .copia-data.mudou{border-color:var(--warning);}
   .copia-dica{flex:1 1 100%;font-size:12.3px;color:var(--ink-muted);margin-top:-4px;}
 
   /* ---- add-entry toggle + form ---- */
@@ -2386,13 +2391,16 @@
       <label>Quantos meses
         <input type="number" id="copiaQtd" min="1" max="24" value="1" inputmode="numeric">
       </label>
+      <label>Dia do vencimento
+        <input type="number" id="copiaDia" min="1" max="31" inputmode="numeric">
+      </label>
       <label>Valor das cópias (R$)
         <input type="text" id="copiaValor" inputmode="decimal" autocomplete="off">
       </label>
       <label>Reajuste (%)
         <input type="number" id="copiaReajuste" step="0.01" inputmode="decimal" placeholder="0">
       </label>
-      <span class="copia-dica">Mudar o valor de um mês na tabela vale para ele e para os meses seguintes — útil para o reajuste anual.</span>
+      <span class="copia-dica">Mudar o valor de um mês na tabela vale para ele e para os meses seguintes — útil para o reajuste anual. A data de vencimento de cada mês também pode ser trocada na tabela.</span>
     </div>
     <div class="copia-lista" id="copiaLista"></div>
     <div class="copia-rodape">
@@ -4719,6 +4727,8 @@ var MESES_ABREV = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','
 var copiaAlvo = null;
 var copiaValorBase = 0;      // valor das copias (campo "Valor das copias" / reajuste)
 var copiaValoresMes = {};    // valor mudado na tabela, por mes ('fev/2027' -> 140.5)
+var copiaDatasMes = {};      // vencimento mudado na tabela, so daquele mes ('fev/2027' -> Date)
+function dataParaIso(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
 function chaveMes(ano, mes){ return MESES_ABREV[mes] + '/' + ano; }
 function somarMeses(ano, mes, n){
@@ -4752,8 +4762,10 @@ function planoCopia(){
     var ch = chaveMes(d.ano, d.mes);
     var parc = parcelaAvancada(r.parcela, n);
     if (parc.passou){ plano.push({ chave: ch, d: d, motivo: 'Parcelas acabaram' }); break; }
+    // Dia escolhido no campo (padrao: o do original); mes curto usa o ultimo dia.
+    var dia = Math.max(1, Math.min(31, Number(document.getElementById('copiaDia').value) || r.vencDate.getDate()));
     var ultimoDia = new Date(d.ano, d.mes + 1, 0).getDate();
-    var venc = new Date(d.ano, d.mes, Math.min(r.vencDate.getDate(), ultimoDia));
+    var venc = copiaDatasMes[ch] || new Date(d.ano, d.mes, Math.min(dia, ultimoDia));
     var jaExiste = DATA.some(function(x){
       return x._mesano === ch && x.nome === r.nome && x.desc === r.desc && String(x.parcela || '') === parc.texto;
     });
@@ -4774,7 +4786,7 @@ function desenharCopia(){
     plano.map(function(it){
       return '<tr class="' + (it.motivo ? 'pula' : '') + '">' +
         '<td>' + rotuloMesLongo(it.d.ano, it.d.mes) + '</td>' +
-        '<td>' + (it.venc ? fmtDate(it.venc) : '—') + '</td>' +
+        '<td>' + (it.venc && !it.motivo ? '<input type="date" class="copia-data' + (copiaDatasMes[it.chave] ? ' mudou' : '') + '" data-copia-data="' + it.chave + '" value="' + dataParaIso(it.venc) + '" aria-label="Vencimento em ' + rotuloMesLongo(it.d.ano, it.d.mes) + '">' : (it.venc ? fmtDate(it.venc) : '—')) + '</td>' +
         '<td>' + (it.parcela ? escHtml(it.parcela) : '—') + '</td>' +
         '<td class="num">' + (it.motivo ? '—' :
           '<input type="text" class="copia-valor' + (Math.abs(it.valor - r.valor) > 0.004 ? ' mudou' : '') + '" inputmode="decimal"' +
@@ -4813,6 +4825,8 @@ function abrirCopia(rawId, rowIndex){
   document.getElementById('copiaQtd').value = '1';
   copiaValorBase = r.valor || 0;
   copiaValoresMes = {};
+  copiaDatasMes = {};
+  document.getElementById('copiaDia').value = r.vencDate.getDate();
   document.getElementById('copiaValor').value = valorParaCampo(copiaValorBase);
   document.getElementById('copiaReajuste').value = '';
   desenharCopia();
@@ -4876,6 +4890,16 @@ document.getElementById('copiaCancelar').addEventListener('click', fecharCopia);
 document.getElementById('copiaOverlay').addEventListener('click', function(ev){ if (ev.target === this) fecharCopia(); });
 document.getElementById('copiaInicio').addEventListener('change', desenharCopia);
 document.getElementById('copiaQtd').addEventListener('input', desenharCopia);
+/* Dia do vencimento vale para todos os meses e desfaz datas trocadas na tabela. */
+document.getElementById('copiaDia').addEventListener('input', function(){ copiaDatasMes = {}; desenharCopia(); });
+/* Data trocada na tabela vale so para aquele mes. */
+document.getElementById('copiaLista').addEventListener('change', function(ev){
+  var campo = ev.target;
+  if (!campo.classList || !campo.classList.contains('copia-data') || !campo.value) return;
+  var p = campo.value.split('-');
+  copiaDatasMes[campo.getAttribute('data-copia-data')] = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  desenharCopia();
+});
 /* Valor das copias e reajuste andam juntos: mudar um recalcula o outro. Os dois
    refazem todos os meses, desfazendo o que foi mudado linha a linha. */
 document.getElementById('copiaValor').addEventListener('input', function(){
