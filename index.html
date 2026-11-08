@@ -1246,13 +1246,6 @@
     }
     .nav-mobile button svg{width:22px;height:22px;}
     .nav-mobile button.ativo{color:var(--ink);font-weight:700;}
-    .nav-graf-menu{display:none;position:absolute;right:8px;bottom:calc(100% + 8px);min-width:220px;
-      background:var(--surface-2);border:1px solid var(--border-strong);border-radius:14px;padding:6px;
-      box-shadow:0 12px 30px rgba(0,0,0,.4);flex-direction:column;}
-    .nav-graf-menu.open{display:flex;}
-    .nav-mobile .nav-graf-menu button{min-height:44px;flex-direction:row;justify-content:flex-start;padding:0 12px;
-      border-radius:10px;color:var(--ink);font:600 14px var(--sans);}
-    .nav-mobile .nav-graf-menu button:active{background:var(--surface-3);}
     /* O "+" fica na mesma linha dos outros botoes, com o rotulo "Novo" embaixo:
        antes ele flutuava acima da barra, grande e desalinhado. */
     .nav-mobile .nav-novo{background:transparent;color:var(--ink-faint);}
@@ -2243,8 +2236,8 @@
   <button type="button" class="ativo" data-nav="topo">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Contas
   </button>
-  <button type="button" data-nav="filtros">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros
+  <button type="button" data-nav="desempenho">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Desempenho
   </button>
   <button type="button" class="nav-novo" data-nav="novo" aria-label="Novo lançamento">
     <span class="nav-novo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Novo
@@ -2252,11 +2245,6 @@
   <button type="button" data-nav="lancamentos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Lista
   </button>
-  <div class="nav-graf-menu" id="navGrafMenu" role="menu">
-    <button type="button" data-ir="zonaGraficos" role="menuitem">Total por Tipo/Descrição</button>
-    <button type="button" data-ir="painelMesAno" role="menuitem">Total por Mês/Ano</button>
-    <button type="button" data-ir="painelDesempenho" role="menuitem">Desempenho</button>
-  </div>
   <button type="button" data-nav="graficos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>Gráficos
   </button>
@@ -2277,23 +2265,13 @@
     new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
     var acoes = {
       topo: function(){ document.body.scrollTo({top:0, behavior:'smooth'}); },
-      filtros: function(){ document.getElementById('filtersIconBtn').click(); },
+      // Filtros saiu da barra: o botao Filtros ja esta na tela, junto da busca.
+      desempenho: function(){ document.getElementById('painelDesempenho').scrollIntoView({behavior:'smooth', block:'start'}); },
       novo: function(){ addBtn.click(); document.body.scrollTo({top:0, behavior:'smooth'}); },
       lancamentos: function(){ document.getElementById('mLista').scrollIntoView({behavior:'smooth', block:'start'}); },
       // "Mais" saiu: o menu Acoes ja abre pelo cartao do usuario, no topo.
-      // Gráficos abre um menu curto com os tres graficos; cada um rola ate o seu.
-      graficos: function(){ document.getElementById('navGrafMenu').classList.toggle('open'); }
+      graficos: function(){ document.getElementById('zonaGraficos').scrollIntoView({behavior:'smooth', block:'start'}); }
     };
-    document.getElementById('navGrafMenu').addEventListener('click', function(ev){
-      var b = ev.target.closest('[data-ir]');
-      if (!b) return;
-      ev.stopPropagation();
-      this.classList.remove('open');
-      document.getElementById(b.getAttribute('data-ir')).scrollIntoView({behavior:'smooth', block:'start'});
-    });
-    document.addEventListener('click', function(ev){
-      if (!ev.target.closest('#navGrafMenu, [data-nav="graficos"]')) document.getElementById('navGrafMenu').classList.remove('open');
-    });
     document.getElementById('navMobile').addEventListener('click', function(ev){
       var b = ev.target.closest('[data-nav]');
       if (!b) return;
