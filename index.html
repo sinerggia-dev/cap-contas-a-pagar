@@ -1150,7 +1150,7 @@
   .date-cal-grid button.today{outline:1px solid var(--chart);outline-offset:-1px;}
 
   .edivider{
-    grid-column:1/-1;font-size:11.8px;color:var(--chart-soft);text-transform:uppercase;
+    grid-column:1/-1;font-size:11.8px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;
     letter-spacing:.06em;margin-top:6px;padding-top:10px;border-top:1px solid var(--border);
   }
   .edivider:first-child{margin-top:0;padding-top:0;border-top:none;}
@@ -1747,8 +1747,18 @@
      ajuste anterior antes de ler os tons de base. */
   var CAP_AJUSTE_TOKENS = {
     fundo: ['--bg','--bg-base','--tarja-a','--tarja-b','--tarja-c','--surface','--surface-2','--surface-3','--border','--border-strong'],
-    destaque: ['--chart','--chart-hover','--chart-fundo']
+    destaque: ['--chart','--chart-hover','--chart-fundo'],
+    texto: ['--ink','--ink-soft','--ink-muted','--ink-faint']
   };
+  /* Textos: "+" aumenta o contraste com o fundo (clareia em fundo escuro,
+     escurece em fundo claro). Vai ate 60%, os outros grupos ate 30%. */
+  var CAP_AJUSTE_LIMITE = { fundo: 30, destaque: 30, texto: 60 };
+  function fundoEhClaro(cs){
+    var m = String(cs.getPropertyValue('--bg')).trim().match(/^#([0-9a-f]{6})$/i);
+    if (!m) return false;
+    var n = parseInt(m[1], 16);
+    return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) > 140;
+  }
   function lerAjusteCores(){
     try { var aj = JSON.parse(localStorage.getItem('cap_ajuste_v1')); if (aj && typeof aj === 'object') return aj; } catch(e){}
     return {};
@@ -1775,8 +1785,10 @@
     });
     var cs = getComputedStyle(el);
     Object.keys(CAP_AJUSTE_TOKENS).forEach(function(g){
-      var p = Math.max(-30, Math.min(30, Number(aj[g]) || 0)) / 100;
+      var lim = CAP_AJUSTE_LIMITE[g] || 30;
+      var p = Math.max(-lim, Math.min(lim, Number(aj[g]) || 0)) / 100;
       if (!p) return;
+      if (g === 'texto' && fundoEhClaro(cs)) p = -p;
       CAP_AJUSTE_TOKENS[g].forEach(function(t){
         var v = ajustarTom(cs.getPropertyValue(t), p);
         if (v) el.style.setProperty(t, v);
@@ -1823,6 +1835,7 @@
           <div class="fundo-lbl">Ajuste das cores</div>
           <label class="ajuste-linha"><span>Fundo</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="fundo" aria-label="Clarear ou escurecer o fundo"><output data-ajuste-val="fundo">0%</output></label>
           <label class="ajuste-linha"><span>Destaque</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="destaque" aria-label="Clarear ou escurecer a cor de destaque"><output data-ajuste-val="destaque">0%</output></label>
+          <label class="ajuste-linha"><span>Textos</span><input type="range" min="-60" max="60" step="10" value="0" data-ajuste="texto" aria-label="Diminuir ou aumentar a intensidade dos textos"><output data-ajuste-val="texto">0%</output></label>
           <button type="button" class="ajuste-reset" data-ajuste-reset>Restaurar 0%</button>
         </div>
         </div>
@@ -1926,6 +1939,7 @@
           <div class="fundo-lbl">Ajuste das cores</div>
           <label class="ajuste-linha"><span>Fundo</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="fundo" aria-label="Clarear ou escurecer o fundo"><output data-ajuste-val="fundo">0%</output></label>
           <label class="ajuste-linha"><span>Destaque</span><input type="range" min="-30" max="30" step="5" value="0" data-ajuste="destaque" aria-label="Clarear ou escurecer a cor de destaque"><output data-ajuste-val="destaque">0%</output></label>
+          <label class="ajuste-linha"><span>Textos</span><input type="range" min="-60" max="60" step="10" value="0" data-ajuste="texto" aria-label="Diminuir ou aumentar a intensidade dos textos"><output data-ajuste-val="texto">0%</output></label>
           <button type="button" class="ajuste-reset" data-ajuste-reset>Restaurar 0%</button>
         </div>
       </div>
