@@ -1262,6 +1262,14 @@
     }
     html[data-fundo="modelof"] .nav-mobile .nav-novo .nav-novo-ic{color:#1c1c1e;}
     .nav-mobile .nav-novo svg{width:18px;height:18px;}
+    /* Com o formulario de lancamento aberto, a barra de baixo sai (ela cobria
+       Cancelar/Adicionar) e os dois botoes ficam presos no rodape da tela. */
+    body.com-nav:has(.entry-panel.open) .nav-mobile{display:none;}
+    body.com-nav:has(.entry-panel.open){padding-bottom:12px;}
+    .entry-panel.open{overflow:visible;}  /* .panel tem overflow:hidden, que anula o sticky */
+    .entry-panel .entry-actions-bottom{position:sticky;bottom:0;z-index:5;background:var(--surface);
+      padding-bottom:calc(16px + env(safe-area-inset-bottom)) !important;}
+    .entry-panel .entry-actions-bottom .ebtn{flex:1 1 0;height:46px;}
     /* No celular o "Novo" do cabecalho sai: a barra de baixo assume. */
     body.com-nav #addToggleBtn{display:none !important;}
   }
@@ -6256,7 +6264,12 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
       setFormMode(false);
       document.getElementById('entryForm').reset();
       limparNomesAnexo();
-      if (!wasEditing) {
+      var celular = window.matchMedia('(max-width:640px)').matches;
+      if (!wasEditing && celular) {
+        // No celular, depois de salvar volta para a tela inicial (Lista).
+        togglePanel(false);
+        if (window.irParaAba) window.irParaAba('contas');
+      } else if (!wasEditing) {
         document.getElementById('nf_nome').value = keepNome;
         document.getElementById('nf_tipo').value = 'Outras';
         document.getElementById('nf_status').value = 'A Vencer';
