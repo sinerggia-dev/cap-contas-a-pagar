@@ -2810,6 +2810,49 @@ async function buscarUsuariosGraph(token){
     });
   }
 }
+/* ---- Espelho de acessos na aba Config ----
+   Uma linha por usuario: chave "acesso:<email>", valor JSON {papel,status,filtro,nome}.
+   O administrador grava ao conceder/trocar/desabilitar e toda vez que abre o painel
+   de Administracao (que tambem corrige quem ficou para tras). */
+var CONFIG_PREFIXO_ACESSO = 'acesso:';
+async function lerAcessoEspelho(token, email){
+  var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+  var linhas = await lerLinhasConfig(token, alvo);
+  var linha = linhas.map(function(r){ return r.values[0]; })
+    .filter(function(v){ return String(v[0]).toLowerCase() === CONFIG_PREFIXO_ACESSO + email; })[0];
+  if (!linha || !linha[1]) return null;
+  try { return JSON.parse(String(linha[1])); } catch (e) { return null; }
+}
+async function espelharAcessos(token, usuarios){
+  var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+  await garantirTabelaConfig(token, alvo);
+  var linhas = await lerLinhasConfig(token, alvo);
+  var porChave = {};
+  linhas.forEach(function(r){ porChave[String(r.values[0][0]).toLowerCase()] = r; });
+  var desejado = {};
+  usuarios.forEach(function(u){
+    if (!u.email) return;
+    desejado[CONFIG_PREFIXO_ACESSO + u.email.toLowerCase()] = JSON.stringify({
+      papel: u.papel || '', status: u.status || '', filtro: u.filtroDespesaDe || '', nome: u.nome || ''
+    });
+  });
+  // Quem saiu da lista de usuarios fica marcado como removido.
+  Object.keys(porChave).forEach(function(k){
+    if (k.indexOf(CONFIG_PREFIXO_ACESSO) === 0 && !desejado[k]) desejado[k] = JSON.stringify({ papel: '', status: 'Removido', filtro: '', nome: '' });
+  });
+  var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+  var urlRows = configUrl(alvo, "/tables('" + CONFIG_TABLE_NAME + "')/rows");
+  var chaves = Object.keys(desejado);
+  for (var i = 0; i < chaves.length; i++){
+    var k = chaves[i], existente = porChave[k];
+    if (existente && String(existente.values[0][1]) === desejado[k]) continue;
+    var valores = [[k, desejado[k], agoraBR()]];
+    var r = existente
+      ? await fetch(urlRows + '/itemAt(index=' + existente.index + ')', { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: valores }) })
+      : await fetch(urlRows, { method: 'POST', headers: hJson, body: JSON.stringify({ values: valores }) });
+    if (!r.ok) throw new Error('Falha ao espelhar acesso de ' + k.slice(CONFIG_PREFIXO_ACESSO.length) + ' (' + r.status + ').');
+  }
+}
 function filtroDespesaDeParaArray(str){
   return String(str||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
 }
@@ -2822,6 +2865,20 @@ async function verificarAcesso(token){
   ultimoErroAcesso = null;
   if (ehDono()) return 'Editor';
   var email = (currentAccount.username || '').toLowerCase();
+  /* Primeiro o espelho ao vivo (aba Config da planilha financeira, que todo
+     usuario com acesso consegue ler): reflete na hora o que o administrador
+     mudou. O usuarios.json do GitHub so atualiza quando a sincronizacao roda,
+     e o agendamento do GitHub atrasa horas — a troca para Editor nao chegava. */
+  try {
+    var vivo = await lerAcessoEspelho(token, email);
+    if (vivo){
+      if (vivo.status !== 'Aprovado'){ ultimoErroAcesso = 'Acesso com status "' + vivo.status + '".'; return null; }
+      var listaVivo = filtroDespesaDeParaArray(vivo.filtro);
+      currentUserFiltroNome = listaVivo.length ? listaVivo : null;
+      currentUserNome = vivo.nome || null;
+      return vivo.papel === 'Editor' ? 'Editor' : 'Visualizador';
+    }
+  } catch (eVivo) { /* sem acesso a planilha: segue pelo usuarios.json */ }
   try {
     var usuarios = await buscarUsuariosPublico();
     var match = usuarios.find(function(u){ return u.email.toLowerCase() === email; });
@@ -6375,6 +6432,8 @@ async function carregarAdminPanel(){
     var usuarios = await buscarUsuariosGraph(token);
     usuarios = usuarios.filter(function(u){ return u.email.toLowerCase() !== DONO_EMAIL.toLowerCase(); });
     renderAdminLista(usuarios);
+    try { await espelharAcessos(token, usuarios); }
+    catch (eEsp) { showToast('Usuários salvos, mas a atualização imediata falhou: ' + (eEsp && eEsp.message ? eEsp.message : eEsp)); }
   } catch (e) {
     showToast('Erro ao carregar usuários: ' + (e && e.message ? e.message : e));
   }
@@ -6402,19 +6461,18 @@ async function concederAcessoGraph(token, email, papel, filtroLista, nome){
   var filtroStr = (filtroLista || []).join(', ');
   var nomeStr = nome || (existente ? existente.nome : '') || '';
   var usersUrl = GRAPH_BASE + '/drives/' + USERS_DRIVE_ID + '/items/' + USERS_ITEM_ID + "/workbook/tables('" + USERS_TABLE_NAME + "')/rows";
-  if (existente){
-    await fetch(usersUrl + '/itemAt(index=' + existente._rowIndex + ')', {
-      method: 'PATCH',
-      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values: [[email, papel, 'Aprovado', dataStr, filtroStr, nomeStr]] })
-    });
-  } else {
-    await fetch(usersUrl, {
-      method: 'POST',
-      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values: [[email, papel, 'Aprovado', dataStr, filtroStr, nomeStr]] })
-    });
-  }
+  var rUser = existente
+    ? await fetch(usersUrl + '/itemAt(index=' + existente._rowIndex + ')', {
+        method: 'PATCH',
+        headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ values: [[email, papel, 'Aprovado', dataStr, filtroStr, nomeStr]] })
+      })
+    : await fetch(usersUrl, {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ values: [[email, papel, 'Aprovado', dataStr, filtroStr, nomeStr]] })
+      });
+  if (!rUser.ok) throw new Error('Falha ao gravar o usuário na planilha (' + rUser.status + ').');
 }
 
 async function revogarAcesso(email){
