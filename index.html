@@ -2003,6 +2003,11 @@
           <button type="button" class="ebtn primary" id="adm_senha_salvar">Redefinir senha</button>
         </div>
       </div>
+      <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border);">
+        <h3 style="margin:0 0 4px;font:700 14.6px var(--sans);color:var(--ink);">Padronizar descrições</h3>
+        <p style="font-size:12.9px;color:var(--ink-muted);margin:0 0 10px;">Junta descrições que só diferem por erro de digitação — espaço em volta do traço ("201- 136" → "201 - 136"), espaço duplo, maiúscula/minúscula ou acento — usando a forma mais usada. Corrige direto na planilha. <span id="adm_padr_estado"></span></p>
+        <button type="button" class="ebtn primary" id="adm_padr_btn">Procurar e corrigir</button>
+      </div>
       <p style="font-size:12.3px;color:var(--ink-muted);margin-top:14px;">Conceder acesso compartilha o arquivo de verdade no SharePoint para esse e-mail (Editor = leitura e escrita, Visualizador = somente leitura). Revogar remove esse compartilhamento.</p>
     </div>
   </div>
@@ -5649,6 +5654,32 @@ function unicosOrdenados(lista){
   return lista.filter(function(v, i, a){ return v && a.indexOf(v) === i; })
     .sort(function(a, b){ return a.localeCompare(b, 'pt-BR'); });
 }
+/* Texto digitado: traco com espaco de um lado so vira " - " (o traco colado dos
+   dois lados, como em 136-411619680 ou 0001-98, fica como esta), espacos
+   repetidos viram um, sem espaco nas pontas. */
+function formatarTextoDigitado(t){
+  return String(t || '').replace(/\s+-\s*|\s*-\s+/g, ' - ').replace(/\s+/g, ' ').trim();
+}
+/* Chave para achar variantes do mesmo texto (sem acento, minusculas). */
+function chaveTexto(t){ return semAcento(formatarTextoDigitado(t)); }
+/* De varias grafias do mesmo texto, fica a mais usada (empate: a ja formatada). */
+function formaPadrao(contagem){
+  return Object.keys(contagem).sort(function(a, b){
+    return (contagem[b] - contagem[a]) ||
+      ((formatarTextoDigitado(b) === b ? 1 : 0) - (formatarTextoDigitado(a) === a ? 1 : 0));
+  })[0];
+}
+function unicosSemVariantes(lista){
+  var grupos = {};
+  lista.forEach(function(t){
+    if (!t) return;
+    var k = chaveTexto(t);
+    grupos[k] = grupos[k] || {};
+    grupos[k][t] = (grupos[k][t] || 0) + 1;
+  });
+  return Object.keys(grupos).map(function(k){ return formatarTextoDigitado(formaPadrao(grupos[k])); })
+    .sort(function(a, b){ return a.localeCompare(b, 'pt-BR'); });
+}
 function opcoesCampoLista(id){
   if (id === 'nf_nome'){
     // So o administrador lanca para qualquer pessoa; os demais, so para si.
@@ -5656,9 +5687,9 @@ function opcoesCampoLista(id){
     if (meu) return [meu];
     return unicosOrdenados(DATA.map(function(r){ return r.nome; }));
   }
-  if (id === 'nf_tipo') return unicosOrdenados(DATA.map(function(r){ return r.tipo; }).concat(TIPOS_DESPESA_CONHECIDOS));
+  if (id === 'nf_tipo') return unicosSemVariantes(DATA.map(function(r){ return r.tipo; }).concat(TIPOS_DESPESA_CONHECIDOS));
   var nome = document.getElementById('nf_nome').value;
-  return unicosOrdenados(DATA.filter(function(r){ return !nome || r.nome === nome; }).map(function(r){ return r.desc; }));
+  return unicosSemVariantes(DATA.filter(function(r){ return !nome || r.nome === nome; }).map(function(r){ return r.desc; }));
 }
 /* Redesenha a lista e coloca nela o valor que esta no input. */
 function sincronizarCampoLista(id){
@@ -5668,6 +5699,10 @@ function sincronizarCampoLista(id){
   sel.innerHTML = '<option value="">' + cfg.placeholder + '</option>' +
     ops.map(function(o){ return '<option value="' + escHtml(o) + '">' + escHtml(o) + '</option>'; }).join('') +
     (cfg.outra ? '<option value="__outra">Outra…</option>' : '');
+  if (v && ops.indexOf(v) === -1){
+    var igual = ops.filter(function(o){ return chaveTexto(o) === chaveTexto(v); })[0];
+    if (igual){ v = igual; inp.value = igual; }
+  }
   var naLista = !!v && ops.indexOf(v) !== -1;
   var outra = cfg.outra && !!v && !naLista;
   if (!cfg.outra && v && !naLista){
@@ -6378,7 +6413,7 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
       if (compFile) anexoComprovanteUrl = await subirAnexo(token, compFile, 'comprovante', novoId);
 
       var nome = document.getElementById('nf_nome').value.trim();
-      var desc = document.getElementById('nf_desc').value.trim();
+      var desc = formatarTextoDigitado(document.getElementById('nf_desc').value);
       var parcela = document.getElementById('nf_parcela').value.trim();
       var descCompleta = desc + (parcela ? ' - Parcela ' + parcela : '');
       var venc = document.getElementById('nf_venc').value.trim();
@@ -6717,6 +6752,73 @@ async function excluirUsuario(email){
     showToast('Erro ao excluir: ' + (e && e.message ? e.message : e));
   }
 }
+
+/* Padronizar descricoes na planilha: agrupa as grafias da mesma descricao (sem a
+   parte " - Parcela x") e troca as variantes pela forma padrao. Grava celula a
+   celula na coluna da descricao, para nao reescrever as outras colunas. */
+function letraColuna(n){ var s = ''; n++; while (n > 0){ var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; }
+function numeroColuna(letras){ return letras.split('').reduce(function(t, c){ return t * 26 + (c.charCodeAt(0) - 64); }, 0) - 1; }
+document.getElementById('adm_padr_btn').addEventListener('click', function(){
+  if (!ehDono()) return;
+  var btn = this, estado = document.getElementById('adm_padr_estado');
+  btn.disabled = true;
+  estado.textContent = 'Procurando…';
+  (async function(){
+    try {
+      var token = await getToken();
+      var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+      var linhas = await buscarLinhasAtuaisGraph(token);
+      var partes = linhas.map(function(r){
+        var full = String(r.values[0][7] || '');
+        var m = full.match(/^(.*?)(\s*-\s*Parcela\s+[\d/]+)$/);
+        return { index: r.index, full: full, base: m ? m[1] : full, sufixo: m ? ' - Parcela ' + m[2].replace(/^\s*-\s*Parcela\s+/, '') : '' };
+      });
+      var grupos = {};
+      partes.forEach(function(p){
+        if (!p.base) return;
+        var k = chaveTexto(p.base);
+        grupos[k] = grupos[k] || {};
+        grupos[k][p.base] = (grupos[k][p.base] || 0) + 1;
+      });
+      var mudancas = partes.map(function(p){
+        if (!p.base) return null;
+        var novo = formatarTextoDigitado(formaPadrao(grupos[chaveTexto(p.base)])) + p.sufixo;
+        return novo !== p.full ? { index: p.index, de: p.full, para: novo } : null;
+      }).filter(Boolean);
+      if (!mudancas.length){ estado.textContent = 'Nada para corrigir: as descrições já estão padronizadas.'; return; }
+      var resumo = {};
+      mudancas.forEach(function(m){ var k = m.de + '  →  ' + m.para; resumo[k] = (resumo[k] || 0) + 1; });
+      var texto = Object.keys(resumo).map(function(k){ return '• ' + k + (resumo[k] > 1 ? '  (' + resumo[k] + 'x)' : ''); });
+      if (!window.confirm('Corrigir ' + mudancas.length + ' lançamento(s) na planilha?\n\n' + texto.slice(0, 15).join('\n') +
+          (texto.length > 15 ? '\n… e mais ' + (texto.length - 15) : ''))){ estado.textContent = ''; return; }
+      // Endereco da tabela: primeira linha = cabecalho; a linha i fica em primeira+1+i.
+      var rTab = await fetch(GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/tables('" + TABLE_NAME + "')/range?$select=address",
+        { headers: { Authorization: 'Bearer ' + token } });
+      if (!rTab.ok) throw new Error('Não foi possível ler o endereço da tabela (' + rTab.status + ').');
+      var end = (await rTab.json()).address;                       // ex.: 'Base de Dados'!A1:Q300
+      var mEnd = end.match(/^(.*)!\$?([A-Z]+)\$?(\d+):/);
+      if (!mEnd) throw new Error('Endereço da tabela inesperado: ' + end);
+      var aba = mEnd[1].replace(/^'|'$/g, '').replace(/''/g, "'");
+      var colDesc = letraColuna(numeroColuna(mEnd[2]) + 7), linha1 = Number(mEnd[3]);
+      var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+      for (var i = 0; i < mudancas.length; i++){
+        estado.textContent = 'Corrigindo ' + (i + 1) + ' de ' + mudancas.length + '…';
+        var cel = colDesc + (linha1 + 1 + mudancas[i].index);
+        var url = GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/worksheets('" + encodeURIComponent(aba.replace(/'/g, "''")) + "')/range(address='" + cel + "')";
+        var r = await fetch(url, { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [[mudancas[i].para]] }) });
+        if (!r.ok) throw new Error('Falha na célula ' + cel + ' (' + r.status + '): ' + (await r.text()).slice(0, 200));
+      }
+      estado.textContent = mudancas.length + ' lançamento(s) corrigido(s).';
+      showToast('Descrições padronizadas.');
+      await carregarDados();
+    } catch (err) {
+      estado.textContent = '';
+      showToast('Erro ao padronizar: ' + (err && err.message ? err.message : err));
+    } finally {
+      btn.disabled = false;
+    }
+  })();
+});
 
 document.getElementById('adm_senha_salvar').addEventListener('click', function(){
   var nova = document.getElementById('adm_senha_nova').value;
