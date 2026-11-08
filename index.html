@@ -1426,7 +1426,7 @@
     .m-card-big, .m-card{grid-column:auto;padding:11px 6px;border-radius:14px;
       display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:3px;min-width:0;}
     .m-card-big .k, .m-card .k{font-size:clamp(11px,3.2vw,14px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .m-card-big .v, .m-card .v{font:700 clamp(12px,4.2vw,21px) var(--num);letter-spacing:-.05em;white-space:nowrap;
+    .m-card-big .v, .m-card .v{font:700 clamp(13px,4.6vw,24px) var(--num);letter-spacing:-.05em;white-space:nowrap;
       display:block;overflow:hidden;}
     .m-rs{font-size:.6em;font-weight:600;opacity:.75;margin-right:2px;letter-spacing:0;}
     .m-card-big .de{font-size:clamp(9px,2.5vw,11px);padding:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -5156,10 +5156,17 @@ function ajustarValoresResumo(){
   var els = Array.prototype.slice.call(document.querySelectorAll('#mResumo .v'));
   if (!els.length || !els[0].clientWidth) return;
   var menor = Infinity;
+  /* Largura do TEXTO (nao da caixa): scrollWidth nunca fica menor que a caixa,
+     entao com folga ele sempre "passava" e a letra descia ate o minimo. */
+  function larguraTexto(el){
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    return r.getBoundingClientRect().width;
+  }
   els.forEach(function(el){
     el.style.fontSize = '';
     var tam = parseFloat(getComputedStyle(el).fontSize);
-    while (el.scrollWidth > el.clientWidth - 6 && tam > 10){
+    while (larguraTexto(el) > el.clientWidth - 4 && tam > 10){
       tam -= 0.5;
       el.style.fontSize = tam + 'px';
     }
