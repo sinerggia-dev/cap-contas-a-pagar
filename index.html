@@ -965,7 +965,6 @@
   .uc-clima b{font:700 15px var(--sans);color:var(--ink);}
   .uc-clima .uc-pin{width:13px;height:13px;color:var(--critical);flex:none;}
   .uc-clima .uc-cidade{font-size:12.9px;color:var(--ink-soft);}
-  .uc-novo{display:none;}
   .uc-hora{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;white-space:nowrap;}
   .uc-hora span{font-size:11.8px;color:var(--ink-muted);}
   .uc-hora b{font:700 15px var(--num);color:var(--ink);font-variant-numeric:tabular-nums;}
@@ -1247,12 +1246,15 @@
     }
     .nav-mobile button svg{width:22px;height:22px;}
     .nav-mobile button.ativo{color:var(--ink);font-weight:700;}
-    .nav-mobile .nav-novo{
-      width:56px;height:56px;min-width:56px;margin-top:-26px;border-radius:18px;
+    /* O "+" fica na mesma linha dos outros botoes, com o rotulo "Novo" embaixo:
+       antes ele flutuava acima da barra, grande e desalinhado. */
+    .nav-mobile .nav-novo{background:transparent;color:var(--ink-faint);}
+    .nav-mobile .nav-novo .nav-novo-ic{
+      width:34px;height:26px;border-radius:9px;display:flex;align-items:center;justify-content:center;
       background:var(--chart);color:#fff;
     }
-    html[data-fundo="modelof"] .nav-mobile .nav-novo{color:#1c1c1e;}
-    .nav-mobile .nav-novo svg{width:26px;height:26px;}
+    html[data-fundo="modelof"] .nav-mobile .nav-novo .nav-novo-ic{color:#1c1c1e;}
+    .nav-mobile .nav-novo svg{width:18px;height:18px;}
     /* No celular o "Novo" do cabecalho sai: a barra de baixo assume. */
     body.com-nav #addToggleBtn{display:none !important;}
   }
@@ -1275,7 +1277,7 @@
       --num:'Geist Mono',ui-monospace,"Cascadia Code",Consolas,monospace;
     }
     .ebtn.primary, .add-btn, .ss-opt.selected, .date-cal-grid button.selected,
-    .nav-mobile .nav-novo{color:#1c1c1e;}
+    .nav-mobile .nav-novo .nav-novo-ic{color:#1c1c1e;}
     /* O seletor de fundo nao muda nada no celular; esconder evita a duvida. */
     .fundo-wrap{display:none;}
 
@@ -1309,11 +1311,6 @@
     .user-chip{gap:6px;}
     .user-chip .uc-sep{margin:0 2px;}
     .uc-hora{align-items:flex-start;}
-    .uc-novo{display:flex;align-items:center;justify-content:center;flex:none;width:30px;height:30px;
-      border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--chart);color:#1c1c1e;}
-    html[data-acento] .uc-novo{color:#fff;}
-    html[data-acento="branco"] .uc-novo, html[data-acento="gelo"] .uc-novo, html[data-acento="cinzaclaro"] .uc-novo{color:#1c1c1e;}
-    .uc-novo svg{width:16px;height:16px;}
     html:not([data-acento]) .uc-avatar{color:#1c1c1e;}
 
     .kpis{display:none;}
@@ -1475,7 +1472,7 @@
   html[data-acento="turquesa"]{--chart:#0f766e;--chart-soft:#5eead4;--chart-hover:#0d9488;--chart-fundo:#134e4a;}
   html[data-acento="grafite"]{--chart:#52525b;--chart-soft:#d4d4d8;--chart-hover:#71717a;--chart-fundo:#27272a;}
   html[data-acento] .ebtn.primary, html[data-acento] .add-btn, html[data-acento] .ss-opt.selected,
-  html[data-acento] .date-cal-grid button.selected, html[data-acento] .nav-mobile .nav-novo{color:#fff;}
+  html[data-acento] .date-cal-grid button.selected, html[data-acento] .nav-mobile .nav-novo .nav-novo-ic{color:#fff;}
   .acento-opts{display:flex;flex-wrap:wrap;gap:8px;}
   .acento-opt{
     width:30px;height:30px;border-radius:50%;padding:0;cursor:pointer;flex:none;
@@ -1539,19 +1536,19 @@
   html[data-acento="branco"] .add-btn,
   html[data-acento="branco"] .ss-opt.selected,
   html[data-acento="branco"] .date-cal-grid button.selected,
-  html[data-acento="branco"] .nav-mobile .nav-novo,
+  html[data-acento="branco"] .nav-mobile .nav-novo .nav-novo-ic,
   html[data-acento="branco"] .uc-avatar,
   html[data-acento="gelo"] .ebtn.primary,
   html[data-acento="gelo"] .add-btn,
   html[data-acento="gelo"] .ss-opt.selected,
   html[data-acento="gelo"] .date-cal-grid button.selected,
-  html[data-acento="gelo"] .nav-mobile .nav-novo,
+  html[data-acento="gelo"] .nav-mobile .nav-novo .nav-novo-ic,
   html[data-acento="gelo"] .uc-avatar,
   html[data-acento="cinzaclaro"] .ebtn.primary,
   html[data-acento="cinzaclaro"] .add-btn,
   html[data-acento="cinzaclaro"] .ss-opt.selected,
   html[data-acento="cinzaclaro"] .date-cal-grid button.selected,
-  html[data-acento="cinzaclaro"] .nav-mobile .nav-novo,
+  html[data-acento="cinzaclaro"] .nav-mobile .nav-novo .nav-novo-ic,
   html[data-acento="cinzaclaro"] .uc-avatar{color:#1c1c1e;}
   .acento-opt.claro{box-shadow:inset 0 0 0 2px var(--surface),0 0 0 1px var(--border-strong);}
 </style>
@@ -1664,9 +1661,6 @@
         </div>
         <span class="uc-sep"></span>
         <div class="uc-hora"><span id="ucData"></span><b id="ucRelogio"></b></div>
-        <button type="button" class="uc-novo" id="ucNovo" title="Novo lançamento" aria-label="Novo lançamento">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        </button>
         <button type="button" class="ebtn ghost" id="logoutBtn">Sair</button>
       </div>
       <div class="quick-icons">
@@ -2144,7 +2138,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros
   </button>
   <button type="button" class="nav-novo" data-nav="novo" aria-label="Novo lançamento">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    <span class="nav-novo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Novo
   </button>
   <button type="button" data-nav="lancamentos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Lista
@@ -2164,14 +2158,7 @@
     function sincronizarNovo(){
       /* Visualizador nao lanca: o app esconde o "Novo" por style inline; espelhamos. */
       novo.style.visibility = addBtn.style.display === 'none' ? 'hidden' : 'visible';
-      // "+" do cartao do usuario, ao lado da hora: mesma regra (so Editor).
-      document.getElementById('ucNovo').style.display = addBtn.style.display === 'none' ? 'none' : '';
     }
-    document.getElementById('ucNovo').addEventListener('click', function(ev){
-      ev.stopPropagation();
-      addBtn.click();
-      document.body.scrollTo({top:0, behavior:'smooth'});
-    });
     sincronizarNovo();
     new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
     var acoes = {
@@ -4978,7 +4965,7 @@ document.getElementById('mLista').addEventListener('click', function(ev){
 /* No celular o avatar e o "Conta e configuracoes" do desenho: abre a gaveta de Acoes,
    onde fica o "Sair da conta". */
 document.getElementById('userChip').addEventListener('click', function(ev){
-  if (ev.target.closest('#ucAtualizar, #ucCores, #ucCoresPop, #ucNovo')) return;
+  if (ev.target.closest('#ucAtualizar, #ucCores, #ucCoresPop')) return;
   var celular = window.matchMedia('(max-width:640px)').matches;
   if (!celular && !ev.target.closest('#ucAvatar')) return;
   ev.stopPropagation();
