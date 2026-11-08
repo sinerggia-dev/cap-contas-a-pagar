@@ -1702,7 +1702,7 @@
       <h1>CAP</h1>
       <p>Contas a Pagar</p>
       <div class="brand-m mobile-only">
-        <span class="brand-kicker">CAP · Contas a Pagar</span>
+        <span class="brand-kicker" id="brandKicker">CAP · Contas a Pagar</span>
         <span class="brand-mes" id="brandMes">Todas as contas</span>
       </div>
     </div>
@@ -5052,7 +5052,19 @@ function ajustarValoresResumo(){
 }
 window.addEventListener('resize', ajustarValoresResumo);
 function renderMobile(rows, rowsSemStatus){
-  document.getElementById('brandMes').textContent = rotuloPeriodoMobile();
+  /* Com filtro de Usuario, o topo diz de quem sao os numeros: o nome vira o
+     titulo e o periodo desce para a linha de cima. */
+  var nomesSel = Array.isArray(state.nome) ? state.nome : [];
+  var kicker = document.getElementById('brandKicker');
+  if (nomesSel.length){
+    kicker.textContent = rotuloPeriodoMobile();
+    document.getElementById('brandMes').textContent = nomesSel.length === 1 ? nomesSel[0] : nomesSel.length + ' usuários';
+    document.getElementById('brandMes').title = nomesSel.join(', ');
+  } else {
+    kicker.textContent = 'CAP · Contas a Pagar';
+    document.getElementById('brandMes').textContent = rotuloPeriodoMobile();
+    document.getElementById('brandMes').title = '';
+  }
 
   var total = sum(rows, function(r){ return r.valor; });
   var aberto = sum(rows.filter(function(r){ return r.status !== 'pago'; }), function(r){ return r.valor; });
