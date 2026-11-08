@@ -1440,6 +1440,17 @@
     #mLista{max-height:390px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
       padding-right:6px;margin-right:-6px;scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent;}
     #mLista > *{flex:none;}
+    /* Mensal no celular: barras deitadas, um mes por linha (mes | barra | valor),
+       descendo pela tela em vez de rolar de lado. A largura vem de --pct/--seg,
+       que o render grava junto da altura usada no computador. */
+    #mesRankBody .mes-graf{flex-direction:column;align-items:stretch;height:auto;overflow:visible;gap:4px;padding:10px 12px;}
+    #mesRankBody .rank-col{flex:none;min-width:0;height:auto;display:grid;grid-template-columns:72px 1fr auto;
+      align-items:center;gap:8px;padding:6px 4px;}
+    #mesRankBody .rank-col-name{order:1;margin:0;padding:2px 4px;font-size:12.5px;text-align:left;}
+    #mesRankBody .mes-barra{order:2;height:18px !important;width:var(--pct) !important;max-width:none;min-height:0;min-width:4px;
+      flex-direction:row;border-radius:5px;}
+    #mesRankBody .rank-col-item{height:auto !important;width:var(--seg);min-height:0;min-width:2px;}
+    #mesRankBody .mes-val{order:3;margin:0;font-size:12.5px;color:var(--ink);text-align:right;}
     /* ---- Abas da barra de baixo ---- */
     body[data-aba] .zona{display:none;}
     body[data-aba] #rankBody{display:none;}
@@ -4482,7 +4493,7 @@ function renderMesRanking(rows){
       // navegador competiria com ela, aparecendo em cima e com atraso.
       return '<div class="rank-col-item seg-'+k+(itemAtivo?' active':'')+'"'+
         ' data-mes="'+mesAttr+'" data-status="'+k+'"'+
-        ' style="height:'+(e[k] / e.total * 100).toFixed(3)+'%"></div>';
+        ' style="height:'+(e[k] / e.total * 100).toFixed(3)+'%;--seg:'+(e[k] / e.total * 100).toFixed(3)+'%"></div>';
     }).join('');
     // Os valores viajam na propria coluna: a dica os le de volta sem precisar procurar
     // o mes numa lista a parte, e continua certa depois de qualquer filtro.
@@ -4492,7 +4503,7 @@ function renderMesRanking(rows){
     return '<div class="rank-col'+(mesSelecionado?' active':'')+'"'+
       ' data-tip-mes="'+mesAttr+'" data-tip-total="'+e.total+'" data-tip="'+dados+'">'+
       '<span class="mes-val">'+brl(e.total).replace('R$ ','')+'</span>'+
-      '<span class="mes-barra" style="height:'+(e.total / maxMes * 100).toFixed(3)+'%">'+segs+'</span>'+
+      '<span class="mes-barra" style="height:'+(e.total / maxMes * 100).toFixed(3)+'%;--pct:'+(e.total / maxMes * 100).toFixed(3)+'%">'+segs+'</span>'+
       '<span class="rank-col-name'+(mesSelecionado?' active':'')+'" data-mes="'+mesAttr+'" title="Clique para filtrar por '+mesAttr+'">'+e.mes+'</span>'+
       '</div>';
   }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
