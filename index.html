@@ -1785,6 +1785,10 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Emissão de Documentos
       </button>
+      <button class="clear-btn" id="instalarAppBtn" type="button" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Instalar app (tela cheia)
+      </button>
       <button class="clear-btn" id="logoutBtnM" type="button">
         <svg viewBox="0 0 24 24" fill="none"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Sair da conta
@@ -2401,6 +2405,43 @@ var msalInstance = new msal.PublicClientApplication(MSAL_CONFIG);
 /* Aberto pelo icone da tela inicial (sem barra de endereco). Ai a janela de login
    da Microsoft nao pode ser popup: no iPhone ela abre fora do app e nunca volta.
    Nesse modo o login vai e volta pela propria pagina (redirect). */
+/* ---- Tela cheia no celular ----
+   1) Service worker + manifest: o Chrome oferece "Instalar app"; instalado, abre
+      sem barra de endereco. O botao "Instalar app" (menu Acoes) aparece quando o
+      Chrome deixa instalar.
+   2) Enquanto nao estiver instalado, no Android o primeiro toque na tela pede
+      tela cheia ao navegador (o iPhone nao permite isso no Safari: la, so pelo
+      "Adicionar a Tela de Inicio"). */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+var pedidoInstalar = null;
+window.addEventListener('beforeinstallprompt', function(ev){
+  ev.preventDefault();
+  pedidoInstalar = ev;
+  document.getElementById('instalarAppBtn').style.display = '';
+});
+window.addEventListener('appinstalled', function(){
+  pedidoInstalar = null;
+  document.getElementById('instalarAppBtn').style.display = 'none';
+});
+document.getElementById('instalarAppBtn').addEventListener('click', function(ev){
+  ev.stopPropagation();
+  if (!pedidoInstalar) return;
+  pedidoInstalar.prompt();
+  pedidoInstalar.userChoice.then(function(){ pedidoInstalar = null; document.getElementById('instalarAppBtn').style.display = 'none'; });
+});
+(function(){
+  var celular = window.matchMedia('(max-width:640px)').matches;
+  var el = document.documentElement;
+  if (!celular || !el.requestFullscreen) return;
+  function pedirTelaCheia(){
+    document.removeEventListener('click', pedirTelaCheia, true);
+    if (modoApp() || document.fullscreenElement) return;
+    el.requestFullscreen({ navigationUI: 'hide' }).catch(function(){});
+  }
+  document.addEventListener('click', pedirTelaCheia, true);
+})();
 function modoApp(){
   return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
 }
