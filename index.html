@@ -2311,7 +2311,8 @@
     var novo = document.querySelector('#navMobile [data-nav="novo"]');
     function sincronizarNovo(){
       /* Visualizador nao lanca: o app esconde o "Novo" por style inline; espelhamos. */
-      novo.style.visibility = addBtn.style.display === 'none' ? 'hidden' : 'visible';
+      // Sem o "Novo", os outros botoes dividem a barra (sem buraco no meio).
+      novo.style.display = addBtn.style.display === 'none' ? 'none' : '';
     }
     sincronizarNovo();
     new MutationObserver(sincronizarNovo).observe(addBtn, {attributes:true, attributeFilter:['style']});
