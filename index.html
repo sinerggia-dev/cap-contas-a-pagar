@@ -2256,23 +2256,20 @@
 </div>
 
 <nav class="nav-mobile" id="navMobile" aria-label="Navegação principal">
-  <button type="button" data-nav="topo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 11l6-6 6 6M5 3h14"/></svg>Topo
-  </button>
-  <button type="button" data-nav="mensal">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4M8 17v-3M12 17v-5M16 17v-2"/></svg>Mensal
-  </button>
-  <button type="button" data-nav="desempenho">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Desempenho
-  </button>
-  <button type="button" class="nav-novo" data-nav="novo" aria-label="Novo lançamento">
-    <span class="nav-novo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Novo
-  </button>
   <button type="button" data-nav="lancamentos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Lista
   </button>
   <button type="button" data-nav="graficos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>Gráficos
+  </button>
+  <button type="button" class="nav-novo" data-nav="novo" aria-label="Novo lançamento">
+    <span class="nav-novo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Novo
+  </button>
+  <button type="button" data-nav="desempenho">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Desempenho
+  </button>
+  <button type="button" data-nav="mensal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4M8 17v-3M12 17v-5M16 17v-2"/></svg>Mensal
   </button>
 </nav>
 <script>
@@ -2312,13 +2309,6 @@
       ev.stopPropagation();
       var k = b.getAttribute('data-nav');
       if (k === 'novo'){ irParaAba('contas'); addBtn.click(); return; }
-      // Topo: sobe a tela (e a lista) da aba atual, sem trocar de aba.
-      if (k === 'topo'){
-        document.body.scrollTo({top:0, behavior:'smooth'});
-        window.scrollTo({top:0, behavior:'smooth'});
-        document.getElementById('mLista').scrollTo({top:0, behavior:'smooth'});
-        return;
-      }
       if (ABA_DO_BOTAO[k]) irParaAba(ABA_DO_BOTAO[k]);
     });
     irParaAba('contas');
