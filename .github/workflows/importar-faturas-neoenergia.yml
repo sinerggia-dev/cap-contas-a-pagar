@@ -1,0 +1,33 @@
+name: Importar Faturas Neoenergia
+
+on:
+  schedule:
+    - cron: "30 10 * * *"   # 07:30 no horário de Brasília, antes do alerta das 08:00
+  workflow_dispatch:
+    inputs:
+      simular:
+        description: "Só simular (não grava nada na planilha)"
+        type: boolean
+        default: true
+
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: pip install msal requests pypdf cryptography
+
+      - name: Importar faturas
+        env:
+          CAP_CLIENT_SECRET: ${{ secrets.CAP_CLIENT_SECRET }}
+          NEO_PDF_SENHAS: ${{ secrets.NEO_PDF_SENHAS }}
+          SIMULAR: ${{ github.event_name == 'workflow_dispatch' && inputs.simular && '1' || '' }}
+        run: python scripts/importar_faturas_neoenergia.py
