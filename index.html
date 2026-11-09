@@ -1393,6 +1393,14 @@
        e busca (mesmo vao de 10px). O "de"/"ate" fica no aria-label dos campos. */
     .periodo-wrap{order:3;gap:10px;}
     .periodo-wrap label{display:none;}
+    /* Grade de 2 colunas iguais: Usuario | busca em cima e as duas datas embaixo
+       caem exatamente nas mesmas colunas (no flex, o conteudo de cada caixa
+       puxava a largura e elas desalinhavam). */
+    .panel-head.barra-ferramentas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+    .panel-head.barra-ferramentas .nome-sel, .panel-head.barra-ferramentas .busca-wrap{width:100%;min-width:0;}
+    .panel-head.barra-ferramentas .periodo-wrap{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+    .panel-head.barra-ferramentas .periodo-wrap .data-campo{min-width:0;}
+    .panel-head.barra-ferramentas .barra-botoes{grid-column:1 / -1;}
     .periodo-wrap input{height:40px;border-radius:12px;}
     /* iPhone e Android mostram o campo de data vazio em branco, sem "dd/mm/aaaa"
        nem icone: parecia que nao havia campo. O texto de exemplo fica por cima
