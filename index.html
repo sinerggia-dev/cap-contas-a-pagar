@@ -1389,7 +1389,10 @@
     .panel-head.barra-ferramentas .barra-botoes .clear-btn.has-filters{border-color:var(--critical);}
     .panel-head.barra-ferramentas .barra-botoes .clear-btn.mes-ativo{background-color:var(--select);border-color:var(--chart);}
     .barra-ferramentas .busca-wrap > svg{left:14px;width:16px;height:16px;}
-    .periodo-wrap{order:3;}
+    /* De/Ate sem os rotulos: as duas caixas ficam nas mesmas colunas de Usuario
+       e busca (mesmo vao de 10px). O "de"/"ate" fica no aria-label dos campos. */
+    .periodo-wrap{order:3;gap:10px;}
+    .periodo-wrap label{display:none;}
     .periodo-wrap input{height:40px;border-radius:12px;}
     /* iPhone e Android mostram o campo de data vazio em branco, sem "dd/mm/aaaa"
        nem icone: parecia que nao havia campo. O texto de exemplo fica por cima
