@@ -1350,6 +1350,8 @@
       box-shadow:0 6px 18px rgba(0,0,0,.18);
       align-items:center;flex-wrap:nowrap;gap:10px;}
     .head-row .user-chip{background:var(--surface-2);border-color:var(--border-strong);}
+    /* A faixa do topo fica presa no alto ao rolar: titulo, usuario e hora nunca saem da tela. */
+    .head-row{position:sticky;top:-12px;z-index:12;}
     .brand{min-width:0;}
     .brand h1, .brand p{display:none;}
     .brand-m{display:flex;flex-direction:column;gap:2px;min-width:0;}
@@ -1541,6 +1543,10 @@
     body[data-aba="desempenho"] .bottom.analitico{display:none;}
     body[data-aba="desempenho"] .zona{display:grid;}
     body[data-aba="desempenho"] .zona > .panel, body[data-aba="desempenho"] .zona-corpo .middle{display:none;}
+    body[data-aba="desempenho"] #painelDesempenho{display:flex;flex-direction:column;}
+    body[data-aba="desempenho"] #perfBody{overflow-y:auto;overscroll-behavior:contain;}
+    /* Nessas abas o quadro ja termina na barra de baixo: sem espaco extra para rolar. */
+    body[data-aba="mensal"] .report::after, body[data-aba="desempenho"] .report::after{height:0;}
 
     #mLista::-webkit-scrollbar{width:4px;}
     #mLista::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
@@ -4793,13 +4799,20 @@ document.getElementById('mesAnoSel').addEventListener('change', function(){
 /* Aba Mensal no celular: o quadro desce ate a barra de baixo; os meses que
    passarem disso rolam dentro dele. */
 function ajustarAlturaMensal(){
+  /* Mensal e Desempenho no celular: o quadro vai ate a barra de baixo e rola por
+     dentro, entao o topo (faixa do usuario) nunca sai da tela. */
   var meio = document.querySelector('#painelMesAno').parentNode;
+  var perf = document.getElementById('painelDesempenho');
   meio.style.height = '';
-  if (document.body.getAttribute('data-aba') !== 'mensal' || !window.matchMedia('(max-width:640px)').matches) return;
+  perf.style.height = '';
+  var aba = document.body.getAttribute('data-aba');
+  if (!window.matchMedia('(max-width:640px)').matches) return;
+  var alvo = aba === 'mensal' ? meio : aba === 'desempenho' ? perf : null;
+  if (!alvo) return;
   var nav = document.getElementById('navMobile');
   var fim = nav ? nav.getBoundingClientRect().top : window.innerHeight;
-  var h = fim - meio.getBoundingClientRect().top - 12;
-  meio.style.height = Math.max(260, Math.floor(h)) + 'px';
+  var h = fim - alvo.getBoundingClientRect().top - 12;
+  alvo.style.height = Math.max(260, Math.floor(h)) + 'px';
 }
 window.addEventListener('resize', ajustarAlturaMensal);
 
