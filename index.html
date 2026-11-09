@@ -1265,7 +1265,12 @@
   /* ---- Modelo F: barra de navegacao inferior (so no celular) ---- */
   .nav-mobile{display:none;}
   @media (max-width:640px){
-    body.com-nav{padding-bottom:calc(110px + env(safe-area-inset-bottom));}
+    body.com-nav{padding-bottom:12px;}
+    /* Espaco no fim da pagina para o ultimo cartao subir acima da barra de baixo.
+       Como item da propria folha (e nao padding do body, que a rolagem nem sempre
+       conta), ele sempre entra na altura rolavel. */
+    body.com-nav .report::after{content:'';display:block;flex:none;height:calc(100px + env(safe-area-inset-bottom));}
+    body.com-nav:has(.entry-panel.open) .report::after{height:0;}
     .nav-mobile{
       display:flex;align-items:center;justify-content:space-around;
       position:fixed;left:0;right:0;bottom:0;z-index:15;
