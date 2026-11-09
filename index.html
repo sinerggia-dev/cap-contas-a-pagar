@@ -1422,7 +1422,14 @@
     .barra-botoes .clear-btn{flex:1 1 0;justify-content:center;height:40px;border-radius:12px;}
     #filtersDrawer{order:2;}
     /* Resumo e chips de status primeiro, depois Usuario/busca e os demais filtros. */
-    #mResumo{order:-2;} #mChips{order:-1;} #mLista{order:5;}
+    #mResumo{order:-2;} #mChips{order:-1;} #mOrdem{order:4;} #mLista{order:5;}
+    /* Linha acima da lista: quantidade e o botao que ordena por data. */
+    .m-ordem{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:-4px;}
+    #mOrdemQtd{font-size:13px;color:var(--ink-muted);}
+    #mOrdemBtn{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:17px;
+      border:1px solid var(--border-strong);background:var(--surface);color:var(--ink);font:600 13px var(--sans);cursor:pointer;}
+    #mOrdemBtn svg{width:15px;height:15px;}
+    body[data-aba]:not([data-aba="contas"]) #mOrdem{display:none;}
     #rankBody{order:6;background:var(--surface);border:1px solid var(--border);border-radius:16px;}
     #rankBody::before{content:'Total por Despesa de';display:block;font-size:15px;font-weight:600;
       color:var(--ink);padding:0 0 4px 6px;}
@@ -2227,6 +2234,10 @@
     <!-- So no celular (Modelo F): resumo, chips de status e a lista em cartoes. -->
     <section class="m-resumo mobile-only" id="mResumo" aria-label="Resumo"></section>
     <div class="m-chips mobile-only" id="mChips" role="group" aria-label="Status"></div>
+    <div class="m-ordem mobile-only" id="mOrdem">
+      <span id="mOrdemQtd"></span>
+      <button type="button" id="mOrdemBtn" aria-label="Ordenar por data"></button>
+    </div>
     <section class="m-lista mobile-only" id="mLista" aria-label="Lançamentos"></section>
 
     <div class="panel">
@@ -5338,7 +5349,26 @@ function ajustarValoresResumo(){
   els.forEach(function(el){ el.style.fontSize = menor + 'px'; });
 }
 window.addEventListener('resize', ajustarValoresResumo);
+/* Botao de ordem da lista do celular: alterna data mais antiga / mais recente
+   (usa a mesma ordem da tabela do computador). */
+function desenharOrdemMobile(qtd){
+  var porData = sortState.key === 'venc';
+  var asc = porData && sortState.dir === 1;
+  document.getElementById('mOrdemQtd').textContent = qtd + (qtd === 1 ? ' lançamento' : ' lançamentos');
+  document.getElementById('mOrdemBtn').innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    (asc ? '<path d="M7 4v16M3 8l4-4 4 4M14 8h7M14 12h5M14 16h3"/>' : '<path d="M7 4v16M3 16l4 4 4-4M14 8h3M14 12h5M14 16h7"/>') +
+    '</svg>' + (!porData ? 'Ordenar por data' : asc ? 'Data: mais antigas' : 'Data: mais recentes');
+}
+document.getElementById('mOrdemBtn').addEventListener('click', function(){
+  if (sortState.key === 'venc') sortState.dir *= -1;
+  else { sortState.key = 'venc'; sortState.dir = 1; }
+  renderTableHead();
+  render();
+  document.getElementById('mLista').scrollTop = 0;
+});
 function renderMobile(rows, rowsSemStatus){
+  desenharOrdemMobile(rows.length);
   /* Com filtro de Usuario, o topo diz de quem sao os numeros: o nome vira o
      titulo e o periodo desce para a linha de cima. */
   var nomesSel = Array.isArray(state.nome) ? state.nome : [];
