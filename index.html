@@ -1441,7 +1441,15 @@
     .m-card.venc{border-color:#5c2a27;}
     .m-card.venc .k{color:#ff8a80;}
     /* Cada cartao do resumo na cor da sua situacao: degrade + borda. */
-    .m-card-big{background:linear-gradient(145deg,#4a4a4e 0%,#2c2c2f 55%,#1f1f21 100%);border-color:#5a5a5e;}
+    .m-card-big{background:linear-gradient(145deg,rgba(255,204,0,.30) 0%,rgba(255,204,0,.10) 55%,rgba(255,204,0,.03) 100%);border-color:#a8871f;}
+    .m-card-big .k{color:#ffd95a;}
+    /* Datas: bolinha verde = inicio, vermelha = fim. */
+    .data-campo::before{content:'';position:absolute;left:12px;top:50%;width:9px;height:9px;border-radius:50%;
+      transform:translateY(-50%);pointer-events:none;z-index:1;}
+    span.data-campo:nth-of-type(1)::before{background:#30d158;box-shadow:0 0 0 3px rgba(48,209,88,.18);}
+    span.data-campo:nth-of-type(2)::before{background:#ff453a;box-shadow:0 0 0 3px rgba(255,69,58,.18);}
+    .periodo-wrap .data-campo input{padding-left:30px;}
+    .periodo-wrap .data-campo .data-ph{left:30px;}
     .m-card.pago{background:linear-gradient(145deg,rgba(48,209,88,.32) 0%,rgba(48,209,88,.10) 55%,rgba(48,209,88,.03) 100%);
       border-color:#2f8f4a;}
     .m-card.pago .k{color:#7ee2a0;}
@@ -1581,7 +1589,8 @@
     html[data-fundo-m-claro] .periodo-wrap input, html[data-fundo-m-claro] input[type=date]{color-scheme:light;}
     html[data-fundo-m-claro] .acento-opt.claro{display:none;}
     /* resumo */
-    html[data-fundo-m-claro] .m-card-big{background:linear-gradient(145deg,#ffffff 0%,#f1f2f4 60%,#e6e8eb 100%);border-color:#c9cdd3;}
+    html[data-fundo-m-claro] .m-card-big{background:linear-gradient(145deg,rgba(234,179,8,.30) 0%,rgba(234,179,8,.10) 55%,rgba(234,179,8,.03) 100%);border-color:#d4a72c;}
+    html[data-fundo-m-claro] .m-card-big .k{color:#7a5600;}
     html[data-fundo-m-claro] .m-card.pago{background:linear-gradient(145deg,rgba(22,163,74,.24) 0%,rgba(22,163,74,.09) 55%,rgba(22,163,74,.03) 100%);border-color:#58b97a;}
     html[data-fundo-m-claro] .m-card.pago .k{color:#147a3d;}
     html[data-fundo-m-claro] .m-card.venc{background:linear-gradient(145deg,rgba(220,38,38,.20) 0%,rgba(220,38,38,.07) 55%,rgba(220,38,38,.02) 100%);border-color:#e0928b;}
