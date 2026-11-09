@@ -820,6 +820,19 @@
     font-size:13.4px;font-weight:500;color:var(--ink-muted);margin:9px 0 0;
     white-space:nowrap;padding:2px 5px;border-radius:5px;
   }
+  #mesRankBody .rank-col-name.active{color:var(--select-ink);font-weight:700;}
+  /* Um mes so no grafico: abaixo, o mes dia a dia, com o acumulado. */
+  .mes-dias{padding:6px 16px 12px;}
+  .mes-dias-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    font:700 13px var(--sans);color:var(--ink);padding:10px 0 8px;border-top:1px solid var(--border);}
+  .mes-dias-h span{font-weight:500;font-size:12px;color:var(--ink-muted);}
+  .mes-dia{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:10px;padding:5px 0;}
+  .mes-dia-d{font:600 12.5px var(--num);color:var(--ink-soft);white-space:nowrap;}
+  .mes-dia-d small{display:block;font:500 10.5px var(--sans);color:var(--ink-muted);}
+  .mes-dia-barra{height:14px;border-radius:4px;display:flex;overflow:hidden;background:var(--surface-3);min-width:4px;}
+  .mes-dia-barra i{display:block;height:100%;}
+  .mes-dia-v{text-align:right;font:700 12.5px var(--num);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .mes-dia-v small{display:block;font:500 11px var(--num);color:var(--ink-muted);}
   .rank-col-total{font:600 14.6px var(--sans);color:var(--ink-soft);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .rank-col-list{display:flex;flex-direction:column;gap:7px;}
   .rank-col-item{
@@ -4650,6 +4663,38 @@ function renderRanking(rows){
    vencimento: a ideia é bater o olho e ver quanto de cada mês já foi pago e
    quanto ainda vence. Ordena cronologicamente (não pelo maior valor), porque
    aqui a sequência dos meses é o que importa. */
+/* Mes unico no grafico: cada dia com vencimento, a barra do dia (mesmas cores
+   de situacao) e o valor, e embaixo dele o acumulado do mes ate aquele dia. */
+var DIAS_SEMANA_CURTO = ['dom','seg','ter','qua','qui','sex','sáb'];
+var COR_SITUACAO = { pago: 'var(--positive)', vencido: 'var(--atrasado)', hoje: 'var(--warning)', avencer: 'var(--ink-muted)' };
+function htmlMesPorDia(rows, mes){
+  var dias = {};
+  rows.forEach(function(r){
+    if (r._mesano !== mes) return;
+    var d = r.vencDate.getDate();
+    var b = dias[d] = dias[d] || { data: r.vencDate, total: 0, n: 0, pago: 0, vencido: 0, hoje: 0, avencer: 0 };
+    b.total += r.valor || 0;
+    b.n++;
+    b[r.status === 'pago' || r.status === 'vencido' || r.status === 'hoje' ? r.status : 'avencer'] += r.valor || 0;
+  });
+  var lista = Object.keys(dias).map(Number).sort(function(a, b){ return a - b; }).map(function(d){ return dias[d]; });
+  if (!lista.length) return '';
+  var maior = lista.reduce(function(m, b){ return Math.max(m, b.total); }, 0) || 1;
+  var acum = 0;
+  return '<div class="mes-dias"><div class="mes-dias-h">Por dia<span>valor do dia · acumulado no mês</span></div>' +
+    lista.map(function(b){
+      acum += b.total;
+      var segs = ['pago','vencido','hoje','avencer'].filter(function(k){ return b[k] > 0; }).map(function(k){
+        return '<i style="width:' + (b[k] / b.total * 100).toFixed(2) + '%;background:' + COR_SITUACAO[k] + '"></i>';
+      }).join('');
+      return '<div class="mes-dia">' +
+        '<span class="mes-dia-d">' + String(b.data.getDate()).padStart(2, '0') + '/' + String(b.data.getMonth() + 1).padStart(2, '0') +
+          '<small>' + DIAS_SEMANA_CURTO[b.data.getDay()] + ' · ' + b.n + (b.n === 1 ? ' conta' : ' contas') + '</small></span>' +
+        '<span class="mes-dia-barra" style="width:' + Math.max(2, b.total / maior * 100).toFixed(2) + '%">' + segs + '</span>' +
+        '<span class="mes-dia-v">' + brl(b.total) + '<small>' + brl(acum) + '</small></span>' +
+      '</div>';
+    }).join('') + '</div>';
+}
 function renderMesRanking(rows){
   var byMes = {};
   rows.forEach(function(r){
@@ -4711,7 +4756,8 @@ function renderMesRanking(rows){
       '<span class="mes-barra" style="height:'+(e.total / maxMes * 100).toFixed(3)+'%;--pct:'+(e.total / maxMes * 100).toFixed(3)+'%">'+segs+'</span>'+
       '<span class="rank-col-name'+(mesSelecionado?' active':'')+'" data-mes="'+mesAttr+'" title="Clique para filtrar por '+mesAttr+'">'+e.mes+'</span>'+
       '</div>';
-  }).join('') + '</div>' : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
+  }).join('') + '</div>' + (entries.length === 1 ? htmlMesPorDia(rows, entries[0].mes) : '')
+    : '<div class="empty-note">Sem dados para os filtros selecionados.</div>';
   // So reposiciona quando a lista de meses muda: clicar num mes nao faz o grafico pular.
   var chave = entries.map(function(e){ return e.mes; }).join(',');
   if (chave !== mesGrafChave){
