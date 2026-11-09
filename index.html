@@ -1352,19 +1352,20 @@
     .head-row .user-chip{background:var(--surface-2);border-color:var(--border-strong);}
     /* A faixa do topo fica presa no alto ao rolar: titulo, usuario e hora nunca saem da tela. */
     .head-row{position:sticky;top:0;z-index:12;}
-    /* Faixa viva: degrade que vai mudando de cor devagar, com as cores do perfil
-       de quem entrou (Administrador, Editor, Visualizador). */
-    html[data-perfil] .head-row{background-size:300% 300%;animation:faixa-viva 14s ease-in-out infinite alternate;}
-    html[data-perfil="admin"] .head-row{background-image:linear-gradient(120deg,#3b1f6e,#1d3b8f,#0f5c6e,#3b1f6e);}
-    html[data-perfil="editor"] .head-row{background-image:linear-gradient(120deg,#0f4d3a,#11606b,#1f4d8a,#0f4d3a);}
-    html[data-perfil="visualizador"] .head-row{background-image:linear-gradient(120deg,#6b3a10,#7a2440,#4a2470,#6b3a10);}
-    html[data-fundo-m-claro][data-perfil="admin"] .head-row{background-image:linear-gradient(120deg,#e6d8ff,#d6e3ff,#d2f1f4,#e6d8ff);}
-    html[data-fundo-m-claro][data-perfil="editor"] .head-row{background-image:linear-gradient(120deg,#d3f4e3,#cff0f2,#d8e5ff,#d3f4e3);}
-    html[data-fundo-m-claro][data-perfil="visualizador"] .head-row{background-image:linear-gradient(120deg,#ffe4c7,#ffd8e3,#e6d8ff,#ffe4c7);}
-    html[data-perfil]:not([data-fundo-m-claro]) .head-row .brand-kicker{color:rgba(255,255,255,.72);}
-    html[data-perfil]:not([data-fundo-m-claro]) .head-row .brand-mes{color:#fff;}
-    html[data-perfil] .head-row .user-chip{background:rgba(0,0,0,.28);border-color:rgba(255,255,255,.18);backdrop-filter:blur(6px);}
-    html[data-fundo-m-claro][data-perfil] .head-row .user-chip{background:rgba(255,255,255,.6);border-color:rgba(0,0,0,.08);}
+    /* Faixa viva: degrade que vai mudando devagar entre preto, cinza e azul-escuro
+       (o mesmo para todos os perfis e qualquer fundo). Como a faixa e sempre escura,
+       os textos dela usam sempre os tons claros, inclusive no tema claro. */
+    html[data-perfil] .head-row{
+      background-image:linear-gradient(120deg,#000000,#3a3a3e,#0b1f4a,#000000);
+      background-size:300% 300%;animation:faixa-viva 14s ease-in-out infinite alternate;
+      border-bottom-color:rgba(255,255,255,.12);
+      --ink:#f2f2f2; --ink-soft:#d1d1d6; --ink-muted:#b0b0b6; --ink-faint:#9a9aa0;
+      --border:rgba(255,255,255,.16); --border-strong:rgba(255,255,255,.24);
+      --surface-3:rgba(255,255,255,.12);
+    }
+    html[data-perfil] .head-row .brand-kicker{color:rgba(255,255,255,.72);}
+    html[data-perfil] .head-row .brand-mes{color:#fff;}
+    html[data-perfil] .head-row .user-chip{background:rgba(0,0,0,.32);border-color:rgba(255,255,255,.18);backdrop-filter:blur(6px);}
     @keyframes faixa-viva{0%{background-position:0% 50%;}100%{background-position:100% 50%;}}
     @media (prefers-reduced-motion:reduce){ html[data-perfil] .head-row{animation:none;} }
     .brand{min-width:0;}
