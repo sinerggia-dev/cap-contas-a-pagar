@@ -128,6 +128,10 @@
     -webkit-font-smoothing:antialiased;
     padding:22px;
     height:100vh;
+    /* No celular, 100vh conta a area atras da barra do navegador: o fim da pagina
+       ficava escondido e nao dava para rolar ate o ultimo cartao. dvh e a altura
+       visivel de verdade. */
+    height:100dvh;
     overflow-y:auto;
     overflow-x:hidden;
   }
@@ -1248,7 +1252,7 @@
   /* ---- Modelo F: barra de navegacao inferior (so no celular) ---- */
   .nav-mobile{display:none;}
   @media (max-width:640px){
-    body.com-nav{padding-bottom:96px;}
+    body.com-nav{padding-bottom:calc(110px + env(safe-area-inset-bottom));}
     .nav-mobile{
       display:flex;align-items:center;justify-content:space-around;
       position:fixed;left:0;right:0;bottom:0;z-index:15;
