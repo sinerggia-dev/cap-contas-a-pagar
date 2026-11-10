@@ -1249,7 +1249,9 @@
   /* Botao "Rodar o robo agora" (Boletos por e-mail) */
   .robo-box{margin:0 0 14px;padding:12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2, rgba(127,127,127,.06));}
   .robo-linha{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .robo-linha input{flex:1 1 220px;min-width:0;}
+  .robo-linha input{flex:1 1 220px;min-width:0;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
+    font:14px var(--sans);padding:8px 10px;border-radius:7px;height:36px;}
+  .robo-linha input:focus{outline:2px solid var(--chart);outline-offset:1px;border-color:transparent;}
   .robo-status{font-size:13px;color:var(--ink-muted);line-height:1.4;}
   .robo-status a{color:inherit;text-decoration:underline;}
   .robo-status.ok{color:var(--pago, #1f9d55);}
