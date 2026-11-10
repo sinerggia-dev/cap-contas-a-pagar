@@ -545,11 +545,11 @@ def main():
                 if not sem_anexo and (so_digitos(v[10]) == barra or not barra):
                     print(f"= {desc_final} {venc:%m/%Y}: já pago e com boleto — não mexi.")
                     continue
-                acao = f"📎 Boleto anexado (já pago): {desc_final} · {regra['nome']} · {venc:%m/%Y}"
+                acao = f"📎 Boleto/código conferido (já pago): {desc_final} · {regra['nome']} · {venc:%m/%Y}"
                 if not SIMULAR:
                     if sem_anexo:
                         v[13] = subir_boleto(headers, conteudo, desc_final, venc)
-                    v[10] = v[10] or linha_digitavel(barra)
+                    v[10] = linha_digitavel(barra) if barra else v[10]
                     gravar_linha(headers, linha["index"], v)
                     linha["values"] = v
             else:
