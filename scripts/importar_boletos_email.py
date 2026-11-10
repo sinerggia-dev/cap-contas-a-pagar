@@ -208,6 +208,10 @@ RE_BANCARIO = re.compile(  # boleto bancário: 47 dígitos
 )
 
 
+MESES = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto",
+         "setembro", "outubro", "novembro", "dezembro"]
+
+
 def data_do_fator(fator):
     """Fator de vencimento do boleto bancário. A contagem recomeçou em 22/02/2025
     (fator 1000); fica a data das duas bases que cair mais perto de hoje."""
@@ -251,12 +255,35 @@ def ler_boleto(texto):
         if m:
             achado["valor_texto"] = valor_br(m.group(1))
             break
-    m = re.search(r"VENCIMENTO[^\d]{0,40}?(\d{2}/\d{2}/\d{4})", plano, re.I)
+    m = re.search(r"VENC(?:IMENTO|E)[^\d]{0,40}?(\d{2}/\d{2}/\d{4})", plano, re.I)
     if m:
         try:
             achado["venc_texto"] = datetime.strptime(m.group(1), "%d/%m/%Y").date()
         except ValueError:
             pass
+    if "venc_texto" not in achado:
+        # "Vence em 16 de novembro" / "vencimento: 16 de novembro de 2026" (fatura de app,
+        # sem boleto). Sem o ano, fica o mais proximo de hoje.
+        m = re.search(r"VENC(?:IMENTO|E)(?:\s+EM|\s*:)?\s*(\d{1,2})\s+DE\s+([A-ZÇa-zç]+)(?:\s+DE\s+(\d{4}))?",
+                      sem_acento(plano), re.I)
+        if m and sem_acento(m.group(2)) in MESES:
+            mes, dia = MESES.index(sem_acento(m.group(2))) + 1, int(m.group(1))
+            anos = [int(m.group(3))] if m.group(3) else [HOJE.year - 1, HOJE.year, HOJE.year + 1]
+            datas = []
+            for a in anos:
+                try:
+                    datas.append(date(a, mes, dia))
+                except ValueError:
+                    pass
+            if datas:
+                achado["venc_texto"] = min(datas, key=lambda d: abs((d - HOJE).days))
+    if "valor_texto" not in achado:
+        # Valor solto perto do vencimento: "R$ 568,08" ou "R$ 568 08" (centavos em
+        # sobrescrito viram outro pedaco de texto).
+        m = re.search(r"VENC(?:IMENTO|E)[\s\S]{0,120}?R\$\s*([\d.]+)(?:\s*,\s*|\s+)(\d{2})(?!\d)", plano, re.I) \
+            or re.search(r"R\$\s*([\d.]+)(?:\s*,\s*|\s+)(\d{2})(?!\d)[\s\S]{0,120}?VENC(?:IMENTO|E)", plano, re.I)
+        if m:
+            achado["valor_texto"] = valor_br(m.group(1) + "," + m.group(2))
     return achado
 
 
