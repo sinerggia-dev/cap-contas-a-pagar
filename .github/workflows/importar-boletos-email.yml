@@ -1,4 +1,4 @@
-name: Importar Faturas Neoenergia
+name: Importar Boletos do E-mail
 
 on:
   schedule:
@@ -25,9 +25,9 @@ jobs:
       - name: Instalar dependências
         run: pip install msal requests pypdf cryptography
 
-      - name: Importar faturas
+      - name: Importar boletos
         env:
           CAP_CLIENT_SECRET: ${{ secrets.CAP_CLIENT_SECRET }}
           NEO_PDF_SENHAS: ${{ secrets.NEO_PDF_SENHAS }}
           SIMULAR: ${{ github.event_name == 'workflow_dispatch' && inputs.simular && '1' || '' }}
-        run: python scripts/importar_faturas_neoenergia.py
+        run: python scripts/importar_boletos_email.py

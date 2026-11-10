@@ -1966,6 +1966,10 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Emissão de Documentos
       </button>
+      <button class="clear-btn" id="boletoEmailBtn" type="button" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 7 9 6 9-6" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        Boletos por e-mail
+      </button>
       <button class="clear-btn" id="instalarAppBtn" type="button" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Instalar app (tela cheia)
@@ -2146,6 +2150,65 @@
     <div style="padding:0 16px 16px;">
       <p class="emi-aviso">Estes dados ficam na aba <b>Emissao</b> da planilha financeira no SharePoint — nunca são copiados para o site público. Mas quem tem acesso ao arquivo no SharePoint consegue abrir essa aba e ler as senhas.</p>
       <div id="emi_lista"></div>
+    </div>
+  </div>
+
+  <div class="panel entry-panel" id="boletoPanel">
+    <div class="panel-head">
+      <h2 id="bolTitulo">Boletos por e-mail</h2>
+      <button type="button" class="ebtn ghost" id="boletoCloseBtn">Fechar</button>
+    </div>
+    <div style="padding:14px 16px 0;">
+      <p class="emi-aviso">Todo dia às 07:30 um robô lê o e-mail <b>natanael.silva@sinerggia.com.br</b>. Quando chega um boleto em PDF de um remetente cadastrado aqui, ele cria o lançamento "A Vencer" (ou completa o do mês, se já existir) com valor, vencimento, código de barras e o PDF anexado — e manda um resumo por e-mail. As contas da Neoenergia já entram sozinhas pela <b>Emissão de Documentos</b> (código de cada unidade).</p>
+    </div>
+    <form id="boletoForm" autocomplete="off">
+      <div class="entry-grid">
+        <div class="edivider">Quem manda o boleto</div>
+        <div class="efield span2">
+          <label>Remetente <span class="req">*</span></label>
+          <input type="text" id="bol_remetente" placeholder="Ex.: faturas@claro.com.br ou só claro.com.br" autocomplete="off">
+          <span class="hint">O e-mail inteiro ou só o domínio (a parte depois do @).</span>
+        </div>
+        <div class="efield">
+          <label>Assunto contém</label>
+          <input type="text" id="bol_assunto" placeholder="Opcional. Ex.: fatura" autocomplete="off">
+        </div>
+        <div class="efield">
+          <label>Texto no PDF</label>
+          <input type="text" id="bol_texto" placeholder="Opcional. Ex.: nº do cliente" autocomplete="off">
+          <span class="hint">Use quando o mesmo remetente manda mais de uma conta: o número do cliente, contrato ou unidade que aparece no boleto.</span>
+        </div>
+
+        <div class="edivider">Como lançar no CAP</div>
+        <div class="efield">
+          <label>Despesa de <span class="req">*</span></label>
+          <select id="bol_nome"></select>
+        </div>
+        <div class="efield span2">
+          <label>Descrição da Despesa <span class="req">*</span></label>
+          <input type="text" id="bol_desc" list="bolDescList" placeholder="Ex.: Claro Apto 102" autocomplete="off">
+          <datalist id="bolDescList"></datalist>
+        </div>
+        <div class="efield">
+          <label>Tipo de Despesa</label>
+          <input type="text" id="bol_tipo" list="tipoList" placeholder="Ex.: Internet" autocomplete="off">
+        </div>
+        <div class="efield">
+          <label>Senha do PDF</label>
+          <input type="text" id="bol_senha" placeholder="Opcional (se o PDF vier protegido)" autocomplete="off">
+        </div>
+        <div class="efield">
+          <label>Situação</label>
+          <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);cursor:pointer;"><input type="checkbox" id="bol_ativo" checked style="width:auto;"> Ativo</label>
+        </div>
+      </div>
+      <div class="entry-actions-bottom" style="display:flex;justify-content:flex-end;gap:10px;padding:16px;border-top:1px solid var(--border);">
+        <button type="button" class="ebtn ghost" id="bol_cancelar">Cancelar</button>
+        <button type="submit" class="ebtn primary" id="bol_salvar">Adicionar</button>
+      </div>
+    </form>
+    <div style="padding:0 16px 16px;">
+      <div id="bol_lista"></div>
     </div>
   </div>
 
@@ -3058,6 +3121,7 @@ function aplicarRestricoesPapel(){
   document.getElementById('addToggleBtn').style.display = currentUserRole === 'Editor' ? '' : 'none';
   document.getElementById('adminBtn').style.display = ehDono() ? '' : 'none';
   document.getElementById('emissaoBtn').style.display = ehDono() ? '' : 'none';
+  document.getElementById('boletoEmailBtn').style.display = ehDono() ? '' : 'none';
 }
 
 async function processarLogin(){
@@ -7463,6 +7527,7 @@ document.getElementById('emissaoBtn').addEventListener('click', function(){
   var abrindo = !document.getElementById('emissaoPanel').classList.contains('open');
   document.getElementById('entryPanel').classList.remove('open');
   document.getElementById('adminPanel').classList.remove('open');
+  document.getElementById('boletoPanel').classList.remove('open');
   document.getElementById('emissaoPanel').classList.toggle('open', abrindo);
   document.getElementById('addToggleBtn').style.display = (abrindo || currentUserRole !== 'Editor') ? 'none' : '';
   atualizarBotaoVoltar();
@@ -7491,7 +7556,8 @@ document.getElementById('emi_dia').addEventListener('input', function(){
 var PAINEIS_TELA_CHEIA = [
   { painel:'entryPanel',   fechar:'cancelEntryBtn'  },
   { painel:'adminPanel',   fechar:'adminCloseBtn'   },
-  { painel:'emissaoPanel', fechar:'emissaoCloseBtn' }
+  { painel:'emissaoPanel', fechar:'emissaoCloseBtn' },
+  { painel:'boletoPanel',  fechar:'boletoCloseBtn'  }
 ];
 function painelAbertoAtual(){
   for (var i = 0; i < PAINEIS_TELA_CHEIA.length; i++){
@@ -7516,11 +7582,219 @@ document.getElementById('adminBtn').addEventListener('click', function(){
   var opening = !document.getElementById('adminPanel').classList.contains('open');
   document.getElementById('entryPanel').classList.remove('open');
   document.getElementById('emissaoPanel').classList.remove('open');
+  document.getElementById('boletoPanel').classList.remove('open');
   document.getElementById('adminPanel').classList.toggle('open', opening);
   document.getElementById('addToggleBtn').style.display = opening ? 'none' : '';
   atualizarBotaoVoltar();
   if (opening) carregarAdminPanel();
 });
+/* ---- Boletos por e-mail ----
+   Regras que o robo (scripts/importar_boletos_email.py) usa para saber de quem
+   e cada boleto que chega no e-mail. Ficam na aba Importacao da planilha
+   financeira — a senha do PDF nunca vai para o site publico. */
+var IMP_SHEET = 'Importacao';
+var IMP_TABLE = 'TabelaImportacao';
+var IMP_COLS = ['Id','Ativo','Remetente','Assunto contém','Texto no PDF','Despesa de','Descrição','Tipo','Senha do PDF','Atualizado em'];
+var IMP_DADOS = [];
+var impEditandoId = null;
+
+async function garantirTabelaImportacao(token, alvo){
+  var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+  var hGet = { Authorization: 'Bearer ' + token };
+  var r0 = await fetch(emissaoWorkbookUrl(alvo, "/tables('" + IMP_TABLE + "')"), { headers: hGet });
+  if (r0.ok) return;
+  if (r0.status !== 404) throw new Error('Não foi possível checar a aba Importacao (' + r0.status + ').');
+  var rAba = await fetch(emissaoWorkbookUrl(alvo, "/worksheets('" + IMP_SHEET + "')"), { headers: hGet });
+  if (!rAba.ok){
+    var r1 = await fetch(emissaoWorkbookUrl(alvo, '/worksheets'), { method: 'POST', headers: hJson, body: JSON.stringify({ name: IMP_SHEET }) });
+    if (!r1.ok) throw new Error('Falha ao criar a aba Importacao (' + r1.status + ').');
+  }
+  var endereco = 'A1:' + colLetraEmissao(IMP_COLS.length) + '1';
+  var r2 = await fetch(emissaoWorkbookUrl(alvo, "/worksheets('" + IMP_SHEET + "')/range(address='" + endereco + "')"), {
+    method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [IMP_COLS] })
+  });
+  if (!r2.ok) throw new Error('Falha ao escrever o cabeçalho da aba Importacao (' + r2.status + ').');
+  var r3 = await fetch(emissaoWorkbookUrl(alvo, "/worksheets('" + IMP_SHEET + "')/tables/add"), {
+    method: 'POST', headers: hJson, body: JSON.stringify({ address: endereco, hasHeaders: true })
+  });
+  if (!r3.ok) throw new Error('Falha ao criar a tabela da aba Importacao (' + r3.status + ').');
+  var criada = await r3.json();
+  var r4 = await fetch(emissaoWorkbookUrl(alvo, '/tables/' + criada.id), { method: 'PATCH', headers: hJson, body: JSON.stringify({ name: IMP_TABLE }) });
+  if (!r4.ok) throw new Error('Falha ao nomear a tabela como ' + IMP_TABLE + ' (' + r4.status + ').');
+}
+async function lerImportacao(token, alvo){
+  var r = await fetch(emissaoWorkbookUrl(alvo, "/tables('" + IMP_TABLE + "')/rows"), { headers: { Authorization: 'Bearer ' + token } });
+  if (!r.ok) throw new Error('Não foi possível ler a aba Importacao (' + r.status + ').');
+  return ((await r.json()).value || []).map(function(row){
+    var v = row.values[0], t = function(i){ return v[i] == null ? '' : String(v[i]); };
+    return { _index: row.index, id: t(0), ativo: t(1) !== 'Não', remetente: t(2), assunto: t(3), texto: t(4),
+             nome: t(5), desc: t(6), tipo: t(7), senha: t(8), atualizado: t(9) };
+  });
+}
+function impLinha(o){
+  return [o.id, o.ativo ? 'Sim' : 'Não', o.remetente, o.assunto, o.texto, o.nome, o.desc, o.tipo, o.senha, agoraBR()];
+}
+function renderImportacao(){
+  var el = document.getElementById('bol_lista');
+  if (!IMP_DADOS.length){
+    el.innerHTML = '<p class="emi-empty">Nenhum remetente cadastrado ainda. Preencha acima e clique em "Adicionar".</p>';
+    return;
+  }
+  el.innerHTML = IMP_DADOS.slice().sort(function(a, b){ return a.desc.localeCompare(b.desc, 'pt-BR'); }).map(function(o){
+    var id = escHtml(o.id);
+    var sub = [escHtml(o.nome), escHtml(o.tipo || 'Outras'), o.ativo ? 'ativo' : '<b style="color:var(--atrasado)">pausado</b>'];
+    if (o.atualizado) sub.push('atualizado em ' + escHtml(o.atualizado));
+    var item = function(k, v){ return '<div class="emi-item"><span class="k">' + k + '</span><span class="v"><span class="txt' + (v ? '' : ' vazio') + '">' + (v ? escHtml(v) : '—') + '</span></span></div>'; };
+    return '<div class="emi-card"' + (o.ativo ? '' : ' style="opacity:.6"') + '>' +
+      '<div class="emi-card-head"><span class="emi-desc">' + escHtml(o.desc) + '<span class="emi-sub">' + sub.join(' · ') + '</span></span>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+          '<button type="button" class="ebtn" data-bol-editar="' + id + '" style="padding:5px 10px;font-size:12.3px;flex:none;">Editar</button>' +
+          '<button type="button" class="ebtn" data-bol-excluir="' + id + '" style="padding:5px 10px;font-size:12.3px;flex:none;color:var(--critical);">Excluir</button>' +
+        '</div></div>' +
+      '<div class="emi-grid">' + item('Remetente', o.remetente) + item('Assunto contém', o.assunto) +
+        item('Texto no PDF', o.texto) + item('Senha do PDF', o.senha ? '••••••' : '') + '</div>' +
+    '</div>';
+  }).join('');
+}
+function impLimparForm(){
+  impEditandoId = null;
+  ['bol_remetente','bol_assunto','bol_texto','bol_desc','bol_tipo','bol_senha'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('bol_ativo').checked = true;
+  document.getElementById('bol_nome').value = '';
+  document.getElementById('bol_salvar').textContent = 'Adicionar';
+  document.getElementById('bolTitulo').textContent = 'Boletos por e-mail';
+}
+function impPreencherListas(){
+  var nomes = unicosOrdenados(DATA.map(function(r){ return r.nome; }));
+  var sel = document.getElementById('bol_nome'), atual = sel.value;
+  sel.innerHTML = '<option value="">Selecione…</option>' + nomes.map(function(n){ return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>'; }).join('');
+  sel.value = atual;
+  document.getElementById('bolDescList').innerHTML = unicosSemVariantes(DATA.map(function(r){ return r.desc; }))
+    .map(function(d){ return '<option value="' + escHtml(d) + '">'; }).join('');
+}
+async function carregarImportacao(){
+  impPreencherListas();
+  document.getElementById('bol_lista').innerHTML = '<p class="emi-empty">Carregando…</p>';
+  try {
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    await garantirTabelaImportacao(token, alvo);
+    IMP_DADOS = await lerImportacao(token, alvo);
+    renderImportacao();
+  } catch (e) {
+    document.getElementById('bol_lista').innerHTML = '<p class="emi-empty">Erro: ' + escHtml(e && e.message ? e.message : e) + '</p>';
+  }
+}
+async function salvarImportacao(){
+  var o = {
+    remetente: document.getElementById('bol_remetente').value.trim().toLowerCase(),
+    assunto: document.getElementById('bol_assunto').value.trim(),
+    texto: document.getElementById('bol_texto').value.trim(),
+    nome: document.getElementById('bol_nome').value,
+    desc: formatarTextoDigitado(document.getElementById('bol_desc').value),
+    tipo: document.getElementById('bol_tipo').value.trim() || 'Outras',
+    senha: document.getElementById('bol_senha').value.trim(),
+    ativo: document.getElementById('bol_ativo').checked
+  };
+  if (!o.remetente || !o.nome || !o.desc){ showToast('Preencha Remetente, Despesa de e Descrição.'); return; }
+  if (!/^[^\s@]*@?[^\s@]+\.[^\s@]+$/.test(o.remetente)){ showToast('Remetente inválido: use o e-mail (fulano@empresa.com.br) ou o domínio (empresa.com.br).'); return; }
+  var btn = document.getElementById('bol_salvar');
+  btn.disabled = true;
+  try {
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    await garantirTabelaImportacao(token, alvo);
+    var atuais = await lerImportacao(token, alvo);   // indice atual da linha (outra sessao pode ter mudado)
+    var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+    var urlRows = emissaoWorkbookUrl(alvo, "/tables('" + IMP_TABLE + "')/rows");
+    var r;
+    if (impEditandoId !== null){
+      var ex = atuais.filter(function(x){ return x.id === impEditandoId; })[0];
+      if (!ex) throw new Error('Esse cadastro não existe mais na planilha.');
+      o.id = ex.id;
+      r = await fetch(urlRows + '/itemAt(index=' + ex._index + ')', { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [impLinha(o)] }) });
+    } else {
+      o.id = String(atuais.reduce(function(m, x){ return Math.max(m, Number(x.id) || 0); }, 0) + 1);
+      r = await fetch(urlRows, { method: 'POST', headers: hJson, body: JSON.stringify({ values: [impLinha(o)] }) });
+    }
+    if (!r.ok) throw new Error('Falha ao gravar (' + r.status + '): ' + (await r.text()).slice(0, 200));
+    showToast(impEditandoId !== null ? 'Cadastro atualizado.' : 'Remetente cadastrado. O robô passa a ler os boletos dele a partir de amanhã, 07:30.');
+    impLimparForm();
+    await carregarImportacao();
+  } catch (e) {
+    showToast('Erro ao salvar: ' + (e && e.message ? e.message : e));
+  } finally {
+    btn.disabled = false;
+  }
+}
+async function excluirImportacao(id){
+  try {
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    var ex = (await lerImportacao(token, alvo)).filter(function(x){ return x.id === id; })[0];
+    if (!ex) throw new Error('Esse cadastro não existe mais na planilha.');
+    var r = await fetch(emissaoWorkbookUrl(alvo, "/tables('" + IMP_TABLE + "')/rows/itemAt(index=" + ex._index + ')'), {
+      method: 'DELETE', headers: { Authorization: 'Bearer ' + token }
+    });
+    if (!r.ok) throw new Error('Falha ao excluir (' + r.status + ').');
+    showToast('Cadastro excluído.');
+    if (impEditandoId === id) impLimparForm();
+    await carregarImportacao();
+  } catch (e) {
+    showToast('Erro ao excluir: ' + (e && e.message ? e.message : e));
+  }
+}
+function fecharBoletoPanel(){
+  document.getElementById('boletoPanel').classList.remove('open');
+  document.getElementById('addToggleBtn').style.display = currentUserRole === 'Editor' ? '' : 'none';
+  impLimparForm();
+  atualizarBotaoVoltar();
+}
+document.getElementById('boletoEmailBtn').addEventListener('click', function(){
+  if (!ehDono()) return;
+  fecharGavetaAcoes();
+  var abrindo = !document.getElementById('boletoPanel').classList.contains('open');
+  ['entryPanel', 'adminPanel', 'emissaoPanel'].forEach(function(id){ document.getElementById(id).classList.remove('open'); });
+  document.getElementById('boletoPanel').classList.toggle('open', abrindo);
+  document.getElementById('addToggleBtn').style.display = (abrindo || currentUserRole !== 'Editor') ? 'none' : '';
+  atualizarBotaoVoltar();
+  if (abrindo){ impLimparForm(); carregarImportacao(); document.body.scrollTo(0, 0); }
+});
+document.getElementById('boletoCloseBtn').addEventListener('click', fecharBoletoPanel);
+document.getElementById('bol_cancelar').addEventListener('click', function(){
+  if (impEditandoId !== null){ impLimparForm(); return; }
+  fecharBoletoPanel();
+});
+document.getElementById('boletoForm').addEventListener('submit', function(ev){ ev.preventDefault(); salvarImportacao(); });
+document.getElementById('bol_lista').addEventListener('click', function(ev){
+  var ed = ev.target.closest('[data-bol-editar]'), ex = ev.target.closest('[data-bol-excluir]');
+  if (ed){
+    var o = IMP_DADOS.filter(function(x){ return x.id === ed.getAttribute('data-bol-editar'); })[0];
+    if (!o) return;
+    impEditandoId = o.id;
+    document.getElementById('bol_remetente').value = o.remetente;
+    document.getElementById('bol_assunto').value = o.assunto;
+    document.getElementById('bol_texto').value = o.texto;
+    document.getElementById('bol_desc').value = o.desc;
+    document.getElementById('bol_tipo').value = o.tipo;
+    document.getElementById('bol_senha').value = o.senha;
+    document.getElementById('bol_ativo').checked = o.ativo;
+    var sel = document.getElementById('bol_nome');
+    if (o.nome && !Array.prototype.some.call(sel.options, function(op){ return op.value === o.nome; })){
+      sel.insertAdjacentHTML('beforeend', '<option value="' + escHtml(o.nome) + '">' + escHtml(o.nome) + '</option>');
+    }
+    sel.value = o.nome;
+    document.getElementById('bol_salvar').textContent = 'Salvar alterações';
+    document.getElementById('bolTitulo').textContent = 'Editar: ' + o.desc;
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (ex){
+    var id = ex.getAttribute('data-bol-excluir');
+    var alvo = IMP_DADOS.filter(function(x){ return x.id === id; })[0];
+    if (alvo && window.confirm('Excluir o cadastro "' + alvo.desc + '" (' + alvo.remetente + ')?\n\nO robô deixa de importar os boletos desse remetente.')) excluirImportacao(id);
+  }
+});
+
 document.getElementById('adminCloseBtn').addEventListener('click', function(){
   document.getElementById('adminPanel').classList.remove('open');
   document.getElementById('addToggleBtn').style.display = '';
