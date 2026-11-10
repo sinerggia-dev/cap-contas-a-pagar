@@ -7379,7 +7379,7 @@ function renderEmissaoLista(){
     if (o.nome) sub.push(escHtml(o.nome));
     if (o.tipo) sub.push(escHtml(o.tipo));
     if (o.dia) sub.push('vence dia ' + escHtml(o.dia));
-    if (o.atualizado) sub.push('atualizado em ' + escHtml(o.atualizado));
+    if (o.atualizado) sub.push('atualizado em ' + escHtml(dataPlanilhaTxt(o.atualizado)));
     return '<div class="emi-card">' +
       '<div class="emi-card-head">' +
         '<span class="emi-desc">' + escHtml(o.desc || '(sem descrição)') +
@@ -7676,6 +7676,14 @@ async function lerImportacao(token, alvo){
              nome: t(5), desc: t(6), tipo: t(7), senha: t(8), atualizado: t(9) };
   });
 }
+/* O Excel pode devolver "Atualizado em" como numero serial (46306.43...): vira dd/mm/aaaa hh:mm. */
+function dataPlanilhaTxt(v){
+  var s = String(v == null ? '' : v).trim();
+  if (!/^\d+(\.\d+)?$/.test(s)) return s;
+  var d = new Date(Math.round((Number(s) - 25569) * 86400000));
+  var p2 = function(n){ return ('0' + n).slice(-2); };
+  return p2(d.getUTCDate()) + '/' + p2(d.getUTCMonth() + 1) + '/' + d.getUTCFullYear() + ' ' + p2(d.getUTCHours()) + ':' + p2(d.getUTCMinutes());
+}
 function impLinha(o){
   return [o.id, o.ativo ? 'Sim' : 'Não', o.remetente, o.assunto, o.texto, o.nome, o.desc, o.tipo, o.senha, agoraBR()];
 }
@@ -7688,7 +7696,7 @@ function renderImportacao(){
   el.innerHTML = IMP_DADOS.slice().sort(function(a, b){ return a.desc.localeCompare(b.desc, 'pt-BR'); }).map(function(o){
     var id = escHtml(o.id);
     var sub = [escHtml(o.nome), escHtml(o.tipo || 'Outras'), o.ativo ? 'ativo' : '<b style="color:var(--atrasado)">pausado</b>'];
-    if (o.atualizado) sub.push('atualizado em ' + escHtml(o.atualizado));
+    if (o.atualizado) sub.push('atualizado em ' + escHtml(dataPlanilhaTxt(o.atualizado)));
     var item = function(k, v){ return '<div class="emi-item"><span class="k">' + k + '</span><span class="v"><span class="txt' + (v ? '' : ' vazio') + '">' + (v ? escHtml(v) : '—') + '</span></span></div>'; };
     return '<div class="emi-card"' + (o.ativo ? '' : ' style="opacity:.6"') + '>' +
       '<div class="emi-card-head"><span class="emi-desc">' + escHtml(o.desc) + '<span class="emi-sub">' + sub.join(' · ') + '</span></span>' +
