@@ -928,6 +928,15 @@
   }
   .add-btn:hover{background:var(--chart-hover);}
   .add-btn svg{width:13px;height:13px;}
+  .add-btn.robo-topo{background:transparent;border-color:var(--border);color:var(--ink);}
+  .add-btn.robo-topo:hover{background:var(--surface-3);}
+  .add-btn.robo-topo svg{width:15px;height:15px;}
+  .add-btn.robo-topo.rodando{border-color:var(--chart);}
+  .add-btn.robo-topo.rodando svg{animation:roboPulso 1s ease-in-out infinite;}
+  .add-btn.robo-topo.ok{border-color:var(--pago, #1f9d55);color:var(--pago, #1f9d55);}
+  .add-btn.robo-topo.erro{border-color:var(--atrasado, #d64545);color:var(--atrasado, #d64545);}
+  @keyframes roboPulso{50%{opacity:.35;}}
+  @media (max-width:640px){ .add-btn.robo-topo{display:none !important;} }
 
   .entry-panel{display:none;}
   .entry-panel.open{display:block;flex:none;}
@@ -1895,6 +1904,10 @@
       <button class="back-btn" id="backBtn" type="button" title="Voltar para o painel">
         <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Voltar
+      </button>
+      <button class="add-btn robo-topo" id="roboTopoBtn" type="button" style="display:none;" title="Lê os boletos do e-mail agora e lança no CAP">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="8" width="14" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span id="roboTopoTxt">Rodar robô</span>
       </button>
       <button class="add-btn" id="addToggleBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -3153,6 +3166,7 @@ function aplicarRestricoesPapel(){
   document.getElementById('adminBtn').style.display = ehDono() ? '' : 'none';
   document.getElementById('emissaoBtn').style.display = ehDono() ? '' : 'none';
   document.getElementById('boletoEmailBtn').style.display = ehDono() ? '' : 'none';
+  document.getElementById('roboTopoBtn').style.display = ehDono() ? '' : 'none';
 }
 
 async function processarLogin(){
@@ -7856,12 +7870,31 @@ async function roboDecifrar(valor, senha){
     return new TextDecoder().decode(t);
   } catch (e) { return null; }
 }
+var roboTopoTimer = null;
 function roboStatus(html, classe){
   var el = document.getElementById('roboStatus');
   el.className = 'robo-status' + (classe ? ' ' + classe : '');
   el.innerHTML = html;
+  // Botao do topo acompanha o mesmo estado.
+  var btn = document.getElementById('roboTopoBtn'), txt = document.getElementById('roboTopoTxt');
+  var plano = String(html || '').replace(/<[^>]+>/g, '').replace(/\s*·\s*ver log/, '').trim();
+  clearTimeout(roboTopoTimer);
+  btn.classList.remove('rodando', 'ok', 'erro');
+  if (classe === 'ok' || classe === 'erro'){
+    btn.classList.add(classe);
+    txt.textContent = classe === 'ok' ? 'Concluído' : 'Erro';
+    if (!document.getElementById('boletoPanel').classList.contains('open')) showToast(plano);
+    roboTopoTimer = setTimeout(function(){ btn.classList.remove('ok', 'erro'); txt.textContent = 'Rodar robô'; }, 10000);
+  } else if (plano){
+    btn.classList.add('rodando');
+    txt.textContent = (plano.match(/\(\d+s\)/) ? 'Rodando ' + plano.match(/\d+s/)[0] : 'Rodando…');
+  } else {
+    txt.textContent = 'Rodar robô';
+  }
 }
 function roboPedirToken(msg){
+  // O campo do token fica no painel Boletos por e-mail: abre o painel se veio do topo.
+  if (!document.getElementById('boletoPanel').classList.contains('open')) document.getElementById('boletoEmailBtn').click();
   if (msg) document.getElementById('roboTokenMsg').innerHTML = msg;
   document.getElementById('roboTokenBox').style.display = '';
   document.getElementById('roboToken').value = '';
@@ -7937,10 +7970,13 @@ async function roboRodar(senha){
     roboRodando = false;
   }
 }
-document.getElementById('roboRodarBtn').addEventListener('click', function(){
-  if (!ehDono() || roboRodando) return;
+function roboPedir(){
+  if (!ehDono()) return;
+  if (roboRodando){ showToast('O robô já está rodando…'); return; }
   pedirSenha('Digite a senha para rodar o robô de boletos agora:', function(ok, senha){ if (ok) roboRodar(senha); });
-});
+}
+document.getElementById('roboRodarBtn').addEventListener('click', roboPedir);
+document.getElementById('roboTopoBtn').addEventListener('click', roboPedir);
 document.getElementById('roboTokenSalvar').addEventListener('click', async function(){
   var gh = document.getElementById('roboToken').value.trim();
   if (!/^(github_pat_|ghp_)\w{20,}$/.test(gh)){ showToast('Cole o token inteiro do GitHub (começa com github_pat_).'); return; }
