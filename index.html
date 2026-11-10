@@ -2159,7 +2159,7 @@
       <button type="button" class="ebtn ghost" id="boletoCloseBtn">Fechar</button>
     </div>
     <div style="padding:14px 16px 0;">
-      <p class="emi-aviso">Todo dia às 07:30 um robô lê o e-mail <b>natanael.silva@sinerggia.com.br</b>. Quando chega um boleto em PDF de um remetente cadastrado aqui, ele cria o lançamento "A Vencer" (ou completa o do mês, se já existir) com valor, vencimento, código de barras e o PDF anexado — e manda um resumo por e-mail. As contas da Neoenergia já entram sozinhas pela <b>Emissão de Documentos</b> (código de cada unidade).</p>
+      <p class="emi-aviso">Todo dia às 07:30 um robô lê o e-mail <b>natanael.silva@sinerggia.com.br</b>. Quando chega um boleto de um remetente cadastrado aqui — em PDF anexo, por link ou só com o código de barras no corpo do e-mail — ele cria o lançamento "A Vencer" (ou completa o do mês, se já existir) com valor, vencimento, código de barras e o PDF anexado — e manda um resumo por e-mail. As contas da Neoenergia já entram sozinhas pela <b>Emissão de Documentos</b> (código de cada unidade).<br><br>Boleto que chega em <b>outro e-mail</b> (ex.: Gmail)? Crie lá um <b>encaminhamento automático</b> desse remetente para natanael.silva@sinerggia.com.br — o robô reconhece o remetente original.</p>
     </div>
     <form id="boletoForm" autocomplete="off">
       <div class="entry-grid">
@@ -2174,9 +2174,9 @@
           <input type="text" id="bol_assunto" placeholder="Opcional. Ex.: fatura" autocomplete="off">
         </div>
         <div class="efield">
-          <label>Texto no PDF</label>
+          <label>Texto no boleto</label>
           <input type="text" id="bol_texto" placeholder="Opcional. Ex.: nº do cliente" autocomplete="off">
-          <span class="hint">Use quando o mesmo remetente manda mais de uma conta: o número do cliente, contrato ou unidade que aparece no boleto.</span>
+          <span class="hint">Use quando o mesmo remetente manda mais de uma conta: o número do cliente, contrato ou unidade que aparece no boleto ou no e-mail.</span>
         </div>
 
         <div class="edivider">Como lançar no CAP</div>
@@ -7652,7 +7652,7 @@ function renderImportacao(){
           '<button type="button" class="ebtn" data-bol-excluir="' + id + '" style="padding:5px 10px;font-size:12.3px;flex:none;color:var(--critical);">Excluir</button>' +
         '</div></div>' +
       '<div class="emi-grid">' + item('Remetente', o.remetente) + item('Assunto contém', o.assunto) +
-        item('Texto no PDF', o.texto) + item('Senha do PDF', o.senha ? '••••••' : '') + '</div>' +
+        item('Texto no boleto', o.texto) + item('Senha do PDF', o.senha ? '••••••' : '') + '</div>' +
     '</div>';
   }).join('');
 }

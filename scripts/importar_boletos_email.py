@@ -266,11 +266,42 @@ def remetente_de(msg):
     return (((msg.get("from") or {}).get("emailAddress") or {}).get("address") or "").lower()
 
 
-def emails_com_pdf(headers, regras):
+def html_para_texto(html):
+    t = re.sub(r"(?is)<(script|style).*?</\1>", " ", html or "")
+    t = re.sub(r"(?i)<br\s*/?>|</p>|</div>|</tr>|</td>", "\n", t)
+    t = re.sub(r"<[^>]+>", " ", t)
+    for a, b in (("&nbsp;", " "), ("&amp;", "&"), ("&lt;", "<"), ("&gt;", ">"), ("&#36;", "$")):
+        t = t.replace(a, b)
+    return re.sub(r"[ \t]+", " ", t)
+
+
+def eh_encaminhado(msg):
+    return re.match(r"^\s*(fwd?|enc|encaminhada?)\s*:", msg.get("subject") or "", re.I) is not None
+
+
+def baixar_pdf_do_link(html):
+    """Boleto que vem como link no corpo ("Baixar boleto"): tenta baixar o PDF."""
+    links = re.findall(r"""href=["']([^"']+)["']""", html or "", re.I)
+    for url in links:
+        if not re.search(r"boleto|fatura|\.pdf|segunda.?via|2.?via", url, re.I):
+            continue
+        try:
+            r = requests.get(url.replace("&amp;", "&"), timeout=30, allow_redirects=True)
+        except Exception:
+            continue
+        if r.ok and (r.content[:5] == b"%PDF-" or "pdf" in r.headers.get("Content-Type", "").lower()):
+            return r.content
+    return None
+
+
+def emails_com_boleto(headers, regras):
+    """Para cada e-mail de remetente cadastrado: devolve (msg, origem, pdf, texto_corpo).
+    Boleto em PDF anexo, em PDF por link, ou so no corpo do e-mail (linha digitavel).
+    E-mail encaminhado tambem vale: o remetente cadastrado e procurado no corpo."""
     desde = (HOJE - timedelta(days=DIAS_BUSCA)).isoformat() + "T00:00:00Z"
     url = (f"{GRAPH}/users/{CAIXA_EMAIL}/messages"
-           f"?$filter=receivedDateTime ge {desde} and hasAttachments eq true"
-           f"&$select=id,subject,from,receivedDateTime&$top=50")
+           f"?$filter=receivedDateTime ge {desde}"
+           f"&$select=id,subject,from,receivedDateTime,hasAttachments&$top=100")
     mensagens = []
     while url:
         resp = requests.get(url, headers=headers)
@@ -283,14 +314,35 @@ def emails_com_pdf(headers, regras):
     remetentes = {r["remetente"] for r in regras}
     for m in sorted(mensagens, key=lambda x: x["receivedDateTime"]):
         de = remetente_de(m)
-        if not any(r in de for r in remetentes):
+        if not any(r in de for r in remetentes) and not eh_encaminhado(m):
             continue
-        resp = requests.get(f"{GRAPH}/users/{CAIXA_EMAIL}/messages/{m['id']}/attachments", headers=headers)
+        resp = requests.get(f"{GRAPH}/users/{CAIXA_EMAIL}/messages/{m['id']}?$select=body", headers=headers)
         resp.raise_for_status()
-        for anexo in resp.json().get("value", []):
-            nome = anexo.get("name") or ""
-            if anexo.get("@odata.type") == "#microsoft.graph.fileAttachment" and nome.lower().endswith(".pdf"):
-                yield m, nome, base64.b64decode(anexo["contentBytes"])
+        html = (resp.json().get("body") or {}).get("content", "")
+        corpo = html_para_texto(html)
+        if not any(r in de for r in remetentes):
+            # Encaminhado: so segue se um remetente cadastrado aparece no corpo.
+            achou = [r for r in remetentes if r in corpo.lower()]
+            if not achou:
+                continue
+            m["_remetente_original"] = achou[0]
+        pdfs = []
+        if m.get("hasAttachments"):
+            resp = requests.get(f"{GRAPH}/users/{CAIXA_EMAIL}/messages/{m['id']}/attachments", headers=headers)
+            resp.raise_for_status()
+            for anexo in resp.json().get("value", []):
+                nome = anexo.get("name") or ""
+                if anexo.get("@odata.type") == "#microsoft.graph.fileAttachment" and nome.lower().endswith(".pdf"):
+                    pdfs.append((nome, base64.b64decode(anexo["contentBytes"])))
+        if not pdfs:
+            pdf_link = baixar_pdf_do_link(html)
+            if pdf_link:
+                pdfs.append(("boleto (link do e-mail)", pdf_link))
+        if pdfs:
+            for nome, conteudo in pdfs:
+                yield m, nome, conteudo, corpo
+        else:
+            yield m, "corpo do e-mail", None, corpo
 
 
 def enviar_resumo(headers, linhas):
@@ -355,18 +407,24 @@ def main():
     lancamentos = ler_tabela(headers, "TabelaLancamentos")
     resumo, problemas = [], []
 
-    for msg, nome_pdf, conteudo in emails_com_pdf(headers, regras):
+    for msg, nome_pdf, conteudo, corpo in emails_com_boleto(headers, regras):
         recebido = msg["receivedDateTime"][:10]
-        de, assunto = remetente_de(msg), sem_acento(msg.get("subject"))
+        de = msg.get("_remetente_original") or remetente_de(msg)
+        assunto = sem_acento(msg.get("subject"))
         candidatas = [r for r in regras if r["remetente"] in de and sem_acento(r["assunto"]) in assunto]
         if not candidatas:
             continue
         senhas = list(dict.fromkeys([s for r in candidatas for s in r["senhas"] if s] + extras))
-        try:
-            texto = texto_pdf(conteudo, senhas)
-        except Exception as exc:
-            problemas.append(f"⚠ {nome_pdf} de {de} ({recebido}): {exc}")
-            continue
+        if conteudo:
+            try:
+                texto = texto_pdf(conteudo, senhas)
+            except Exception as exc:
+                problemas.append(f"⚠ {nome_pdf} de {de} ({recebido}): {exc}")
+                continue
+            # O corpo ajuda quando o PDF nao traz algum dado (ou vice-versa).
+            texto = texto + "\n" + corpo
+        else:
+            texto = corpo
         digitos = so_digitos(texto)
         achadas = [r for r in candidatas if texto_bate(r["texto"], texto, digitos)]
         # Com e sem texto na mesma caixa: a que achou o texto ganha.
@@ -411,7 +469,7 @@ def main():
                 continue
             acao = f"✔ Completado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
             if not SIMULAR:
-                url_boleto = subir_boleto(headers, conteudo, desc_final, venc)
+                url_boleto = subir_boleto(headers, conteudo, desc_final, venc) if conteudo else ""
                 v[5], v[10], v[11] = data_para_serial(venc), barra, valor
                 v[13] = url_boleto or v[13]
                 v[16] = v[16] or nota
@@ -420,7 +478,7 @@ def main():
         else:
             acao = f"✚ Criado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
             if not SIMULAR:
-                url_boleto = subir_boleto(headers, conteudo, desc_final, venc)
+                url_boleto = subir_boleto(headers, conteudo, desc_final, venc) if conteudo else ""
                 novo_id = max([int(float(l["values"][0])) for l in lancamentos
                                if str(l["values"][0]).replace(".", "", 1).isdigit()] or [0]) + 1
                 v = [novo_id, "", "", regra["nome"], "Envio de Boleto", data_para_serial(venc), "",
