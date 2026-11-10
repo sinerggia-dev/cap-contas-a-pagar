@@ -928,15 +928,13 @@
   }
   .add-btn:hover{background:var(--chart-hover);}
   .add-btn svg{width:13px;height:13px;}
-  .add-btn.robo-topo{background:transparent;border-color:var(--border);color:var(--ink);}
-  .add-btn.robo-topo:hover{background:var(--surface-3);}
-  .add-btn.robo-topo svg{width:15px;height:15px;}
-  .add-btn.robo-topo.rodando{border-color:var(--chart);}
-  .add-btn.robo-topo.rodando svg{animation:roboPulso 1s ease-in-out infinite;}
-  .add-btn.robo-topo.ok{border-color:var(--pago, #1f9d55);color:var(--pago, #1f9d55);}
-  .add-btn.robo-topo.erro{border-color:var(--atrasado, #d64545);color:var(--atrasado, #d64545);}
-  @keyframes roboPulso{50%{opacity:.35;}}
-  @media (max-width:640px){ .add-btn.robo-topo{display:none !important;} }
+  /* Icone de boleto no cartao do usuario: busca os boletos do e-mail agora (so admin). */
+  .uc-refresh.robo-topo svg{width:17px;height:17px;}
+  .uc-refresh.robo-topo.rodando{color:var(--chart);}
+  .uc-refresh.robo-topo.rodando svg{animation:roboPulso 1s ease-in-out infinite;}
+  .uc-refresh.robo-topo.ok{color:#22c55e;}
+  .uc-refresh.robo-topo.erro{color:#ef4444;}
+  @keyframes roboPulso{50%{opacity:.3;}}
 
   .entry-panel{display:none;}
   .entry-panel.open{display:block;flex:none;}
@@ -1905,10 +1903,6 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Voltar
       </button>
-      <button class="add-btn robo-topo" id="roboTopoBtn" type="button" style="display:none;" title="Lê os boletos do e-mail agora e lança no CAP">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="8" width="14" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <span id="roboTopoTxt">Rodar robô</span>
-      </button>
       <button class="add-btn" id="addToggleBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         Novo
@@ -1918,6 +1912,10 @@
         <div class="uc-ola"><span id="ucSaudacao">Olá,</span><b id="userName"></b></div>
         <button type="button" class="uc-refresh" id="ucAtualizar" title="Atualizar dados" aria-label="Atualizar dados">
           <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="uc-refresh robo-topo" id="roboTopoBtn" style="display:none;" title="Buscar boletos no e-mail agora e lançar no CAP" aria-label="Buscar boletos no e-mail agora">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="5" width="19" height="14" rx="2.2" stroke="currentColor" stroke-width="1.7"/><path d="M6 8.5v7M8.5 8.5v7M10.2 8.5v7M12.6 8.5v7M15 8.5v7M16.7 8.5v7M18.4 8.5v7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span id="roboTopoTxt" hidden></span>
         </button>
         <button type="button" class="uc-refresh" id="ucCores" title="Cor do tema" aria-label="Cor do tema" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.7-.9 1.7-1.8 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H16a5 5 0 0 0 5-5c0-3.9-4-7-9-7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.3" fill="currentColor"/><circle cx="10" cy="7" r="1.3" fill="currentColor"/><circle cx="14.5" cy="7" r="1.3" fill="currentColor"/></svg>
@@ -7880,16 +7878,17 @@ function roboStatus(html, classe){
   var plano = String(html || '').replace(/<[^>]+>/g, '').replace(/\s*·\s*ver log/, '').trim();
   clearTimeout(roboTopoTimer);
   btn.classList.remove('rodando', 'ok', 'erro');
+  var tituloPadrao = 'Buscar boletos no e-mail agora e lançar no CAP';
   if (classe === 'ok' || classe === 'erro'){
     btn.classList.add(classe);
-    txt.textContent = classe === 'ok' ? 'Concluído' : 'Erro';
+    txt.textContent = btn.title = plano;
     if (!document.getElementById('boletoPanel').classList.contains('open')) showToast(plano);
-    roboTopoTimer = setTimeout(function(){ btn.classList.remove('ok', 'erro'); txt.textContent = 'Rodar robô'; }, 10000);
+    roboTopoTimer = setTimeout(function(){ btn.classList.remove('ok', 'erro'); btn.title = tituloPadrao; }, 10000);
   } else if (plano){
     btn.classList.add('rodando');
-    txt.textContent = (plano.match(/\(\d+s\)/) ? 'Rodando ' + plano.match(/\d+s/)[0] : 'Rodando…');
+    txt.textContent = btn.title = plano;
   } else {
-    txt.textContent = 'Rodar robô';
+    btn.title = tituloPadrao;
   }
 }
 function roboPedirToken(msg){
@@ -7973,7 +7972,11 @@ async function roboRodar(senha){
 function roboPedir(){
   if (!ehDono()) return;
   if (roboRodando){ showToast('O robô já está rodando…'); return; }
-  pedirSenha('Digite a senha para rodar o robô de boletos agora:', function(ok, senha){ if (ok) roboRodar(senha); });
+  pedirSenha('Digite a senha para buscar os boletos do e-mail agora:', function(ok, senha){
+    if (!ok) return;
+    if (!document.getElementById('boletoPanel').classList.contains('open')) showToast('Buscando boletos no e-mail… leva ~1 min. O ícone pisca enquanto roda.');
+    roboRodar(senha);
+  });
 }
 document.getElementById('roboRodarBtn').addEventListener('click', roboPedir);
 document.getElementById('roboTopoBtn').addEventListener('click', roboPedir);
