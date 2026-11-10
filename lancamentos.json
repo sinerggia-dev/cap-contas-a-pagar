@@ -6647,6 +6647,102 @@
 ""
 ]
 ]
+},
+{
+"index": 277,
+"values": [
+[
+298,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46337,
+"",
+"Neoenergia Apto 102",
+"Energia",
+"A Vencer",
+"34191.75173 66817.752935 85829.430009 8 16270000054432",
+544.32,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-neoenergia-apto-102-2026-11.pdf",
+"",
+"",
+"Importado do e-mail (10/11/2026)"
+]
+]
+},
+{
+"index": 278,
+"values": [
+[
+299,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46342,
+"",
+"Neoenergia Apto 301",
+"Energia",
+"A Vencer",
+"83850000003-2 39970011007-9 06866437810-1 18031782433-8",
+339.97,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-neoenergia-apto-301-2026-11.pdf",
+"",
+"",
+"Importado do e-mail (10/11/2026)"
+]
+]
+},
+{
+"index": 279,
+"values": [
+[
+300,
+"",
+"",
+"Felipe Hozana",
+"Envio de Boleto",
+46337,
+46336,
+"Neoenergia Apto 201",
+"Energia",
+"Pago",
+"",
+544.76,
+544.76,
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-neoenergia-apto-201-2026-11.pdf",
+"",
+"",
+"Importado do e-mail (10/11/2026) - fatura em débito automático (sem boleto) - fatura com total a pagar R$ 0,00 (já paga)"
+]
+]
+},
+{
+"index": 280,
+"values": [
+[
+301,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46337,
+"",
+"Neoenergia Gravtá 21",
+"Energia",
+"A Vencer",
+"00190.00009 02807.460023 18668.058177 7 16270000043553",
+435.53,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-neoenergia-gravta-21-2026-11.pdf",
+"",
+"",
+"Importado do e-mail (10/11/2026)"
+]
+]
 }
 ]
 }
