@@ -528,8 +528,13 @@ def main():
         historico = sorted(da_conta, key=lambda l: serial_para_data(l["values"][5]) or date.min)
         desc_final = desc_da_linha(historico[-1]["values"]) if historico else regra["desc"]
         nota = f"Importado do e-mail ({recebido[8:10]}/{recebido[5:7]}/{recebido[:4]})"
-        if b.get("debito_auto"):
-            nota += " - fatura em débito automático (sem boleto)"
+        # "TOTAL A PAGAR R$ 0,00" sem codigo de barras: a fatura ja esta quitada
+        # (debito automatico ou pago antes). O lancamento entra/fica como Pago, com a
+        # data do e-mail como pagamento.
+        quitada = bool(b.get("debito_auto"))
+        data_pag = datetime.strptime(recebido, "%Y-%m-%d").date()
+        if quitada:
+            nota += " - fatura com total a pagar R$ 0,00 (já paga)"
 
         if do_mes:
             linha = do_mes[0]
@@ -564,6 +569,8 @@ def main():
                     mudou.append("código de barras")
                 if sem_anexo:
                     mudou.append("boleto anexado")
+                if quitada:
+                    mudou.append("marcado como pago")
                 if not mudou:
                     print(f"= {desc_final} {venc:%m/%Y}: lançamento já está igual ao boleto.")
                     continue
@@ -575,16 +582,23 @@ def main():
                     v[5], v[11] = data_para_serial(venc), valor
                     v[10] = linha_digitavel(barra) if barra else v[10]
                     v[16] = v[16] or nota
+                    if quitada:
+                        v[6], v[9], v[12] = data_para_serial(data_pag), "Pago", valor
+                        if "já paga" not in str(v[16]):
+                            v[16] = (str(v[16]) + " - " if v[16] else "") + "fatura com total a pagar R$ 0,00 (já paga)"
                     gravar_linha(headers, linha["index"], v)
                     linha["values"] = v
         else:
-            acao = f"✚ Criado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
+            acao = (f"✚ Criado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
+                    + (" · já pago" if quitada else ""))
             if not SIMULAR:
                 url_boleto = subir_boleto(headers, conteudo, desc_final, venc) if conteudo else ""
                 novo_id = max([int(float(l["values"][0])) for l in lancamentos
                                if str(l["values"][0]).replace(".", "", 1).isdigit()] or [0]) + 1
-                v = [novo_id, "", "", regra["nome"], "Envio de Boleto", data_para_serial(venc), "",
-                     desc_final, regra["tipo"], "A Vencer", linha_digitavel(barra), valor, "", url_boleto, "", "", nota]
+                v = [novo_id, "", "", regra["nome"], "Envio de Boleto", data_para_serial(venc),
+                     data_para_serial(data_pag) if quitada else "", desc_final, regra["tipo"],
+                     "Pago" if quitada else "A Vencer", linha_digitavel(barra), valor,
+                     valor if quitada else "", url_boleto, "", "", nota]
                 gravar_linha(headers, None, v)
                 lancamentos.append({"index": len(lancamentos), "values": v})
         resumo.append(acao + (" (simulação)" if SIMULAR else ""))
