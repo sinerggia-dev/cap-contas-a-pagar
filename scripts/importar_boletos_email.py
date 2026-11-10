@@ -16,9 +16,11 @@ Fluxo (1x por dia via .github/workflows/importar-boletos-email.yml):
   2. Para cada PDF de um remetente com regra: acha a regra pelo texto, lê o código
      de barras (conta de consumo 48 dígitos ou boleto bancário 47 dígitos — de
      onde saem valor e, no bancário, o vencimento), vencimento e valor escritos.
-  3. Lançamento do mesmo mês (mesma pessoa, descrição parecida):
-       pago ou com o mesmo código de barras -> não mexe;
-       a vencer -> completa vencimento, valor, código de barras e boleto.
+  3. Lançamento já existente (mesmo código de barras, ou mesma pessoa + descrição
+     parecida + vencimento no mesmo mês / a até 10 dias) — inclusive feito à mão:
+       a vencer -> acerta vencimento, valor, código de barras e anexa o boleto
+                   (só o que estiver diferente; se já estiver igual, não mexe);
+       pago     -> não mexe em valor/data; só anexa o boleto se faltar.
      Sem lançamento no mês -> cria "A Vencer" com o boleto anexado.
   4. Manda um resumo por e-mail quando importou algo ou não conseguiu ler algo.
 
@@ -478,11 +480,19 @@ def main():
         da_conta = [l for l in lancamentos
                     if nome_da_linha(l["values"]).strip().lower() == regra["nome"].strip().lower()
                     and parecida(desc_da_linha(l["values"]), regra["desc"])]
-        if barra and any(so_digitos(l["values"][10]) == barra for l in da_conta):
-            print(f"= {regra['desc']} {venc:%m/%Y}: já importado (mesmo código de barras).")
-            continue
-        do_mes = [l for l in da_conta
-                  if (serial_para_data(l["values"][5]) or date.min).strftime("%Y-%m") == venc.strftime("%Y-%m")]
+        # Lançamento que já existe para este boleto: o de mesmo código de barras, ou
+        # o do mesmo mês de vencimento (ou a até 10 dias, quando foi lançado à mão com
+        # a data aproximada). Entre vários, o que ainda não está pago e sem boleto.
+        def pago(l):
+            return bool(serial_para_data(l["values"][6])) or str(l["values"][9] or "").strip().lower() == "pago"
+
+        mesma_barra = [l for l in da_conta if barra and so_digitos(l["values"][10]) == barra]
+        do_mes = mesma_barra or [
+            l for l in da_conta
+            if (serial_para_data(l["values"][5]) or date.min).strftime("%Y-%m") == venc.strftime("%Y-%m")
+            or abs(((serial_para_data(l["values"][5]) or date.min) - venc).days) <= 10]
+        do_mes.sort(key=lambda l: (pago(l), bool(so_digitos(l["values"][10])), bool(str(l["values"][13] or "").strip()),
+                                   abs(((serial_para_data(l["values"][5]) or date.min) - venc).days)))
         # A descrição segue a do histórico, para somar junto nos gráficos.
         historico = sorted(da_conta, key=lambda l: serial_para_data(l["values"][5]) or date.min)
         desc_final = desc_da_linha(historico[-1]["values"]) if historico else regra["desc"]
@@ -491,17 +501,49 @@ def main():
         if do_mes:
             linha = do_mes[0]
             v = list(linha["values"]) + [""] * (17 - len(linha["values"]))
-            if serial_para_data(v[6]) or str(v[9] or "").strip().lower() == "pago":
-                print(f"= {regra['desc']} {venc:%m/%Y}: lançamento do mês já está pago — não mexi.")
-                continue
-            acao = f"✔ Completado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
-            if not SIMULAR:
-                url_boleto = subir_boleto(headers, conteudo, desc_final, venc) if conteudo else ""
-                v[5], v[10], v[11] = data_para_serial(venc), barra, valor
-                v[13] = url_boleto or v[13]
-                v[16] = v[16] or nota
-                gravar_linha(headers, linha["index"], v)
-                linha["values"] = v
+            sem_anexo = conteudo and not str(v[13] or "").strip()
+            if pago(linha):
+                # Já pago: não mexe em valor nem data; só guarda o boleto se faltar.
+                if not sem_anexo and so_digitos(v[10]):
+                    print(f"= {desc_final} {venc:%m/%Y}: já pago e com boleto — não mexi.")
+                    continue
+                acao = f"📎 Boleto anexado (já pago): {desc_final} · {regra['nome']} · {venc:%m/%Y}"
+                if not SIMULAR:
+                    if sem_anexo:
+                        v[13] = subir_boleto(headers, conteudo, desc_final, venc)
+                    v[10] = v[10] or barra
+                    gravar_linha(headers, linha["index"], v)
+                    linha["values"] = v
+            else:
+                # A vencer (lançado à mão ou pelo robô): acerta o que estiver diferente.
+                venc_antes = serial_para_data(v[5])
+                try:
+                    valor_antes = float(str(v[11]).replace(",", ".")) if str(v[11]).strip() else None
+                except ValueError:
+                    valor_antes = None
+                mudou = []
+                if valor_antes is None or abs(valor_antes - valor) > 0.009:
+                    mudou.append(f"valor {brl(valor_antes) if valor_antes is not None else 'vazio'} → {brl(valor)}")
+                if venc_antes != venc:
+                    mudou.append(f"vencimento {venc_antes:%d/%m/%Y} → {venc:%d/%m/%Y}" if venc_antes
+                                 else f"vencimento → {venc:%d/%m/%Y}")
+                if barra and so_digitos(v[10]) != barra:
+                    mudou.append("código de barras")
+                if sem_anexo:
+                    mudou.append("boleto anexado")
+                if not mudou:
+                    print(f"= {desc_final} {venc:%m/%Y}: lançamento já está igual ao boleto.")
+                    continue
+                acao = (f"✔ Atualizado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
+                        f" ({', '.join(mudou)})")
+                if not SIMULAR:
+                    if sem_anexo:
+                        v[13] = subir_boleto(headers, conteudo, desc_final, venc)
+                    v[5], v[11] = data_para_serial(venc), valor
+                    v[10] = barra or v[10]
+                    v[16] = v[16] or nota
+                    gravar_linha(headers, linha["index"], v)
+                    linha["values"] = v
         else:
             acao = f"✚ Criado: {desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · {brl(valor)}"
             if not SIMULAR:
