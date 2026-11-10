@@ -214,6 +214,16 @@ MESES = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "ag
          "setembro", "outubro", "novembro", "dezembro"]
 
 
+def linha_digitavel(c):
+    """Grava o código com pontos/espaços, como nos lançamentos manuais. Só dígitos,
+    o Excel vira número (3.41918E+46) e perde o código."""
+    if len(c) == 47:
+        return f"{c[0:5]}.{c[5:10]} {c[10:15]}.{c[15:21]} {c[21:26]}.{c[26:32]} {c[32]} {c[33:]}"
+    if len(c) == 48:
+        return " ".join(f"{c[i:i + 11]}-{c[i + 11]}" for i in range(0, 48, 12))
+    return c
+
+
 def data_do_fator(fator):
     """Fator de vencimento do boleto bancário. A contagem recomeçou em 22/02/2025
     (fator 1000); fica a data das duas bases que cair mais perto de hoje."""
@@ -465,6 +475,13 @@ def main():
             texto = texto + "\n" + corpo
         else:
             texto = corpo
+        if not conteudo:
+            # Sem PDF: so vale se o corpo tiver cara de boleto (codigo de barras, ou
+            # vencimento + valor). E-mail de aviso/cadastro ("Cadastro de Fatura
+            # Digital!") e ignorado sem gerar alerta.
+            pre = ler_boleto(texto)
+            if not (pre.get("barra") or (pre.get("venc_texto") and pre.get("valor_texto"))):
+                continue
         digitos = so_digitos(texto)
         achadas = [r for r in candidatas if texto_bate(r["texto"], texto, digitos)]
         # Com e sem texto na mesma caixa: a que achou o texto ganha.
@@ -527,7 +544,7 @@ def main():
                 if not SIMULAR:
                     if sem_anexo:
                         v[13] = subir_boleto(headers, conteudo, desc_final, venc)
-                    v[10] = v[10] or barra
+                    v[10] = v[10] or linha_digitavel(barra)
                     gravar_linha(headers, linha["index"], v)
                     linha["values"] = v
             else:
@@ -556,7 +573,7 @@ def main():
                     if sem_anexo:
                         v[13] = subir_boleto(headers, conteudo, desc_final, venc)
                     v[5], v[11] = data_para_serial(venc), valor
-                    v[10] = barra or v[10]
+                    v[10] = linha_digitavel(barra) if barra else v[10]
                     v[16] = v[16] or nota
                     gravar_linha(headers, linha["index"], v)
                     linha["values"] = v
@@ -567,7 +584,7 @@ def main():
                 novo_id = max([int(float(l["values"][0])) for l in lancamentos
                                if str(l["values"][0]).replace(".", "", 1).isdigit()] or [0]) + 1
                 v = [novo_id, "", "", regra["nome"], "Envio de Boleto", data_para_serial(venc), "",
-                     desc_final, regra["tipo"], "A Vencer", barra, valor, "", url_boleto, "", "", nota]
+                     desc_final, regra["tipo"], "A Vencer", linha_digitavel(barra), valor, "", url_boleto, "", "", nota]
                 gravar_linha(headers, None, v)
                 lancamentos.append({"index": len(lancamentos), "values": v})
         resumo.append(acao + (" (simulação)" if SIMULAR else ""))
