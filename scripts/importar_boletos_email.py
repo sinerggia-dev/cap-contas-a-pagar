@@ -542,7 +542,7 @@ def main():
             sem_anexo = conteudo and not str(v[13] or "").strip()
             if pago(linha):
                 # Já pago: não mexe em valor nem data; só guarda o boleto se faltar.
-                if not sem_anexo and so_digitos(v[10]):
+                if not sem_anexo and (so_digitos(v[10]) == barra or not barra):
                     print(f"= {desc_final} {venc:%m/%Y}: já pago e com boleto — não mexi.")
                     continue
                 acao = f"📎 Boleto anexado (já pago): {desc_final} · {regra['nome']} · {venc:%m/%Y}"
