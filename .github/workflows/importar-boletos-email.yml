@@ -31,5 +31,5 @@ jobs:
           CAP_CLIENT_SECRET: ${{ secrets.CAP_CLIENT_SECRET }}
           NEO_PDF_SENHAS: ${{ secrets.NEO_PDF_SENHAS }}
           SIMULAR: ${{ github.event_name == 'workflow_dispatch' && inputs.simular && '1' || '' }}
-          AVISAR_PROBLEMAS: ${{ github.event.schedule == '30 10 * * *' && '1' || '' }}
+          AVISAR_PROBLEMAS: ${{ (github.event.schedule == '30 10 * * *' || github.event_name == 'workflow_dispatch') && '1' || '' }}
         run: python scripts/importar_boletos_email.py

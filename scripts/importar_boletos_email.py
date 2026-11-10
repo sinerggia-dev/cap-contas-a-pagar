@@ -257,6 +257,17 @@ def ler_boleto(texto):
         if m:
             achado["valor_texto"] = valor_br(m.group(1))
             break
+    if achado.get("valor_texto") == 0 and "barra" not in achado:
+        # Fatura em debito automatico: "TOTAL A PAGAR R$ 0,00" e sem codigo de barras.
+        # O valor de verdade fica no "TOTAL" dos itens ou no corpo ("Valor: R$ 544.76").
+        del achado["valor_texto"]
+        achado["debito_auto"] = True
+        m = re.search(r"(?<![A-Z])TOTAL\s+(?!A\s+PAGAR)R?\$?\s*([\d.]+,\d{2})", plano) \
+            or re.search(r"VALOR:\s*R\$\s*(\d+)[.,](\d{2})(?!\d)", plano, re.I)
+        if m:
+            v = valor_br(m.group(1)) if m.lastindex == 1 else valor_br(m.group(1) + "," + m.group(2))
+            if v > 0:
+                achado["valor_texto"] = v
     m = re.search(r"VENC(?:IMENTO|E)[^\d]{0,40}?(\d{2}/\d{2}/\d{4})", plano, re.I)
     if m:
         try:
@@ -500,6 +511,8 @@ def main():
         historico = sorted(da_conta, key=lambda l: serial_para_data(l["values"][5]) or date.min)
         desc_final = desc_da_linha(historico[-1]["values"]) if historico else regra["desc"]
         nota = f"Importado do e-mail ({recebido[8:10]}/{recebido[5:7]}/{recebido[:4]})"
+        if b.get("debito_auto"):
+            nota += " - fatura em débito automático (sem boleto)"
 
         if do_mes:
             linha = do_mes[0]
