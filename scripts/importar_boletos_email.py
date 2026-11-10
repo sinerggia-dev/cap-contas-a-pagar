@@ -440,6 +440,121 @@ def desc_da_linha(v):
     return m.group(1) if m else full
 
 
+# ---------------------------------------------------------------- lançamento previsto
+
+# Marcas na Observação que o app mostra como selo ("aguardando boleto" / "erro no boleto").
+MARCA_AGUARDANDO = "⏳ Aguardando boleto"
+MARCA_ERRO = "⚠ Erro no boleto"
+
+
+def pascoa(ano):
+    a, b, c = ano % 19, ano // 100, ano % 100
+    d, e = b // 4, b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = c // 4, c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    mes = (h + l - 7 * m + 114) // 31
+    dia = ((h + l - 7 * m + 114) % 31) + 1
+    return date(ano, mes, dia)
+
+
+def feriados(ano):
+    """Feriados nacionais (bancos fechados): fixos + Carnaval, Sexta-feira Santa e Corpus Christi."""
+    fixos = [(1, 1), (4, 21), (5, 1), (9, 7), (10, 12), (11, 2), (11, 15), (11, 20), (12, 25)]
+    p = pascoa(ano)
+    return {date(ano, m, d) for m, d in fixos} | {p - timedelta(days=48), p - timedelta(days=47),
+                                                   p - timedelta(days=2), p + timedelta(days=60)}
+
+
+def dia_util(d):
+    """Vencimento em fim de semana ou feriado passa para o próximo dia útil."""
+    while d.weekday() >= 5 or d in feriados(d.year):
+        d += timedelta(days=1)
+    return d
+
+
+def dia_tipico(linhas):
+    """Dia de vencimento de sempre, pelos últimos lançamentos. Datas empurradas por
+    fim de semana/feriado aparecem menos, então fica o dia mais comum (no empate, o menor)."""
+    datas = sorted([serial_para_data(l["values"][5]) for l in linhas if serial_para_data(l["values"][5])])[-6:]
+    if not datas:
+        return None
+    contagem = {}
+    for d in datas:
+        contagem[d.day] = contagem.get(d.day, 0) + 1
+    maior = max(contagem.values())
+    return min(dia for dia, n in contagem.items() if n == maior)
+
+
+def data_prevista(ano, mes, dia):
+    ultimo = (date(ano + (mes == 12), mes % 12 + 1, 1) - timedelta(days=1)).day
+    return dia_util(date(ano, mes, min(dia, ultimo)))
+
+
+def chave_conta(nome, desc):
+    return (str(nome or "").strip().lower(), chave_desc(desc))
+
+
+def garantir_previstos(headers, regras, lancamentos, erros, resumo):
+    """Todo boleto cadastrado tem lançamento no mês atual. Se o boleto não chegou
+    (ou deu erro), cria o lançamento zerado com o vencimento de sempre e a marca na
+    Observação; quando o boleto chegar, o robô completa esse mesmo lançamento."""
+    inicio_mes = HOJE.replace(day=1)
+    vistos = set()
+    for regra in regras:
+        k = chave_conta(regra["nome"], regra["desc"])
+        if k in vistos:
+            continue
+        vistos.add(k)
+        da_conta = [l for l in lancamentos
+                    if nome_da_linha(l["values"]).strip().lower() == regra["nome"].strip().lower()
+                    and parecida(desc_da_linha(l["values"]), regra["desc"])]
+        do_mes = [l for l in da_conta
+                  if (serial_para_data(l["values"][5]) or date.min).strftime("%Y-%m") == HOJE.strftime("%Y-%m")]
+        erro = erros.get(k)
+        if do_mes:
+            # Já existe. Se é o previsto e o boleto deu erro, troca a marca para erro.
+            linha = do_mes[0]
+            v = list(linha["values"]) + [""] * (17 - len(linha["values"]))
+            obs = str(v[16] or "")
+            if erro and MARCA_AGUARDANDO in obs:
+                v[16] = f"{MARCA_ERRO}: {erro}"
+                resumo.append(f"⚠ Erro no boleto: {desc_da_linha(v)} · {regra['nome']} — {erro}")
+                if not SIMULAR:
+                    gravar_linha(headers, linha["index"], v)
+                    linha["values"] = v
+            continue
+        # Só conta que segue ativa: teve lançamento em algum dos 3 meses anteriores.
+        recentes = [l for l in da_conta
+                    if inicio_mes - timedelta(days=95) <= (serial_para_data(l["values"][5]) or date.min) < inicio_mes]
+        if not recentes:
+            continue
+        dia = dia_tipico(da_conta)
+        if not dia:
+            continue
+        venc = data_prevista(HOJE.year, HOJE.month, dia)
+        historico = sorted(da_conta, key=lambda l: serial_para_data(l["values"][5]) or date.min)
+        ultimo = historico[-1]["values"]
+        desc_final = desc_da_linha(ultimo)
+        tipo = str(ultimo[8] or "").strip() or regra["tipo"]
+        obs = (f"{MARCA_ERRO}: {erro}" if erro else
+               f"{MARCA_AGUARDANDO} — previsto pelo histórico (vence todo dia {dia})")
+        acao = (f"{'⚠' if erro else '⏳'} Previsto (boleto {'com erro' if erro else 'ainda não chegou'}): "
+                f"{desc_final} · {regra['nome']} · vence {venc:%d/%m/%Y} · R$ 0,00")
+        if not SIMULAR:
+            novo_id = max([int(float(l["values"][0])) for l in lancamentos
+                           if str(l["values"][0]).replace(".", "", 1).isdigit()] or [0]) + 1
+            v = [novo_id, "", "", regra["nome"], "Envio de Boleto", data_para_serial(venc), "",
+                 desc_final, tipo, "A Vencer", "", 0, "", "", "", "", obs]
+            gravar_linha(headers, None, v)
+            lancamentos.append({"index": len(lancamentos), "values": v})
+        resumo.append(acao + (" (simulação)" if SIMULAR else ""))
+        print(acao)
+
+
 # ---------------------------------------------------------------- principal
 
 def main():
@@ -456,6 +571,7 @@ def main():
     extras = [s.strip() for s in os.environ.get("NEO_PDF_SENHAS", "").split(",") if s.strip()]
     lancamentos = ler_tabela(headers, "TabelaLancamentos")
     resumo, problemas = [], []
+    erros = {}   # conta -> motivo, para marcar o lançamento previsto como "erro no boleto"
 
     for msg, nome_pdf, conteudo, corpo in emails_com_boleto(headers, regras):
         recebido = msg["receivedDateTime"][:10]
@@ -470,6 +586,8 @@ def main():
                 texto = texto_pdf(conteudo, senhas)
             except Exception as exc:
                 problemas.append(f"⚠ {nome_pdf} de {de} ({recebido}): {exc}")
+                if len(candidatas) == 1:
+                    erros[chave_conta(candidatas[0]["nome"], candidatas[0]["desc"])] = str(exc)
                 continue
             # O corpo ajuda quando o PDF nao traz algum dado (ou vice-versa).
             texto = texto + "\n" + corpo
@@ -497,8 +615,9 @@ def main():
         valor = b.get("valor_barra") or b.get("valor_texto")
         venc = b.get("venc_texto") or b.get("venc_barra")
         if not venc or not valor:
-            problemas.append(f"⚠ {regra['desc']} ({recebido}): não achei " +
-                             " e ".join(x for x, ok in (("vencimento", venc), ("valor", valor)) if not ok))
+            motivo = "não achei " + " e ".join(x for x, ok in (("vencimento", venc), ("valor", valor)) if not ok)
+            problemas.append(f"⚠ {regra['desc']} ({recebido}): {motivo}")
+            erros[chave_conta(regra["nome"], regra["desc"])] = f"{motivo} no e-mail de {recebido[8:10]}/{recebido[5:7]}"
             continue
         if b.get("valor_barra") and b.get("valor_texto") and abs(b["valor_barra"] - b["valor_texto"]) > 0.01:
             problemas.append(f"⚠ {regra['desc']}: valor do código de barras ({brl(b['valor_barra'])}) diferente "
@@ -581,7 +700,8 @@ def main():
                         v[13] = subir_boleto(headers, conteudo, desc_final, venc)
                     v[5], v[11] = data_para_serial(venc), valor
                     v[10] = linha_digitavel(barra) if barra else v[10]
-                    v[16] = v[16] or nota
+                    if not v[16] or MARCA_AGUARDANDO in str(v[16]) or MARCA_ERRO in str(v[16]):
+                        v[16] = nota
                     if quitada:
                         v[6], v[9], v[12] = data_para_serial(data_pag), "Pago", valor
                         if "já paga" not in str(v[16]):
@@ -603,6 +723,8 @@ def main():
                 lancamentos.append({"index": len(lancamentos), "values": v})
         resumo.append(acao + (" (simulação)" if SIMULAR else ""))
         print(acao)
+
+    garantir_previstos(headers, regras, lancamentos, erros, resumo)
 
     for p in problemas:
         print(p)
