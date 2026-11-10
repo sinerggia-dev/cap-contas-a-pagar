@@ -1239,6 +1239,18 @@
     margin:0 0 14px;padding:9px 11px;border-radius:7px;
     background:var(--warning-dim);border:1px solid var(--warning);color:var(--warning);
   }
+  /* Botao "Rodar o robo agora" (Boletos por e-mail) */
+  .robo-box{margin:0 0 14px;padding:12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2, rgba(127,127,127,.06));}
+  .robo-linha{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .robo-linha input{flex:1 1 220px;min-width:0;}
+  .robo-status{font-size:13px;color:var(--ink-muted);line-height:1.4;}
+  .robo-status a{color:inherit;text-decoration:underline;}
+  .robo-status.ok{color:var(--pago, #1f9d55);}
+  .robo-status.erro{color:var(--atrasado, #d64545);}
+  .robo-token{margin-top:12px;font-size:12.8px;color:var(--ink);line-height:1.5;}
+  .robo-token p{margin:0 0 6px;}
+  .robo-token ol{margin:0 0 10px;padding-left:20px;}
+  .robo-token a{color:var(--accent, #3b82f6);}
 
   /* ---- ajustes para celular ---- */
   @media (max-width:640px){
@@ -2159,7 +2171,26 @@
       <button type="button" class="ebtn ghost" id="boletoCloseBtn">Fechar</button>
     </div>
     <div style="padding:14px 16px 0;">
-      <p class="emi-aviso">Todo dia às 07:30 um robô lê o e-mail <b>natanael.silva@sinerggia.com.br</b>. Quando chega um boleto de um remetente cadastrado aqui — em PDF anexo, por link ou só com o código de barras no corpo do e-mail — ele cria o lançamento "A Vencer" (ou completa o do mês, se já existir) com valor, vencimento, código de barras e o PDF anexado — e manda um resumo por e-mail. As contas da Neoenergia já entram sozinhas pela <b>Emissão de Documentos</b> (código de cada unidade).<br><br>Boleto que chega em <b>outro e-mail</b> (ex.: Gmail)? Crie lá um <b>encaminhamento automático</b> desse remetente para natanael.silva@sinerggia.com.br — o robô reconhece o remetente original.</p>
+      <div class="robo-box">
+        <div class="robo-linha">
+          <button type="button" class="ebtn primary" id="roboRodarBtn">▶ Rodar o robô agora</button>
+          <span id="roboStatus" class="robo-status"></span>
+        </div>
+        <div id="roboTokenBox" class="robo-token" style="display:none;">
+          <p id="roboTokenMsg">Primeira vez: o site precisa de um <b>token do GitHub</b> para disparar o robô. Ele fica guardado na aba Config da planilha, <b>criptografado com a sua senha</b>.</p>
+          <ol>
+            <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+            <li><b>Resource owner:</b> sinerggia-dev · <b>Repository access:</b> Only select repositories → cap-contas-a-pagar</li>
+            <li><b>Permissions → Repository → Actions:</b> Read and write · <b>Expiration:</b> a maior que aceitar</li>
+            <li>Clique em <b>Generate token</b>, copie e cole aqui:</li>
+          </ol>
+          <div class="robo-linha">
+            <input type="password" id="roboToken" placeholder="github_pat_…" autocomplete="off">
+            <button type="button" class="ebtn primary" id="roboTokenSalvar">Salvar e rodar</button>
+          </div>
+        </div>
+      </div>
+      <p class="emi-aviso">De hora em hora (08:00 às 22:00, e às 07:30) um robô lê o e-mail <b>natanael.silva@sinerggia.com.br</b>. Quando chega um boleto de um remetente cadastrado aqui — em PDF anexo, por link ou só com o código de barras no corpo do e-mail — ele cria o lançamento "A Vencer" (ou completa o do mês, se já existir) com valor, vencimento, código de barras e o PDF anexado — e manda um resumo por e-mail. As contas da Neoenergia já entram sozinhas pela <b>Emissão de Documentos</b> (código de cada unidade).<br><br>Boleto que chega em <b>outro e-mail</b> (ex.: Gmail)? Crie lá um <b>encaminhamento automático</b> desse remetente para natanael.silva@sinerggia.com.br — o robô reconhece o remetente original.</p>
     </div>
     <form id="boletoForm" autocomplete="off">
       <div class="entry-grid">
@@ -7718,7 +7749,7 @@ async function salvarImportacao(){
       r = await fetch(urlRows, { method: 'POST', headers: hJson, body: JSON.stringify({ values: [impLinha(o)] }) });
     }
     if (!r.ok) throw new Error('Falha ao gravar (' + r.status + '): ' + (await r.text()).slice(0, 200));
-    showToast(impEditandoId !== null ? 'Cadastro atualizado.' : 'Remetente cadastrado. O robô passa a ler os boletos dele a partir de amanhã, 07:30.');
+    showToast(impEditandoId !== null ? 'Cadastro atualizado.' : 'Remetente cadastrado. O robô lê os boletos dele na próxima rodada (de hora em hora) — ou clique em "Rodar o robô agora".');
     impLimparForm();
     await carregarImportacao();
   } catch (e) {
@@ -7792,6 +7823,144 @@ document.getElementById('bol_lista').addEventListener('click', function(ev){
     var id = ex.getAttribute('data-bol-excluir');
     var alvo = IMP_DADOS.filter(function(x){ return x.id === id; })[0];
     if (alvo && window.confirm('Excluir o cadastro "' + alvo.desc + '" (' + alvo.remetente + ')?\n\nO robô deixa de importar os boletos desse remetente.')) excluirImportacao(id);
+  }
+});
+
+/* ---- Rodar o robo de boletos agora (GitHub Actions, workflow_dispatch) ----
+   O token do GitHub (fine-grained, so Actions deste repositorio) fica na aba Config,
+   linha github_token_robo, criptografado (AES-GCM) com chave derivada da senha de
+   acoes (PBKDF2). Quem abre a planilha ve so o texto cifrado. Trocou a senha? O
+   token antigo nao abre mais e o site pede para colar de novo. */
+var ROBO_REPO = 'sinerggia-dev/cap-contas-a-pagar';
+var ROBO_WORKFLOW = 'importar-boletos-email.yml';
+var CONFIG_CHAVE_GH = 'github_token_robo';
+var roboSenha = null, roboRodando = false;
+
+function hexParaBytes(h){ var a = new Uint8Array(h.length / 2); for (var i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; }
+function bytesParaHex(b){ return Array.prototype.map.call(new Uint8Array(b), function(x){ return ('0' + x.toString(16)).slice(-2); }).join(''); }
+async function roboChave(senha, saltHex){
+  var base = await crypto.subtle.importKey('raw', new TextEncoder().encode(senha), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: hexParaBytes(saltHex), iterations: 150000, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function roboCifrar(texto, senha){
+  var salt = hexAleatorio(16), iv = hexAleatorio(12);
+  var c = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: hexParaBytes(iv) }, await roboChave(senha, salt), new TextEncoder().encode(texto));
+  return 'aesgcm:' + salt + ':' + iv + ':' + bytesParaHex(c);
+}
+async function roboDecifrar(valor, senha){
+  var p = String(valor || '').split(':');
+  if (p.length !== 4 || p[0] !== 'aesgcm') return null;
+  try {
+    var t = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: hexParaBytes(p[2]) }, await roboChave(senha, p[1]), hexParaBytes(p[3]));
+    return new TextDecoder().decode(t);
+  } catch (e) { return null; }
+}
+function roboStatus(html, classe){
+  var el = document.getElementById('roboStatus');
+  el.className = 'robo-status' + (classe ? ' ' + classe : '');
+  el.innerHTML = html;
+}
+function roboPedirToken(msg){
+  if (msg) document.getElementById('roboTokenMsg').innerHTML = msg;
+  document.getElementById('roboTokenBox').style.display = '';
+  document.getElementById('roboToken').value = '';
+  document.getElementById('roboToken').focus();
+}
+async function roboDisparar(ghToken){
+  var h = { Authorization: 'Bearer ' + ghToken, Accept: 'application/vnd.github+json' };
+  var api = 'https://api.github.com/repos/' + ROBO_REPO + '/actions';
+  var antes = new Date(Date.now() - 5000).toISOString();
+  roboStatus('Disparando o robô…');
+  var r = await fetch(api + '/workflows/' + ROBO_WORKFLOW + '/dispatches', {
+    method: 'POST', headers: h, body: JSON.stringify({ ref: 'main', inputs: { simular: 'false' } })
+  });
+  if (r.status === 401 || r.status === 403 || r.status === 404){
+    roboStatus('O GitHub recusou o token (' + r.status + '): vencido ou sem a permissão Actions.', 'erro');
+    roboPedirToken('O token salvo não funciona mais (vencido ou sem permissão <b>Actions: Read and write</b>). Gere outro:');
+    return;
+  }
+  if (!r.ok) throw new Error('GitHub respondeu ' + r.status + ': ' + (await r.text()).slice(0, 200));
+  document.getElementById('roboTokenBox').style.display = 'none';
+  // Acompanha a execucao ate terminar (o robo leva ~1 min).
+  var inicio = Date.now(), run = null;
+  while (Date.now() - inicio < 6 * 60 * 1000){
+    await new Promise(function(ok){ setTimeout(ok, 5000); });
+    var seg = Math.round((Date.now() - inicio) / 1000);
+    try {
+      var rl = await fetch(api + '/workflows/' + ROBO_WORKFLOW + '/runs?event=workflow_dispatch&per_page=5', { headers: h });
+      if (rl.ok){
+        run = ((await rl.json()).workflow_runs || []).filter(function(x){ return x.created_at >= antes.slice(0, 19); })[0] || run;
+      }
+    } catch (e) {}
+    if (!run){ roboStatus('Na fila do GitHub… (' + seg + 's)'); continue; }
+    var link = ' · <a href="' + escHtml(run.html_url) + '" target="_blank" rel="noopener">ver log</a>';
+    if (run.status !== 'completed'){ roboStatus('Rodando… (' + seg + 's)' + link); continue; }
+    if (run.conclusion === 'success'){
+      roboStatus('✔ Concluído. Lista atualizada — o resumo do que entrou chega no seu e-mail.' + link, 'ok');
+      try { await carregarDados(); } catch (e) {}
+    } else {
+      roboStatus('✖ O robô terminou com erro (' + escHtml(run.conclusion || '?') + ').' + link, 'erro');
+    }
+    return;
+  }
+  roboStatus('Ainda rodando no GitHub — confira mais tarde' + (run ? ' · <a href="' + escHtml(run.html_url) + '" target="_blank" rel="noopener">ver log</a>' : '') + '.');
+}
+async function roboRodar(senha){
+  roboRodando = true;
+  var btn = document.getElementById('roboRodarBtn');
+  btn.disabled = true;
+  try {
+    roboStatus('Lendo o token…');
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    await garantirTabelaConfig(token, alvo);
+    var linha = (await lerLinhasConfig(token, alvo)).map(function(r){ return r.values[0]; })
+      .filter(function(v){ return String(v[0]) === CONFIG_CHAVE_GH; })[0];
+    roboSenha = senha;
+    if (!linha || !linha[1]){
+      roboStatus('');
+      roboPedirToken();
+      return;
+    }
+    var gh = await roboDecifrar(linha[1], senha);
+    if (!gh){
+      roboStatus('');
+      roboPedirToken('A senha mudou desde que o token foi salvo, então ele não abre mais. Cole o token do GitHub de novo (ou gere outro):');
+      return;
+    }
+    await roboDisparar(gh);
+  } catch (e) {
+    roboStatus('Erro: ' + escHtml(e && e.message ? e.message : e), 'erro');
+  } finally {
+    btn.disabled = false;
+    roboRodando = false;
+  }
+}
+document.getElementById('roboRodarBtn').addEventListener('click', function(){
+  if (!ehDono() || roboRodando) return;
+  pedirSenha('Digite a senha para rodar o robô de boletos agora:', function(ok, senha){ if (ok) roboRodar(senha); });
+});
+document.getElementById('roboTokenSalvar').addEventListener('click', async function(){
+  var gh = document.getElementById('roboToken').value.trim();
+  if (!/^(github_pat_|ghp_)\w{20,}$/.test(gh)){ showToast('Cole o token inteiro do GitHub (começa com github_pat_).'); return; }
+  if (!roboSenha){ document.getElementById('roboRodarBtn').click(); return; }
+  var btn = this;
+  btn.disabled = true;
+  roboRodando = true;
+  try {
+    var token = await getToken();
+    var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+    await garantirTabelaConfig(token, alvo);
+    await gravarLinhaConfig(token, alvo, CONFIG_CHAVE_GH, await roboCifrar(gh, roboSenha));
+    document.getElementById('roboToken').value = '';
+    showToast('Token salvo (criptografado). Disparando o robô…');
+    await roboDisparar(gh);
+  } catch (e) {
+    roboStatus('Erro: ' + escHtml(e && e.message ? e.message : e), 'erro');
+  } finally {
+    btn.disabled = false;
+    roboRodando = false;
   }
 });
 
