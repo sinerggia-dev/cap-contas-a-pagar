@@ -565,7 +565,12 @@ def main():
     if not resumo and not problemas:
         print("Nenhum boleto novo nos e-mails.")
         return
-    if not SIMULAR:
+    # Roda de hora em hora: o que foi importado sai na hora (não se repete, pois o
+    # lançamento já fica igual ao boleto); os avisos de problema se repetiriam a cada
+    # rodada, então só vão por e-mail na rodada das 07:30 (AVISAR_PROBLEMAS=1).
+    if not os.environ.get("AVISAR_PROBLEMAS"):
+        problemas = []
+    if not SIMULAR and (resumo or problemas):
         try:
             enviar_resumo(headers, resumo + ([""] if resumo and problemas else []) + problemas)
         except Exception as exc:

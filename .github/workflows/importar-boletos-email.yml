@@ -2,7 +2,8 @@ name: Importar Boletos do E-mail
 
 on:
   schedule:
-    - cron: "30 10 * * *"   # 07:30 no horário de Brasília, antes do alerta das 08:00
+    - cron: "30 10 * * *"         # 07:30 BRT, antes do alerta das 08:00 (manda também os avisos de problema)
+    - cron: "0 11-23,0,1 * * *"   # de hora em hora, 08:00 a 22:00 BRT: boleto que chega vira lançamento logo
   workflow_dispatch:
     inputs:
       simular:
@@ -30,4 +31,5 @@ jobs:
           CAP_CLIENT_SECRET: ${{ secrets.CAP_CLIENT_SECRET }}
           NEO_PDF_SENHAS: ${{ secrets.NEO_PDF_SENHAS }}
           SIMULAR: ${{ github.event_name == 'workflow_dispatch' && inputs.simular && '1' || '' }}
+          AVISAR_PROBLEMAS: ${{ github.event.schedule == '30 10 * * *' && '1' || '' }}
         run: python scripts/importar_boletos_email.py
