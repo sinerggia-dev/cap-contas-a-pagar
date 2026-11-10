@@ -487,10 +487,13 @@ def main():
             return bool(serial_para_data(l["values"][6])) or str(l["values"][9] or "").strip().lower() == "pago"
 
         mesma_barra = [l for l in da_conta if barra and so_digitos(l["values"][10]) == barra]
-        do_mes = mesma_barra or [
-            l for l in da_conta
-            if (serial_para_data(l["values"][5]) or date.min).strftime("%Y-%m") == venc.strftime("%Y-%m")
-            or abs(((serial_para_data(l["values"][5]) or date.min) - venc).days) <= 10]
+        mesmo_mes = [l for l in da_conta
+                     if (serial_para_data(l["values"][5]) or date.min).strftime("%Y-%m") == venc.strftime("%Y-%m")]
+        # Mês vizinho só vale para lançamento manual em aberto e sem código de barras
+        # (ex.: lançado 31/10 e o boleto vence 02/11) — nunca o do mês anterior já pago.
+        perto = [l for l in da_conta if not pago(l) and not so_digitos(l["values"][10])
+                 and abs(((serial_para_data(l["values"][5]) or date.min) - venc).days) <= 10]
+        do_mes = mesma_barra or mesmo_mes or perto
         do_mes.sort(key=lambda l: (pago(l), bool(so_digitos(l["values"][10])), bool(str(l["values"][13] or "").strip()),
                                    abs(((serial_para_data(l["values"][5]) or date.min) - venc).days)))
         # A descrição segue a do histórico, para somar junto nos gráficos.
