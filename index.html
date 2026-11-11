@@ -7716,7 +7716,9 @@ function dataPlanilhaTxt(v){
   return p2(d.getUTCDate()) + '/' + p2(d.getUTCMonth() + 1) + '/' + d.getUTCFullYear() + ' ' + p2(d.getUTCHours()) + ':' + p2(d.getUTCMinutes());
 }
 function impLinha(o){
-  return [o.id, o.ativo ? 'Sim' : 'Não', o.remetente, o.assunto, o.texto, o.nome, o.desc, o.tipo, o.senha, agoraBR()];
+  // Apostrofo: o Excel guarda como texto e nao apaga zero da frente (senha "0459", codigo "007...").
+  var txt = function(x){ x = String(x || ''); return /^\d+$/.test(x) ? "'" + x : x; };
+  return [o.id, o.ativo ? 'Sim' : 'Não', o.remetente, o.assunto, txt(o.texto), o.nome, o.desc, o.tipo, txt(o.senha), agoraBR()];
 }
 function renderImportacao(){
   var el = document.getElementById('bol_lista');

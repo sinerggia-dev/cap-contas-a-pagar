@@ -152,6 +152,20 @@ def ativo(v):
 
 # ---------------------------------------------------------------- regras
 
+def variantes_senha(s):
+    """Senha so com numeros (parte do CPF, ex.: 0459...) pode ter perdido o zero da
+    frente na planilha (o Excel guarda como numero). Tenta tambem com os zeros."""
+    s = str(s or "").strip().lstrip("'")
+    if not s:
+        return []
+    if s.endswith(".0") and s[:-2].isdigit():
+        s = s[:-2]
+    vs = [s]
+    if s.isdigit():
+        vs += [s.zfill(n) for n in (4, 5, 6, 8, 11) if n > len(s)]
+    return list(dict.fromkeys(vs))
+
+
 def carregar_regras(headers):
     regras = []
     # Tela "Boletos por e-mail".
@@ -160,7 +174,7 @@ def carregar_regras(headers):
         if not v[2] or not ativo(v[1]) or not v[5] or not v[6]:
             continue
         regras.append({"remetente": v[2].lower(), "assunto": v[3], "texto": v[4], "nome": v[5],
-                       "desc": v[6], "tipo": v[7] or "Outras", "senhas": [v[8]] if v[8] else []})
+                       "desc": v[6], "tipo": v[7] or "Outras", "senhas": variantes_senha(v[8])})
     # Neoenergia a partir da Emissão de Documentos.
     for linha in ler_tabela(headers, "TabelaEmissao", obrigatoria=False):
         v = [str(x or "").strip() for x in linha["values"]] + [""] * 11
