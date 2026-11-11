@@ -174,6 +174,18 @@ def carregar_regras(headers):
     return regras
 
 
+def assunto_bate(alvo, assunto):
+    """'Assunto contém' do cadastro x assunto do e-mail (já sem acento). Vale o trecho
+    exato ou, se não, todas as palavras com 3+ letras em qualquer ordem: "A sua fatura
+    Claro chegou." bate com "Sua Fatura Digital Claro chegou"."""
+    alvo = sem_acento(alvo).strip()
+    if not alvo or alvo in assunto:
+        return True
+    palavras = [w for w in re.findall(r"\w+", alvo) if len(w) >= 3]
+    do_assunto = set(re.findall(r"\w+", assunto))
+    return bool(palavras) and all(w in do_assunto for w in palavras)
+
+
 def texto_bate(alvo, texto, texto_digitos):
     """Texto da regra aparece no PDF. Se for numero (codigo), compara so os digitos,
     sem zeros a esquerda; senao, compara sem acento e sem maiusculas."""
@@ -577,7 +589,7 @@ def main():
         recebido = msg["receivedDateTime"][:10]
         de = msg.get("_remetente_original") or remetente_de(msg)
         assunto = sem_acento(msg.get("subject"))
-        candidatas = [r for r in regras if r["remetente"] in de and sem_acento(r["assunto"]) in assunto]
+        candidatas = [r for r in regras if r["remetente"] in de and assunto_bate(r["assunto"], assunto)]
         if not candidatas:
             continue
         senhas = list(dict.fromkeys([s for r in candidatas for s in r["senhas"] if s] + extras))
