@@ -5342,13 +5342,13 @@
 "Claro Apto 301 - 136-412746235",
 "Telefone/Internet",
 "A Vencer",
+"84610000000-5 99901054202-8 61120136000-9 00348009833-8",
+99.9,
 "",
-110,
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-claro-apto-301---136-412746235-2026-11.pdf",
 "",
 "",
-"",
-"",
-""
+"Importado do e-mail (11/11/2026)"
 ]
 ]
 },
@@ -6741,6 +6741,78 @@
 "",
 "",
 "Importado do e-mail (10/11/2026)"
+]
+]
+},
+{
+"index": 281,
+"values": [
+[
+302,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46342,
+"",
+"Cartão Carrefour",
+"Cartão de Crédito",
+"A Vencer",
+"",
+0,
+"",
+"",
+"",
+"",
+"⏳ Aguardando boleto — previsto pelo histórico (vence todo dia 14)"
+]
+]
+},
+{
+"index": 282,
+"values": [
+[
+303,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46349,
+"",
+"Cartão Midway Riachuelo",
+"Cartão de Crédito",
+"A Vencer",
+"",
+0,
+"",
+"",
+"",
+"",
+"⏳ Aguardando boleto — previsto pelo histórico (vence todo dia 23)"
+]
+]
+},
+{
+"index": 283,
+"values": [
+[
+304,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46351,
+"",
+"Cartão Hiper 2242",
+"Cartão de Crédito",
+"A Vencer",
+"",
+0,
+"",
+"",
+"",
+"",
+"⏳ Aguardando boleto — previsto pelo histórico (vence todo dia 25)"
 ]
 ]
 }
