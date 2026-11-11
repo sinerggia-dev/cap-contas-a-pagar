@@ -313,10 +313,16 @@ def ler_boleto(texto):
     if "venc_texto" not in achado:
         # "Vence em 16 de novembro" / "vencimento: 16 de novembro de 2026" (fatura de app,
         # sem boleto). Sem o ano, fica o mais proximo de hoje.
-        m = re.search(r"VENC(?:IMENTO|E)(?:\s+EM|\s*:)?\s*(\d{1,2})\s+DE\s+([A-ZÇa-zç]+)(?:\s+DE\s+(\d{4}))?",
-                      sem_acento(plano), re.I)
-        if m and sem_acento(m.group(2)) in MESES:
-            mes, dia = MESES.index(sem_acento(m.group(2))) + 1, int(m.group(1))
+        # Tambem "vence no dia 23 de outubro" (Nubank) e "Vencimento 23 OUT 2026".
+        m = None
+        for m in re.finditer(r"VENC(?:IMENTO|E)(?:\s+(?:EM|NO\s+DIA|DIA))?(?:\s*:)?\s*(\d{1,2})\s+(?:DE\s+)?"
+                             r"([A-Za-z]{3,})\.?(?:\s+(?:DE\s+)?(\d{4}))?", sem_acento(plano), re.I):
+            if sem_acento(m.group(2))[:3] in [x[:3] for x in MESES]:
+                break
+        else:
+            m = None
+        if m:
+            mes, dia = [x[:3] for x in MESES].index(sem_acento(m.group(2))[:3]) + 1, int(m.group(1))
             anos = [int(m.group(3))] if m.group(3) else [HOJE.year - 1, HOJE.year, HOJE.year + 1]
             datas = []
             for a in anos:
