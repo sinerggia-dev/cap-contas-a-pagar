@@ -1257,6 +1257,13 @@
   /* Botao "Rodar o robo agora" (Boletos por e-mail) */
   .robo-box{margin:0 0 14px;padding:12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2, rgba(127,127,127,.06));}
   .robo-linha{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  /* Busca nos boletos cadastrados */
+  .bol-busca{display:flex;align-items:center;gap:8px;margin:4px 0 12px;padding:0 12px;height:38px;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--ink-muted);}
+  .bol-busca:focus-within{outline:2px solid var(--chart);outline-offset:1px;border-color:transparent;}
+  .bol-busca svg{width:16px;height:16px;flex:none;}
+  .bol-busca input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);font:14px var(--sans);}
+  #bol_busca_n{font-size:12px;white-space:nowrap;}
   .robo-linha input{flex:1 1 220px;min-width:0;background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
     font:14px var(--sans);padding:8px 10px;border-radius:7px;height:36px;}
   .robo-linha input:focus{outline:2px solid var(--chart);outline-offset:1px;border-color:transparent;}
@@ -2260,6 +2267,11 @@
       </div>
     </form>
     <div style="padding:0 16px 16px;">
+      <div class="bol-busca">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="search" id="bol_busca" placeholder="Buscar nos boletos cadastrados (descrição, pessoa, remetente, assunto…)" autocomplete="off">
+        <span id="bol_busca_n"></span>
+      </div>
       <div id="bol_lista"></div>
     </div>
   </div>
@@ -7712,7 +7724,19 @@ function renderImportacao(){
     el.innerHTML = '<p class="emi-empty">Nenhum remetente cadastrado ainda. Preencha acima e clique em "Adicionar".</p>';
     return;
   }
-  el.innerHTML = IMP_DADOS.slice().sort(function(a, b){ return a.desc.localeCompare(b.desc, 'pt-BR'); }).map(function(o){
+  // Busca: todas as palavras digitadas precisam aparecer (sem acento/maiuscula).
+  var termos = semAcento(document.getElementById('bol_busca').value || '').toLowerCase().split(/\s+/).filter(Boolean);
+  var lista = IMP_DADOS.filter(function(o){
+    if (!termos.length) return true;
+    var alvo = semAcento([o.desc, o.nome, o.tipo, o.remetente, o.assunto, o.texto].join(' ')).toLowerCase();
+    return termos.every(function(t){ return alvo.indexOf(t) !== -1; });
+  });
+  document.getElementById('bol_busca_n').textContent = termos.length ? lista.length + ' de ' + IMP_DADOS.length : IMP_DADOS.length + ' cadastrados';
+  if (!lista.length){
+    el.innerHTML = '<p class="emi-empty">Nenhum cadastro com "' + escHtml(document.getElementById('bol_busca').value.trim()) + '".</p>';
+    return;
+  }
+  el.innerHTML = lista.sort(function(a, b){ return a.desc.localeCompare(b.desc, 'pt-BR'); }).map(function(o){
     var id = escHtml(o.id);
     var sub = [escHtml(o.nome), escHtml(o.tipo || 'Outras'), o.ativo ? 'ativo' : '<b style="color:var(--atrasado)">pausado</b>'];
     if (o.atualizado) sub.push('atualizado em ' + escHtml(dataPlanilhaTxt(o.atualizado)));
@@ -7838,6 +7862,7 @@ document.getElementById('bol_cancelar').addEventListener('click', function(){
   fecharBoletoPanel();
 });
 document.getElementById('boletoForm').addEventListener('submit', function(ev){ ev.preventDefault(); salvarImportacao(); });
+document.getElementById('bol_busca').addEventListener('input', renderImportacao);
 document.getElementById('bol_lista').addEventListener('click', function(ev){
   var ed = ev.target.closest('[data-bol-editar]'), ex = ev.target.closest('[data-bol-excluir]');
   if (ed){
