@@ -1565,20 +1565,20 @@
 "values": [
 [
 71,
-"30/06/2026 19:18",
-"30/06/2026 19:20",
+"",
+"",
 "Ivanilda Hozana",
 "Envio de Boleto",
-"16/11/2026",
-"",
+46342,
+46334,
 "Aluguel Apto 301",
 "Aluguel",
 "A Vencer",
 5,
-"4.000,00",
+4000,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-71-1795077577089.jpg",
 "",
 "Lançamento Projetado - Novembro"
 ]
@@ -6834,6 +6834,30 @@
 52.35,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-cartao-itau---2242-2026-11.pdf",
+"",
+"",
+"Importado do e-mail (18/11/2026)"
+]
+]
+},
+{
+"index": 285,
+"values": [
+[
+306,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46372,
+"",
+"Neoenergia Apto 301",
+"Energia",
+"A Vencer",
+"83800000003-3 91080011007-7 06866437810-1 18106857563-0",
+391.08,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-neoenergia-apto-301-2026-12.pdf",
 "",
 "",
 "Importado do e-mail (18/11/2026)"
