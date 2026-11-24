@@ -2645,7 +2645,7 @@
         <select id="copiaInicio"></select>
       </label>
       <label>Quantos meses
-        <input type="number" id="copiaQtd" min="1" max="24" value="1" inputmode="numeric">
+        <input type="number" id="copiaQtd" min="1" max="120" value="1" inputmode="numeric">
       </label>
       <label>Dia do vencimento
         <input type="number" id="copiaDia" min="1" max="31" inputmode="numeric">
@@ -5072,7 +5072,7 @@ function planoCopia(){
   var r = copiaAlvo;
   var ano = r.vencDate.getFullYear(), mes = r.vencDate.getMonth();
   var inicio = Number(document.getElementById('copiaInicio').value) || 1;
-  var qtd = Math.max(1, Math.min(24, Number(document.getElementById('copiaQtd').value) || 1));
+  var qtd = Math.max(1, Math.min(120, Number(document.getElementById('copiaQtd').value) || 1));
   var plano = [];
   for (var k = 0; k < qtd; k++){
     var n = inicio + k;
@@ -5981,6 +5981,7 @@ function sincronizarCampoLista(id){
   var ops = opcoesCampoLista(id), v = inp.value;
   sel.innerHTML = '<option value="">' + cfg.placeholder + '</option>' +
     ops.map(function(o){ return '<option value="' + escHtml(o) + '">' + escHtml(o) + '</option>'; }).join('') +
+    (cfg.outra && v ? '<option value="__editar">✏️ Editar o texto desta…</option>' : '') +
     (cfg.outra ? '<option value="__outra">Outra…</option>' : '');
   if (v && ops.indexOf(v) === -1){
     var igual = ops.filter(function(o){ return chaveTexto(o) === chaveTexto(v); })[0];
@@ -6024,7 +6025,12 @@ Object.keys(CAMPOS_LISTA).forEach(function(id){
   document.getElementById(id + '_sel').addEventListener('change', function(){
     var inp = document.getElementById(id);
     var wrap = inp.closest('.efield');
-    if (this.value === '__outra'){
+    if (this.value === '__editar'){
+      // Editar: abre o campo de texto com o valor atual para corrigir/alterar.
+      wrap.classList.add('com-outra');
+      inp.focus();
+      try { inp.setSelectionRange(inp.value.length, inp.value.length); } catch(e){}
+    } else if (this.value === '__outra'){
       inp.value = '';
       wrap.classList.add('com-outra');
       inp.focus();
