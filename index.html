@@ -8026,18 +8026,18 @@ document.getElementById('bol_lista').addEventListener('click', function(ev){
    pronta; a pessoa escolhe o contato. Nada passa pelo CallMeBot. */
 var DIAS_SEMANA_WA = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
 function textoWhatsLancamento(r){
-  var l = ['*CAP - Contas a Pagar*', '', '📄 *' + (r.desc || '(sem descrição)') + '*' + (r.parcela ? ' - Parcela ' + r.parcela : '')];
-  if (r.nome) l.push('👤 ' + r.nome);
-  if (r.vencDate) l.push('📅 Vencimento: ' + fmtDate(r.vencDate) + ' (' + DIAS_SEMANA_WA[r.vencDate.getDay()] + ')');
-  l.push('💰 Valor: ' + brl(r.valor));
-  if (r.status === 'pago') l.push('✅ Pago' + (r.pag ? ' em ' + fmtDate(parseISO(r.pag)) : '') + (r.cobrado != null ? ' · ' + brl(r.cobrado) : ''));
-  else if (r.status === 'vencido') l.push('⛔ Vencido há ' + r.dias + (r.dias === 1 ? ' dia' : ' dias'));
-  else if (r.status === 'hoje') l.push('🔴 Vence hoje');
-  else if (r.dias === 1) l.push('🟠 Vence amanhã');
+  var l = ['*CAP - Contas a Pagar*', '', '*' + (r.desc || '(sem descrição)') + '*' + (r.parcela ? ' - Parcela ' + r.parcela : '')];
+  if (r.nome) l.push('Despesa de: ' + r.nome);
+  if (r.vencDate) l.push('Vencimento: ' + fmtDate(r.vencDate) + ' (' + DIAS_SEMANA_WA[r.vencDate.getDay()] + ')');
+  l.push('Valor: *' + brl(r.valor) + '*');
+  if (r.status === 'pago') l.push('Situação: pago' + (r.pag ? ' em ' + fmtDate(parseISO(r.pag)) : '') + (r.cobrado != null ? ' · ' + brl(r.cobrado) : ''));
+  else if (r.status === 'vencido') l.push('Situação: vencido há ' + r.dias + (r.dias === 1 ? ' dia' : ' dias'));
+  else if (r.status === 'hoje') l.push('Situação: vence hoje');
+  else if (r.dias === 1) l.push('Situação: vence amanhã');
   var barra = String(r.barra || '').trim();
-  if (/\d{20,}/.test(barra.replace(/\D/g, ''))) l.push('', '🔢 Código de barras:', barra);
+  if (/\d{20,}/.test(barra.replace(/\D/g, ''))) l.push('', 'Código de barras:', barra);
   var obs = String(r.obs || '').trim();
-  if (obs && obs.indexOf('Aguardando boleto') === -1 && obs.indexOf('Importado do e-mail') === -1) l.push('', '📝 ' + obs);
+  if (obs && obs.indexOf('Aguardando boleto') === -1 && obs.indexOf('Importado do e-mail') === -1) l.push('', 'Obs.: ' + obs);
   return l.join('\n');
 }
 document.addEventListener('click', function(ev){
