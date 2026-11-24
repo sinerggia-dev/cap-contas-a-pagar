@@ -580,30 +580,6 @@
 "index": 24,
 "values": [
 [
-26,
-"",
-"",
-"Ivanilda Hozana",
-"Envio de Boleto",
-46336,
-"",
-"IPTU Apto 102 - Parcela 10/10",
-"IPTU",
-"A Vencer",
-"",
-0,
-"",
-"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-26-1786650829509.png",
-"",
-"",
-""
-]
-]
-},
-{
-"index": 25,
-"values": [
-[
 27,
 "",
 "",
@@ -625,7 +601,7 @@
 ]
 },
 {
-"index": 26,
+"index": 25,
 "values": [
 [
 28,
@@ -649,7 +625,7 @@
 ]
 },
 {
-"index": 27,
+"index": 26,
 "values": [
 [
 29,
@@ -673,7 +649,7 @@
 ]
 },
 {
-"index": 28,
+"index": 27,
 "values": [
 [
 30,
@@ -697,7 +673,7 @@
 ]
 },
 {
-"index": 29,
+"index": 28,
 "values": [
 [
 31,
@@ -721,7 +697,7 @@
 ]
 },
 {
-"index": 30,
+"index": 29,
 "values": [
 [
 32,
@@ -745,7 +721,7 @@
 ]
 },
 {
-"index": 31,
+"index": 30,
 "values": [
 [
 33,
@@ -769,7 +745,7 @@
 ]
 },
 {
-"index": 32,
+"index": 31,
 "values": [
 [
 34,
@@ -793,7 +769,7 @@
 ]
 },
 {
-"index": 33,
+"index": 32,
 "values": [
 [
 35,
@@ -817,7 +793,7 @@
 ]
 },
 {
-"index": 34,
+"index": 33,
 "values": [
 [
 36,
@@ -841,7 +817,7 @@
 ]
 },
 {
-"index": 35,
+"index": 34,
 "values": [
 [
 37,
@@ -865,7 +841,7 @@
 ]
 },
 {
-"index": 36,
+"index": 35,
 "values": [
 [
 38,
@@ -889,7 +865,7 @@
 ]
 },
 {
-"index": 37,
+"index": 36,
 "values": [
 [
 39,
@@ -913,7 +889,7 @@
 ]
 },
 {
-"index": 38,
+"index": 37,
 "values": [
 [
 40,
@@ -937,7 +913,7 @@
 ]
 },
 {
-"index": 39,
+"index": 38,
 "values": [
 [
 41,
@@ -961,7 +937,7 @@
 ]
 },
 {
-"index": 40,
+"index": 39,
 "values": [
 [
 43,
@@ -985,7 +961,7 @@
 ]
 },
 {
-"index": 41,
+"index": 40,
 "values": [
 [
 44,
@@ -1009,7 +985,7 @@
 ]
 },
 {
-"index": 42,
+"index": 41,
 "values": [
 [
 45,
@@ -1033,7 +1009,7 @@
 ]
 },
 {
-"index": 43,
+"index": 42,
 "values": [
 [
 46,
@@ -1057,7 +1033,7 @@
 ]
 },
 {
-"index": 44,
+"index": 43,
 "values": [
 [
 47,
@@ -1081,7 +1057,7 @@
 ]
 },
 {
-"index": 45,
+"index": 44,
 "values": [
 [
 48,
@@ -1105,7 +1081,7 @@
 ]
 },
 {
-"index": 46,
+"index": 45,
 "values": [
 [
 49,
@@ -1129,7 +1105,7 @@
 ]
 },
 {
-"index": 47,
+"index": 46,
 "values": [
 [
 50,
@@ -1153,7 +1129,7 @@
 ]
 },
 {
-"index": 48,
+"index": 47,
 "values": [
 [
 51,
@@ -1177,7 +1153,7 @@
 ]
 },
 {
-"index": 49,
+"index": 48,
 "values": [
 [
 52,
@@ -1201,7 +1177,7 @@
 ]
 },
 {
-"index": 50,
+"index": 49,
 "values": [
 [
 53,
@@ -1225,7 +1201,7 @@
 ]
 },
 {
-"index": 51,
+"index": 50,
 "values": [
 [
 54,
@@ -1249,7 +1225,7 @@
 ]
 },
 {
-"index": 52,
+"index": 51,
 "values": [
 [
 55,
@@ -1273,7 +1249,7 @@
 ]
 },
 {
-"index": 53,
+"index": 52,
 "values": [
 [
 56,
@@ -1297,7 +1273,7 @@
 ]
 },
 {
-"index": 54,
+"index": 53,
 "values": [
 [
 57,
@@ -1321,7 +1297,7 @@
 ]
 },
 {
-"index": 55,
+"index": 54,
 "values": [
 [
 58,
@@ -1345,7 +1321,7 @@
 ]
 },
 {
-"index": 56,
+"index": 55,
 "values": [
 [
 59,
@@ -1354,7 +1330,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46346,
-"",
+46349,
 "Cartão Ivanilda Mercado Pago",
 "Cartão de Crédito",
 "A Vencer",
@@ -1369,7 +1345,7 @@
 ]
 },
 {
-"index": 57,
+"index": 56,
 "values": [
 [
 60,
@@ -1393,7 +1369,7 @@
 ]
 },
 {
-"index": 58,
+"index": 57,
 "values": [
 [
 62,
@@ -1417,7 +1393,7 @@
 ]
 },
 {
-"index": 59,
+"index": 58,
 "values": [
 [
 63,
@@ -1441,7 +1417,7 @@
 ]
 },
 {
-"index": 60,
+"index": 59,
 "values": [
 [
 65,
@@ -1465,7 +1441,7 @@
 ]
 },
 {
-"index": 61,
+"index": 60,
 "values": [
 [
 67,
@@ -1489,7 +1465,7 @@
 ]
 },
 {
-"index": 62,
+"index": 61,
 "values": [
 [
 68,
@@ -1513,7 +1489,7 @@
 ]
 },
 {
-"index": 63,
+"index": 62,
 "values": [
 [
 69,
@@ -1537,7 +1513,7 @@
 ]
 },
 {
-"index": 64,
+"index": 63,
 "values": [
 [
 70,
@@ -1561,7 +1537,7 @@
 ]
 },
 {
-"index": 65,
+"index": 64,
 "values": [
 [
 71,
@@ -1585,7 +1561,7 @@
 ]
 },
 {
-"index": 66,
+"index": 65,
 "values": [
 [
 72,
@@ -1609,7 +1585,7 @@
 ]
 },
 {
-"index": 67,
+"index": 66,
 "values": [
 [
 75,
@@ -1633,7 +1609,7 @@
 ]
 },
 {
-"index": 68,
+"index": 67,
 "values": [
 [
 76,
@@ -1657,7 +1633,7 @@
 ]
 },
 {
-"index": 69,
+"index": 68,
 "values": [
 [
 78,
@@ -1681,7 +1657,7 @@
 ]
 },
 {
-"index": 70,
+"index": 69,
 "values": [
 [
 79,
@@ -1705,7 +1681,7 @@
 ]
 },
 {
-"index": 71,
+"index": 70,
 "values": [
 [
 80,
@@ -1729,7 +1705,7 @@
 ]
 },
 {
-"index": 72,
+"index": 71,
 "values": [
 [
 81,
@@ -1753,7 +1729,7 @@
 ]
 },
 {
-"index": 73,
+"index": 72,
 "values": [
 [
 82,
@@ -1777,7 +1753,7 @@
 ]
 },
 {
-"index": 74,
+"index": 73,
 "values": [
 [
 83,
@@ -1801,7 +1777,7 @@
 ]
 },
 {
-"index": 75,
+"index": 74,
 "values": [
 [
 172,
@@ -1825,7 +1801,7 @@
 ]
 },
 {
-"index": 76,
+"index": 75,
 "values": [
 [
 84,
@@ -1849,7 +1825,7 @@
 ]
 },
 {
-"index": 77,
+"index": 76,
 "values": [
 [
 85,
@@ -1873,7 +1849,7 @@
 ]
 },
 {
-"index": 78,
+"index": 77,
 "values": [
 [
 86,
@@ -1897,7 +1873,7 @@
 ]
 },
 {
-"index": 79,
+"index": 78,
 "values": [
 [
 173,
@@ -1921,7 +1897,7 @@
 ]
 },
 {
-"index": 80,
+"index": 79,
 "values": [
 [
 87,
@@ -1945,7 +1921,7 @@
 ]
 },
 {
-"index": 81,
+"index": 80,
 "values": [
 [
 88,
@@ -1969,7 +1945,7 @@
 ]
 },
 {
-"index": 82,
+"index": 81,
 "values": [
 [
 89,
@@ -1993,7 +1969,7 @@
 ]
 },
 {
-"index": 83,
+"index": 82,
 "values": [
 [
 90,
@@ -2017,7 +1993,7 @@
 ]
 },
 {
-"index": 84,
+"index": 83,
 "values": [
 [
 91,
@@ -2041,7 +2017,7 @@
 ]
 },
 {
-"index": 85,
+"index": 84,
 "values": [
 [
 92,
@@ -2065,7 +2041,7 @@
 ]
 },
 {
-"index": 86,
+"index": 85,
 "values": [
 [
 93,
@@ -2089,7 +2065,7 @@
 ]
 },
 {
-"index": 87,
+"index": 86,
 "values": [
 [
 100,
@@ -2113,7 +2089,7 @@
 ]
 },
 {
-"index": 88,
+"index": 87,
 "values": [
 [
 94,
@@ -2137,7 +2113,7 @@
 ]
 },
 {
-"index": 89,
+"index": 88,
 "values": [
 [
 95,
@@ -2161,7 +2137,7 @@
 ]
 },
 {
-"index": 90,
+"index": 89,
 "values": [
 [
 96,
@@ -2185,7 +2161,7 @@
 ]
 },
 {
-"index": 91,
+"index": 90,
 "values": [
 [
 97,
@@ -2209,7 +2185,7 @@
 ]
 },
 {
-"index": 92,
+"index": 91,
 "values": [
 [
 98,
@@ -2233,7 +2209,7 @@
 ]
 },
 {
-"index": 93,
+"index": 92,
 "values": [
 [
 99,
@@ -2257,7 +2233,7 @@
 ]
 },
 {
-"index": 94,
+"index": 93,
 "values": [
 [
 101,
@@ -2281,7 +2257,7 @@
 ]
 },
 {
-"index": 95,
+"index": 94,
 "values": [
 [
 102,
@@ -2305,7 +2281,7 @@
 ]
 },
 {
-"index": 96,
+"index": 95,
 "values": [
 [
 103,
@@ -2329,7 +2305,7 @@
 ]
 },
 {
-"index": 97,
+"index": 96,
 "values": [
 [
 104,
@@ -2353,7 +2329,7 @@
 ]
 },
 {
-"index": 98,
+"index": 97,
 "values": [
 [
 105,
@@ -2377,7 +2353,7 @@
 ]
 },
 {
-"index": 99,
+"index": 98,
 "values": [
 [
 108,
@@ -2401,7 +2377,7 @@
 ]
 },
 {
-"index": 100,
+"index": 99,
 "values": [
 [
 106,
@@ -2425,7 +2401,7 @@
 ]
 },
 {
-"index": 101,
+"index": 100,
 "values": [
 [
 107,
@@ -2449,7 +2425,7 @@
 ]
 },
 {
-"index": 102,
+"index": 101,
 "values": [
 [
 109,
@@ -2473,7 +2449,7 @@
 ]
 },
 {
-"index": 103,
+"index": 102,
 "values": [
 [
 110,
@@ -2497,7 +2473,7 @@
 ]
 },
 {
-"index": 104,
+"index": 103,
 "values": [
 [
 111,
@@ -2521,7 +2497,7 @@
 ]
 },
 {
-"index": 105,
+"index": 104,
 "values": [
 [
 112,
@@ -2545,7 +2521,7 @@
 ]
 },
 {
-"index": 106,
+"index": 105,
 "values": [
 [
 113,
@@ -2569,7 +2545,7 @@
 ]
 },
 {
-"index": 107,
+"index": 106,
 "values": [
 [
 114,
@@ -2593,7 +2569,7 @@
 ]
 },
 {
-"index": 108,
+"index": 107,
 "values": [
 [
 115,
@@ -2617,7 +2593,7 @@
 ]
 },
 {
-"index": 109,
+"index": 108,
 "values": [
 [
 116,
@@ -2641,7 +2617,7 @@
 ]
 },
 {
-"index": 110,
+"index": 109,
 "values": [
 [
 117,
@@ -2665,7 +2641,7 @@
 ]
 },
 {
-"index": 111,
+"index": 110,
 "values": [
 [
 118,
@@ -2689,7 +2665,7 @@
 ]
 },
 {
-"index": 112,
+"index": 111,
 "values": [
 [
 119,
@@ -2713,7 +2689,7 @@
 ]
 },
 {
-"index": 113,
+"index": 112,
 "values": [
 [
 121,
@@ -2737,7 +2713,7 @@
 ]
 },
 {
-"index": 114,
+"index": 113,
 "values": [
 [
 122,
@@ -2761,7 +2737,7 @@
 ]
 },
 {
-"index": 115,
+"index": 114,
 "values": [
 [
 123,
@@ -2785,7 +2761,7 @@
 ]
 },
 {
-"index": 116,
+"index": 115,
 "values": [
 [
 124,
@@ -2809,7 +2785,7 @@
 ]
 },
 {
-"index": 117,
+"index": 116,
 "values": [
 [
 125,
@@ -2833,7 +2809,7 @@
 ]
 },
 {
-"index": 118,
+"index": 117,
 "values": [
 [
 126,
@@ -2857,7 +2833,7 @@
 ]
 },
 {
-"index": 119,
+"index": 118,
 "values": [
 [
 127,
@@ -2881,7 +2857,7 @@
 ]
 },
 {
-"index": 120,
+"index": 119,
 "values": [
 [
 128,
@@ -2905,7 +2881,7 @@
 ]
 },
 {
-"index": 121,
+"index": 120,
 "values": [
 [
 129,
@@ -2929,7 +2905,7 @@
 ]
 },
 {
-"index": 122,
+"index": 121,
 "values": [
 [
 130,
@@ -2953,7 +2929,7 @@
 ]
 },
 {
-"index": 123,
+"index": 122,
 "values": [
 [
 131,
@@ -2977,7 +2953,7 @@
 ]
 },
 {
-"index": 124,
+"index": 123,
 "values": [
 [
 132,
@@ -3001,7 +2977,7 @@
 ]
 },
 {
-"index": 125,
+"index": 124,
 "values": [
 [
 133,
@@ -3010,7 +2986,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46336,
-"",
+46336,
 "Soluções - Parcelamento Bradesco - 05.505.693/0001-98 - Parcela 38/72",
 "Cartão de Crédito",
 "A Vencer",
@@ -3025,7 +3001,7 @@
 ]
 },
 {
-"index": 126,
+"index": 125,
 "values": [
 [
 134,
@@ -3049,7 +3025,7 @@
 ]
 },
 {
-"index": 127,
+"index": 126,
 "values": [
 [
 135,
@@ -3073,7 +3049,7 @@
 ]
 },
 {
-"index": 128,
+"index": 127,
 "values": [
 [
 136,
@@ -3097,7 +3073,7 @@
 ]
 },
 {
-"index": 129,
+"index": 128,
 "values": [
 [
 137,
@@ -3121,7 +3097,7 @@
 ]
 },
 {
-"index": 130,
+"index": 129,
 "values": [
 [
 138,
@@ -3145,7 +3121,7 @@
 ]
 },
 {
-"index": 131,
+"index": 130,
 "values": [
 [
 139,
@@ -3169,7 +3145,7 @@
 ]
 },
 {
-"index": 132,
+"index": 131,
 "values": [
 [
 140,
@@ -3193,7 +3169,7 @@
 ]
 },
 {
-"index": 133,
+"index": 132,
 "values": [
 [
 141,
@@ -3217,7 +3193,7 @@
 ]
 },
 {
-"index": 134,
+"index": 133,
 "values": [
 [
 143,
@@ -3241,7 +3217,7 @@
 ]
 },
 {
-"index": 135,
+"index": 134,
 "values": [
 [
 144,
@@ -3265,7 +3241,7 @@
 ]
 },
 {
-"index": 136,
+"index": 135,
 "values": [
 [
 145,
@@ -3289,7 +3265,7 @@
 ]
 },
 {
-"index": 137,
+"index": 136,
 "values": [
 [
 147,
@@ -3313,7 +3289,7 @@
 ]
 },
 {
-"index": 138,
+"index": 137,
 "values": [
 [
 148,
@@ -3337,7 +3313,7 @@
 ]
 },
 {
-"index": 139,
+"index": 138,
 "values": [
 [
 149,
@@ -3361,7 +3337,7 @@
 ]
 },
 {
-"index": 140,
+"index": 139,
 "values": [
 [
 150,
@@ -3385,7 +3361,7 @@
 ]
 },
 {
-"index": 141,
+"index": 140,
 "values": [
 [
 151,
@@ -3409,7 +3385,7 @@
 ]
 },
 {
-"index": 142,
+"index": 141,
 "values": [
 [
 152,
@@ -3433,7 +3409,7 @@
 ]
 },
 {
-"index": 143,
+"index": 142,
 "values": [
 [
 153,
@@ -3457,7 +3433,7 @@
 ]
 },
 {
-"index": 144,
+"index": 143,
 "values": [
 [
 155,
@@ -3481,7 +3457,7 @@
 ]
 },
 {
-"index": 145,
+"index": 144,
 "values": [
 [
 156,
@@ -3505,7 +3481,7 @@
 ]
 },
 {
-"index": 146,
+"index": 145,
 "values": [
 [
 157,
@@ -3529,7 +3505,7 @@
 ]
 },
 {
-"index": 147,
+"index": 146,
 "values": [
 [
 158,
@@ -3553,7 +3529,7 @@
 ]
 },
 {
-"index": 148,
+"index": 147,
 "values": [
 [
 161,
@@ -3577,7 +3553,7 @@
 ]
 },
 {
-"index": 149,
+"index": 148,
 "values": [
 [
 163,
@@ -3601,7 +3577,7 @@
 ]
 },
 {
-"index": 150,
+"index": 149,
 "values": [
 [
 164,
@@ -3625,7 +3601,7 @@
 ]
 },
 {
-"index": 151,
+"index": 150,
 "values": [
 [
 165,
@@ -3649,7 +3625,7 @@
 ]
 },
 {
-"index": 152,
+"index": 151,
 "values": [
 [
 166,
@@ -3673,7 +3649,7 @@
 ]
 },
 {
-"index": 153,
+"index": 152,
 "values": [
 [
 167,
@@ -3697,7 +3673,7 @@
 ]
 },
 {
-"index": 154,
+"index": 153,
 "values": [
 [
 168,
@@ -3721,7 +3697,7 @@
 ]
 },
 {
-"index": 155,
+"index": 154,
 "values": [
 [
 169,
@@ -3745,7 +3721,7 @@
 ]
 },
 {
-"index": 156,
+"index": 155,
 "values": [
 [
 170,
@@ -3769,7 +3745,7 @@
 ]
 },
 {
-"index": 157,
+"index": 156,
 "values": [
 [
 171,
@@ -3793,7 +3769,7 @@
 ]
 },
 {
-"index": 158,
+"index": 157,
 "values": [
 [
 174,
@@ -3817,7 +3793,7 @@
 ]
 },
 {
-"index": 159,
+"index": 158,
 "values": [
 [
 175,
@@ -3841,7 +3817,7 @@
 ]
 },
 {
-"index": 160,
+"index": 159,
 "values": [
 [
 176,
@@ -3865,7 +3841,7 @@
 ]
 },
 {
-"index": 161,
+"index": 160,
 "values": [
 [
 177,
@@ -3889,7 +3865,7 @@
 ]
 },
 {
-"index": 162,
+"index": 161,
 "values": [
 [
 178,
@@ -3913,7 +3889,7 @@
 ]
 },
 {
-"index": 163,
+"index": 162,
 "values": [
 [
 179,
@@ -3937,7 +3913,7 @@
 ]
 },
 {
-"index": 164,
+"index": 163,
 "values": [
 [
 180,
@@ -3961,7 +3937,7 @@
 ]
 },
 {
-"index": 165,
+"index": 164,
 "values": [
 [
 181,
@@ -3985,7 +3961,7 @@
 ]
 },
 {
-"index": 166,
+"index": 165,
 "values": [
 [
 183,
@@ -4009,7 +3985,7 @@
 ]
 },
 {
-"index": 167,
+"index": 166,
 "values": [
 [
 184,
@@ -4033,7 +4009,7 @@
 ]
 },
 {
-"index": 168,
+"index": 167,
 "values": [
 [
 185,
@@ -4057,7 +4033,7 @@
 ]
 },
 {
-"index": 169,
+"index": 168,
 "values": [
 [
 186,
@@ -4081,7 +4057,7 @@
 ]
 },
 {
-"index": 170,
+"index": 169,
 "values": [
 [
 187,
@@ -4090,7 +4066,7 @@
 "Ivanilda Hozana",
 "Envio de Boleto",
 46342,
-"",
+46334,
 "Secretária do Lar - Adrielma",
 "Serviços Domésticos",
 "A Vencer",
@@ -4098,14 +4074,14 @@
 600,
 "",
 "",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-187-1795535628108.jpg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 171,
+"index": 170,
 "values": [
 [
 188,
@@ -4129,7 +4105,7 @@
 ]
 },
 {
-"index": 172,
+"index": 171,
 "values": [
 [
 189,
@@ -4153,7 +4129,7 @@
 ]
 },
 {
-"index": 173,
+"index": 172,
 "values": [
 [
 190,
@@ -4177,7 +4153,7 @@
 ]
 },
 {
-"index": 174,
+"index": 173,
 "values": [
 [
 191,
@@ -4201,7 +4177,7 @@
 ]
 },
 {
-"index": 175,
+"index": 174,
 "values": [
 [
 192,
@@ -4225,7 +4201,7 @@
 ]
 },
 {
-"index": 176,
+"index": 175,
 "values": [
 [
 193,
@@ -4249,7 +4225,7 @@
 ]
 },
 {
-"index": 177,
+"index": 176,
 "values": [
 [
 194,
@@ -4273,7 +4249,7 @@
 ]
 },
 {
-"index": 178,
+"index": 177,
 "values": [
 [
 195,
@@ -4297,7 +4273,7 @@
 ]
 },
 {
-"index": 179,
+"index": 178,
 "values": [
 [
 196,
@@ -4321,7 +4297,7 @@
 ]
 },
 {
-"index": 180,
+"index": 179,
 "values": [
 [
 197,
@@ -4345,7 +4321,7 @@
 ]
 },
 {
-"index": 181,
+"index": 180,
 "values": [
 [
 198,
@@ -4369,7 +4345,7 @@
 ]
 },
 {
-"index": 182,
+"index": 181,
 "values": [
 [
 199,
@@ -4393,7 +4369,7 @@
 ]
 },
 {
-"index": 183,
+"index": 182,
 "values": [
 [
 200,
@@ -4417,7 +4393,7 @@
 ]
 },
 {
-"index": 184,
+"index": 183,
 "values": [
 [
 201,
@@ -4441,7 +4417,7 @@
 ]
 },
 {
-"index": 185,
+"index": 184,
 "values": [
 [
 202,
@@ -4465,7 +4441,7 @@
 ]
 },
 {
-"index": 186,
+"index": 185,
 "values": [
 [
 203,
@@ -4489,7 +4465,7 @@
 ]
 },
 {
-"index": 187,
+"index": 186,
 "values": [
 [
 204,
@@ -4513,7 +4489,7 @@
 ]
 },
 {
-"index": 188,
+"index": 187,
 "values": [
 [
 205,
@@ -4537,7 +4513,7 @@
 ]
 },
 {
-"index": 189,
+"index": 188,
 "values": [
 [
 207,
@@ -4561,7 +4537,7 @@
 ]
 },
 {
-"index": 190,
+"index": 189,
 "values": [
 [
 209,
@@ -4585,7 +4561,7 @@
 ]
 },
 {
-"index": 191,
+"index": 190,
 "values": [
 [
 210,
@@ -4609,7 +4585,7 @@
 ]
 },
 {
-"index": 192,
+"index": 191,
 "values": [
 [
 211,
@@ -4633,7 +4609,7 @@
 ]
 },
 {
-"index": 193,
+"index": 192,
 "values": [
 [
 212,
@@ -4657,7 +4633,7 @@
 ]
 },
 {
-"index": 194,
+"index": 193,
 "values": [
 [
 213,
@@ -4666,7 +4642,7 @@
 "Natanael Silva",
 "Envio de Boleto",
 46349,
-"",
+46350,
 "Cartão Nubank",
 "Cartão de Crédito",
 "A Vencer",
@@ -4674,14 +4650,14 @@
 1338.87,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-cartao-nubank-2026-11.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-213-1795535961299.jpg",
 "",
 "Importado do e-mail (16/11/2026)"
 ]
 ]
 },
 {
-"index": 195,
+"index": 194,
 "values": [
 [
 214,
@@ -4705,7 +4681,7 @@
 ]
 },
 {
-"index": 196,
+"index": 195,
 "values": [
 [
 215,
@@ -4729,7 +4705,7 @@
 ]
 },
 {
-"index": 197,
+"index": 196,
 "values": [
 [
 216,
@@ -4753,7 +4729,7 @@
 ]
 },
 {
-"index": 198,
+"index": 197,
 "values": [
 [
 217,
@@ -4777,7 +4753,7 @@
 ]
 },
 {
-"index": 199,
+"index": 198,
 "values": [
 [
 218,
@@ -4801,7 +4777,7 @@
 ]
 },
 {
-"index": 200,
+"index": 199,
 "values": [
 [
 219,
@@ -4825,7 +4801,7 @@
 ]
 },
 {
-"index": 201,
+"index": 200,
 "values": [
 [
 220,
@@ -4849,7 +4825,7 @@
 ]
 },
 {
-"index": 202,
+"index": 201,
 "values": [
 [
 221,
@@ -4873,7 +4849,7 @@
 ]
 },
 {
-"index": 203,
+"index": 202,
 "values": [
 [
 222,
@@ -4897,7 +4873,7 @@
 ]
 },
 {
-"index": 204,
+"index": 203,
 "values": [
 [
 223,
@@ -4921,7 +4897,7 @@
 ]
 },
 {
-"index": 205,
+"index": 204,
 "values": [
 [
 224,
@@ -4945,7 +4921,7 @@
 ]
 },
 {
-"index": 206,
+"index": 205,
 "values": [
 [
 225,
@@ -4969,7 +4945,7 @@
 ]
 },
 {
-"index": 207,
+"index": 206,
 "values": [
 [
 226,
@@ -4993,7 +4969,7 @@
 ]
 },
 {
-"index": 208,
+"index": 207,
 "values": [
 [
 227,
@@ -5017,7 +4993,7 @@
 ]
 },
 {
-"index": 209,
+"index": 208,
 "values": [
 [
 228,
@@ -5041,7 +5017,7 @@
 ]
 },
 {
-"index": 210,
+"index": 209,
 "values": [
 [
 231,
@@ -5065,7 +5041,7 @@
 ]
 },
 {
-"index": 211,
+"index": 210,
 "values": [
 [
 232,
@@ -5089,7 +5065,7 @@
 ]
 },
 {
-"index": 212,
+"index": 211,
 "values": [
 [
 233,
@@ -5113,7 +5089,7 @@
 ]
 },
 {
-"index": 213,
+"index": 212,
 "values": [
 [
 234,
@@ -5137,7 +5113,7 @@
 ]
 },
 {
-"index": 214,
+"index": 213,
 "values": [
 [
 235,
@@ -5161,7 +5137,7 @@
 ]
 },
 {
-"index": 215,
+"index": 214,
 "values": [
 [
 236,
@@ -5170,22 +5146,22 @@
 "Natanael Silva",
 "Envio de Boleto",
 46351,
-"",
+46350,
 "Claro Apto 102 - 136-411619671",
 "Telefone/Internet",
 "A Vencer",
 "",
-130,
+129.9,
 "",
-"",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-236-1795550742584.jpg",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-236-1795550753865.jpg",
 "",
 ""
 ]
 ]
 },
 {
-"index": 216,
+"index": 215,
 "values": [
 [
 237,
@@ -5209,7 +5185,7 @@
 ]
 },
 {
-"index": 217,
+"index": 216,
 "values": [
 [
 238,
@@ -5233,7 +5209,7 @@
 ]
 },
 {
-"index": 218,
+"index": 217,
 "values": [
 [
 239,
@@ -5257,7 +5233,7 @@
 ]
 },
 {
-"index": 219,
+"index": 218,
 "values": [
 [
 240,
@@ -5281,7 +5257,7 @@
 ]
 },
 {
-"index": 220,
+"index": 219,
 "values": [
 [
 241,
@@ -5305,7 +5281,7 @@
 ]
 },
 {
-"index": 221,
+"index": 220,
 "values": [
 [
 242,
@@ -5329,7 +5305,7 @@
 ]
 },
 {
-"index": 222,
+"index": 221,
 "values": [
 [
 243,
@@ -5353,7 +5329,7 @@
 ]
 },
 {
-"index": 223,
+"index": 222,
 "values": [
 [
 244,
@@ -5377,7 +5353,7 @@
 ]
 },
 {
-"index": 224,
+"index": 223,
 "values": [
 [
 245,
@@ -5401,7 +5377,7 @@
 ]
 },
 {
-"index": 225,
+"index": 224,
 "values": [
 [
 246,
@@ -5425,7 +5401,7 @@
 ]
 },
 {
-"index": 226,
+"index": 225,
 "values": [
 [
 247,
@@ -5449,7 +5425,7 @@
 ]
 },
 {
-"index": 227,
+"index": 226,
 "values": [
 [
 248,
@@ -5473,7 +5449,7 @@
 ]
 },
 {
-"index": 228,
+"index": 227,
 "values": [
 [
 249,
@@ -5497,7 +5473,7 @@
 ]
 },
 {
-"index": 229,
+"index": 228,
 "values": [
 [
 250,
@@ -5521,7 +5497,7 @@
 ]
 },
 {
-"index": 230,
+"index": 229,
 "values": [
 [
 251,
@@ -5545,7 +5521,7 @@
 ]
 },
 {
-"index": 231,
+"index": 230,
 "values": [
 [
 252,
@@ -5569,7 +5545,7 @@
 ]
 },
 {
-"index": 232,
+"index": 231,
 "values": [
 [
 253,
@@ -5593,7 +5569,7 @@
 ]
 },
 {
-"index": 233,
+"index": 232,
 "values": [
 [
 254,
@@ -5617,7 +5593,7 @@
 ]
 },
 {
-"index": 234,
+"index": 233,
 "values": [
 [
 255,
@@ -5641,7 +5617,7 @@
 ]
 },
 {
-"index": 235,
+"index": 234,
 "values": [
 [
 256,
@@ -5665,7 +5641,7 @@
 ]
 },
 {
-"index": 236,
+"index": 235,
 "values": [
 [
 257,
@@ -5673,95 +5649,23 @@
 "",
 "Ivanilda Hozana",
 "Envio de Boleto",
-46346,
+46356,
 46343,
-"Result Vision - Parcelamento 2 - Ivanilda - Parcela 1/60",
-"Parcelamento",
-"A Vencer",
-"",
-381.83,
-"",
-"",
-"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-257-1795462906786.jpg",
-"",
-""
-]
-]
-},
-{
-"index": 237,
-"values": [
-[
-258,
-"",
-"",
-"Ivanilda Hozana",
-"Envio de Boleto",
-46376,
-"",
 "Result Vision - Parcelamento 2 - Ivanilda - Parcela 2/60",
 "Parcelamento",
-"A Vencer",
+"Pago",
 "",
-381.83,
+385.64,
 "",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-257-1795527525975.pdf",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-257-1795462906786.jpg",
 "",
-"",
-"",
-""
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
 ]
 ]
 },
 {
-"index": 238,
-"values": [
-[
-259,
-"",
-"",
-"Ivanilda Hozana",
-"Envio de Boleto",
-46407,
-"",
-"Result Vision - Parcelamento 2 - Ivanilda - Parcela 3/60",
-"Financiamento",
-"A Vencer",
-"",
-381.83,
-"",
-"",
-"",
-"",
-""
-]
-]
-},
-{
-"index": 239,
-"values": [
-[
-260,
-"",
-"",
-"Ivanilda Hozana",
-"Envio de Boleto",
-46438,
-"",
-"Result Vision - Parcelamento 2 - Ivanilda - Parcela 4/60",
-"Parcelamento",
-"A Vencer",
-"",
-381.83,
-"",
-"",
-"",
-"",
-""
-]
-]
-},
-{
-"index": 240,
+"index": 236,
 "values": [
 [
 261,
@@ -5785,7 +5689,7 @@
 ]
 },
 {
-"index": 241,
+"index": 237,
 "values": [
 [
 262,
@@ -5809,7 +5713,7 @@
 ]
 },
 {
-"index": 242,
+"index": 238,
 "values": [
 [
 263,
@@ -5833,7 +5737,7 @@
 ]
 },
 {
-"index": 243,
+"index": 239,
 "values": [
 [
 264,
@@ -5857,7 +5761,7 @@
 ]
 },
 {
-"index": 244,
+"index": 240,
 "values": [
 [
 265,
@@ -5881,7 +5785,7 @@
 ]
 },
 {
-"index": 245,
+"index": 241,
 "values": [
 [
 266,
@@ -5905,7 +5809,7 @@
 ]
 },
 {
-"index": 246,
+"index": 242,
 "values": [
 [
 267,
@@ -5929,7 +5833,7 @@
 ]
 },
 {
-"index": 247,
+"index": 243,
 "values": [
 [
 268,
@@ -5953,7 +5857,7 @@
 ]
 },
 {
-"index": 248,
+"index": 244,
 "values": [
 [
 269,
@@ -5977,7 +5881,7 @@
 ]
 },
 {
-"index": 249,
+"index": 245,
 "values": [
 [
 270,
@@ -6001,7 +5905,7 @@
 ]
 },
 {
-"index": 250,
+"index": 246,
 "values": [
 [
 271,
@@ -6025,7 +5929,7 @@
 ]
 },
 {
-"index": 251,
+"index": 247,
 "values": [
 [
 272,
@@ -6049,7 +5953,7 @@
 ]
 },
 {
-"index": 252,
+"index": 248,
 "values": [
 [
 273,
@@ -6073,7 +5977,7 @@
 ]
 },
 {
-"index": 253,
+"index": 249,
 "values": [
 [
 274,
@@ -6097,7 +6001,7 @@
 ]
 },
 {
-"index": 254,
+"index": 250,
 "values": [
 [
 275,
@@ -6121,7 +6025,7 @@
 ]
 },
 {
-"index": 255,
+"index": 251,
 "values": [
 [
 276,
@@ -6145,7 +6049,7 @@
 ]
 },
 {
-"index": 256,
+"index": 252,
 "values": [
 [
 277,
@@ -6169,7 +6073,7 @@
 ]
 },
 {
-"index": 257,
+"index": 253,
 "values": [
 [
 278,
@@ -6193,7 +6097,7 @@
 ]
 },
 {
-"index": 258,
+"index": 254,
 "values": [
 [
 279,
@@ -6217,7 +6121,7 @@
 ]
 },
 {
-"index": 259,
+"index": 255,
 "values": [
 [
 280,
@@ -6241,7 +6145,7 @@
 ]
 },
 {
-"index": 260,
+"index": 256,
 "values": [
 [
 281,
@@ -6265,7 +6169,7 @@
 ]
 },
 {
-"index": 261,
+"index": 257,
 "values": [
 [
 282,
@@ -6289,7 +6193,7 @@
 ]
 },
 {
-"index": 262,
+"index": 258,
 "values": [
 [
 283,
@@ -6313,7 +6217,7 @@
 ]
 },
 {
-"index": 263,
+"index": 259,
 "values": [
 [
 284,
@@ -6337,7 +6241,7 @@
 ]
 },
 {
-"index": 264,
+"index": 260,
 "values": [
 [
 285,
@@ -6361,7 +6265,7 @@
 ]
 },
 {
-"index": 265,
+"index": 261,
 "values": [
 [
 286,
@@ -6385,7 +6289,7 @@
 ]
 },
 {
-"index": 266,
+"index": 262,
 "values": [
 [
 287,
@@ -6409,7 +6313,7 @@
 ]
 },
 {
-"index": 267,
+"index": 263,
 "values": [
 [
 288,
@@ -6433,7 +6337,7 @@
 ]
 },
 {
-"index": 268,
+"index": 264,
 "values": [
 [
 289,
@@ -6457,7 +6361,7 @@
 ]
 },
 {
-"index": 269,
+"index": 265,
 "values": [
 [
 290,
@@ -6481,7 +6385,7 @@
 ]
 },
 {
-"index": 270,
+"index": 266,
 "values": [
 [
 291,
@@ -6505,7 +6409,7 @@
 ]
 },
 {
-"index": 271,
+"index": 267,
 "values": [
 [
 292,
@@ -6529,7 +6433,7 @@
 ]
 },
 {
-"index": 272,
+"index": 268,
 "values": [
 [
 293,
@@ -6553,7 +6457,7 @@
 ]
 },
 {
-"index": 273,
+"index": 269,
 "values": [
 [
 294,
@@ -6577,7 +6481,7 @@
 ]
 },
 {
-"index": 274,
+"index": 270,
 "values": [
 [
 295,
@@ -6601,7 +6505,7 @@
 ]
 },
 {
-"index": 275,
+"index": 271,
 "values": [
 [
 296,
@@ -6625,7 +6529,7 @@
 ]
 },
 {
-"index": 276,
+"index": 272,
 "values": [
 [
 297,
@@ -6649,7 +6553,7 @@
 ]
 },
 {
-"index": 277,
+"index": 273,
 "values": [
 [
 298,
@@ -6673,7 +6577,7 @@
 ]
 },
 {
-"index": 278,
+"index": 274,
 "values": [
 [
 299,
@@ -6697,7 +6601,7 @@
 ]
 },
 {
-"index": 279,
+"index": 275,
 "values": [
 [
 300,
@@ -6721,7 +6625,7 @@
 ]
 },
 {
-"index": 280,
+"index": 276,
 "values": [
 [
 301,
@@ -6745,7 +6649,7 @@
 ]
 },
 {
-"index": 281,
+"index": 277,
 "values": [
 [
 302,
@@ -6769,7 +6673,7 @@
 ]
 },
 {
-"index": 282,
+"index": 278,
 "values": [
 [
 303,
@@ -6793,7 +6697,7 @@
 ]
 },
 {
-"index": 283,
+"index": 279,
 "values": [
 [
 304,
@@ -6817,7 +6721,7 @@
 ]
 },
 {
-"index": 284,
+"index": 280,
 "values": [
 [
 305,
@@ -6826,22 +6730,22 @@
 "Natanael Silva",
 "Envio de Boleto",
 46351,
-"",
+46350,
 "Cartão Itaú - 2242",
 "Cartão de Crédito",
 "A Vencer",
 "",
-52.35,
+50.4,
 "",
 "https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-email-cartao-itau---2242-2026-11.pdf",
-"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-305-1795550429258.jpg",
 "",
 "Importado do e-mail (18/11/2026)"
 ]
 ]
 },
 {
-"index": 285,
+"index": 281,
 "values": [
 [
 306,
@@ -6861,6 +6765,3606 @@
 "",
 "",
 "Importado do e-mail (18/11/2026)"
+]
+]
+},
+{
+"index": 282,
+"values": [
+[
+307,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46351,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 1/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-307-1795523237488.jpeg",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 283,
+"values": [
+[
+308,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46381,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 2/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 284,
+"values": [
+[
+309,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46412,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 3/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 285,
+"values": [
+[
+310,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46443,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 4/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 286,
+"values": [
+[
+311,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46471,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 5/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 287,
+"values": [
+[
+312,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46502,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 6/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 288,
+"values": [
+[
+313,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46532,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 7/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 289,
+"values": [
+[
+314,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46563,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 8/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 290,
+"values": [
+[
+315,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46593,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 9/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 291,
+"values": [
+[
+316,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46624,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 10/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 292,
+"values": [
+[
+317,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46655,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 11/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 293,
+"values": [
+[
+318,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46685,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 12/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 294,
+"values": [
+[
+319,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46716,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 13/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 295,
+"values": [
+[
+320,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46746,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 14/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 296,
+"values": [
+[
+321,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46777,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 15/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 297,
+"values": [
+[
+322,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46808,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 16/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 298,
+"values": [
+[
+323,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46837,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 17/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 299,
+"values": [
+[
+324,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46868,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 18/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 300,
+"values": [
+[
+325,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46898,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 19/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 301,
+"values": [
+[
+326,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46929,
+"",
+"Empréstimo Pessoal Nubank - Ivanilda - Parcela 20/20",
+"Empréstimo",
+"A Vencer",
+"",
+1516.02,
+"",
+"",
+"",
+"",
+"Reforma casa gravatá"
+]
+]
+},
+{
+"index": 302,
+"values": [
+[
+327,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46353,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 7/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-327-1795524082943.jpeg",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 303,
+"values": [
+[
+328,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46383,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 8/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 304,
+"values": [
+[
+329,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46414,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 9/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 305,
+"values": [
+[
+330,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46445,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 10/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 306,
+"values": [
+[
+331,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46473,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 11/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 307,
+"values": [
+[
+332,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46504,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 12/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 308,
+"values": [
+[
+333,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46534,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 13/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 309,
+"values": [
+[
+334,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46565,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 14/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 310,
+"values": [
+[
+335,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46595,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 15/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 311,
+"values": [
+[
+336,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46626,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 16/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 312,
+"values": [
+[
+337,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46657,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 17/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 313,
+"values": [
+[
+338,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46687,
+"",
+"Empréstimo Nubank - Sinergia - Parcela 18/18",
+"Empréstimo",
+"A Vencer",
+"",
+2694.32,
+"",
+"",
+"",
+"",
+"Empréstimo Nubank feito por Ivanilda para a Sinergia"
+]
+]
+},
+{
+"index": 314,
+"values": [
+[
+339,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46386,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 3/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 315,
+"values": [
+[
+340,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46417,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 4/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 316,
+"values": [
+[
+341,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46446,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 5/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 317,
+"values": [
+[
+342,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46476,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 6/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 318,
+"values": [
+[
+343,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46507,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 7/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 319,
+"values": [
+[
+344,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46537,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 8/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 320,
+"values": [
+[
+345,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46568,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 9/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 321,
+"values": [
+[
+346,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46598,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 10/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 322,
+"values": [
+[
+347,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46629,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 11/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 323,
+"values": [
+[
+348,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46660,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 12/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 324,
+"values": [
+[
+349,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46690,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 13/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 325,
+"values": [
+[
+350,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46721,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 14/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 326,
+"values": [
+[
+351,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46751,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 15/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 327,
+"values": [
+[
+352,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46782,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 16/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 328,
+"values": [
+[
+353,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46812,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 17/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 329,
+"values": [
+[
+354,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46842,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 18/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 330,
+"values": [
+[
+355,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46873,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 19/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 331,
+"values": [
+[
+356,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46903,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 20/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 332,
+"values": [
+[
+357,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46934,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 21/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 333,
+"values": [
+[
+358,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46964,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 22/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 334,
+"values": [
+[
+359,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46995,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 23/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 335,
+"values": [
+[
+360,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47026,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 24/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 336,
+"values": [
+[
+361,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47056,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 25/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 337,
+"values": [
+[
+362,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47087,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 26/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 338,
+"values": [
+[
+363,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47117,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 27/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 339,
+"values": [
+[
+364,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47148,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 28/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 340,
+"values": [
+[
+365,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47177,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 29/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 341,
+"values": [
+[
+366,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47207,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 30/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 342,
+"values": [
+[
+367,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47238,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 31/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 343,
+"values": [
+[
+368,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47268,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 32/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 344,
+"values": [
+[
+369,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47299,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 33/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 345,
+"values": [
+[
+370,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47329,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 34/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 346,
+"values": [
+[
+371,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47360,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 35/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 347,
+"values": [
+[
+372,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47391,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 36/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 348,
+"values": [
+[
+373,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47421,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 37/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 349,
+"values": [
+[
+374,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47452,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 38/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 350,
+"values": [
+[
+375,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47482,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 39/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 351,
+"values": [
+[
+376,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47513,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 40/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 352,
+"values": [
+[
+377,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47542,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 41/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 353,
+"values": [
+[
+378,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47572,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 42/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 354,
+"values": [
+[
+379,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47603,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 43/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 355,
+"values": [
+[
+380,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47633,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 44/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 356,
+"values": [
+[
+381,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47664,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 45/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 357,
+"values": [
+[
+382,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47694,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 46/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 358,
+"values": [
+[
+383,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47725,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 47/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 359,
+"values": [
+[
+384,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47756,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 48/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 360,
+"values": [
+[
+385,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47786,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 49/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 361,
+"values": [
+[
+386,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47817,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 50/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 362,
+"values": [
+[
+387,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47847,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 51/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 363,
+"values": [
+[
+388,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47878,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 52/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 364,
+"values": [
+[
+389,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47907,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 53/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 365,
+"values": [
+[
+390,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47937,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 54/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 366,
+"values": [
+[
+391,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47968,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 55/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 367,
+"values": [
+[
+392,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47998,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 56/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 368,
+"values": [
+[
+393,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48029,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 57/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 369,
+"values": [
+[
+394,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48059,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 58/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 370,
+"values": [
+[
+395,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48090,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 59/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 371,
+"values": [
+[
+396,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48121,
+"",
+"Result Vision - Parcelamento 2 - Ivanilda - Parcela 60/60",
+"Parcelamento",
+"A Vencer",
+"",
+385.64,
+"",
+"",
+"",
+"",
+"Número do Documento: 07.18.26318.3055251-9\nDAS de PARCSN (Versão: 2.0.0)\nNúmero do Parcelamento: 2"
+]
+]
+},
+{
+"index": 372,
+"values": [
+[
+397,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46356,
+46343,
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 1/60",
+"Parcelamento",
+"Pago",
+"",
+317.89,
+"",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/boleto-397-1795529093188.pdf",
+"https://sinerggiacombr.sharepoint.com/sites/ProjetosPowerBi/Shared%20Documents/Gest%C3%A3o%20Financeira%20Claude/Anexos/comprovante-397-1795529093842.jpeg",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 373,
+"values": [
+[
+398,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46386,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 2/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 374,
+"values": [
+[
+399,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46417,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 3/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 375,
+"values": [
+[
+400,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46446,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 4/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 376,
+"values": [
+[
+401,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46476,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 5/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 377,
+"values": [
+[
+402,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46507,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 6/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 378,
+"values": [
+[
+403,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46537,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 7/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 379,
+"values": [
+[
+404,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46568,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 8/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 380,
+"values": [
+[
+405,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46598,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 9/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 381,
+"values": [
+[
+406,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46629,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 10/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 382,
+"values": [
+[
+407,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46660,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 11/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 383,
+"values": [
+[
+408,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46690,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 12/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 384,
+"values": [
+[
+409,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46721,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 13/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 385,
+"values": [
+[
+410,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46751,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 14/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 386,
+"values": [
+[
+411,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46782,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 15/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 387,
+"values": [
+[
+412,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46812,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 16/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 388,
+"values": [
+[
+413,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46842,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 17/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 389,
+"values": [
+[
+414,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46873,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 18/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 390,
+"values": [
+[
+415,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46903,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 19/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 391,
+"values": [
+[
+416,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46934,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 20/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 392,
+"values": [
+[
+417,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46964,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 21/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 393,
+"values": [
+[
+418,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+46995,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 22/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 394,
+"values": [
+[
+419,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47026,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 23/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 395,
+"values": [
+[
+420,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47056,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 24/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 396,
+"values": [
+[
+421,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47087,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 25/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 397,
+"values": [
+[
+422,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47117,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 26/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 398,
+"values": [
+[
+423,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47148,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 27/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 399,
+"values": [
+[
+424,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47177,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 28/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 400,
+"values": [
+[
+425,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47207,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 29/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 401,
+"values": [
+[
+426,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47238,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 30/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 402,
+"values": [
+[
+427,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47268,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 31/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 403,
+"values": [
+[
+428,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47299,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 32/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 404,
+"values": [
+[
+429,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47329,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 33/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 405,
+"values": [
+[
+430,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47360,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 34/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 406,
+"values": [
+[
+431,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47391,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 35/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 407,
+"values": [
+[
+432,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47421,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 36/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 408,
+"values": [
+[
+433,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47452,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 37/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 409,
+"values": [
+[
+434,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47482,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 38/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 410,
+"values": [
+[
+435,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47513,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 39/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 411,
+"values": [
+[
+436,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47542,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 40/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 412,
+"values": [
+[
+437,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47572,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 41/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 413,
+"values": [
+[
+438,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47603,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 42/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 414,
+"values": [
+[
+439,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47633,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 43/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 415,
+"values": [
+[
+440,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47664,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 44/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 416,
+"values": [
+[
+441,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47694,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 45/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 417,
+"values": [
+[
+442,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47725,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 46/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 418,
+"values": [
+[
+443,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47756,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 47/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 419,
+"values": [
+[
+444,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47786,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 48/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 420,
+"values": [
+[
+445,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47817,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 49/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 421,
+"values": [
+[
+446,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47847,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 50/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 422,
+"values": [
+[
+447,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47878,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 51/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 423,
+"values": [
+[
+448,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47907,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 52/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 424,
+"values": [
+[
+449,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47937,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 53/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 425,
+"values": [
+[
+450,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47968,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 54/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 426,
+"values": [
+[
+451,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+47998,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 55/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 427,
+"values": [
+[
+452,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48029,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 56/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 428,
+"values": [
+[
+453,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48059,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 57/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 429,
+"values": [
+[
+454,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48090,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 58/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 430,
+"values": [
+[
+455,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48121,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 59/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 431,
+"values": [
+[
+456,
+"",
+"",
+"Ivanilda Hozana",
+"Envio de Boleto",
+48151,
+"",
+"Result Vision - PGFN Parcelamento - Ivanilda - Parcela 60/60",
+"Parcelamento",
+"A Vencer",
+"",
+317.89,
+"",
+"",
+"",
+"",
+"PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
 ]
 ]
 }
