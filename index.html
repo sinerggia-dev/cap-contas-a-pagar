@@ -2120,7 +2120,7 @@
       </div>
       <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border);">
         <h3 style="margin:0 0 4px;font:700 14.6px var(--sans);color:var(--ink);">Padronizar descrições</h3>
-        <p style="font-size:12.9px;color:var(--ink-muted);margin:0 0 10px;">Junta descrições que só diferem por erro de digitação — espaço em volta do traço ("201- 136" → "201 - 136"), espaço duplo, maiúscula/minúscula ou acento — usando a forma mais usada. Corrige direto na planilha. <span id="adm_padr_estado"></span></p>
+        <p style="font-size:12.9px;color:var(--ink-muted);margin:0 0 10px;">Junta descrições e tipos de despesa que só diferem por erro de digitação — espaço em volta do traço ("201- 136" → "201 - 136"), espaço duplo, maiúscula/minúscula ou acento — usando a forma mais usada. Corrige direto na planilha. <span id="adm_padr_estado"></span></p>
         <button type="button" class="ebtn primary" id="adm_padr_btn">Procurar e corrigir</button>
       </div>
       <p style="font-size:12.3px;color:var(--ink-muted);margin-top:14px;">Conceder acesso compartilha o arquivo de verdade no SharePoint para esse e-mail (Editor = leitura e escrita, Visualizador = somente leitura). Revogar remove esse compartilhamento.</p>
@@ -6064,10 +6064,8 @@ document.getElementById('entryForm').addEventListener('reset', function(){ setTi
 
 function atualizarTipoList(){
   var tlist = document.getElementById('tipoList');
-  var tipos = TIPOS_DESPESA_CONHECIDOS.slice();
-  DATA.forEach(function(r){
-    if (r.tipo && tipos.indexOf(r.tipo) === -1) tipos.push(r.tipo);
-  });
+  // "Parcelamento" e "Parcelamento " (espaco no fim) viram um so.
+  var tipos = unicosSemVariantes(TIPOS_DESPESA_CONHECIDOS.concat(DATA.map(function(r){ return r.tipo; })));
   tlist.innerHTML = '';
   tipos.forEach(function(t){
     var opt = document.createElement('option');
@@ -6728,7 +6726,7 @@ document.getElementById('entryForm').addEventListener('submit', function(ev){
       var valor = parseBRL(document.getElementById('nf_valor').value);
       var cobradoStr = document.getElementById('nf_cobrado').value.trim();
       var cobrado = cobradoStr ? parseBRL(cobradoStr) : '';
-      var tipo = document.getElementById('nf_tipo').value;
+      var tipo = formatarTextoDigitado(document.getElementById('nf_tipo').value);
       var status = document.getElementById('nf_status').value;
       var barra = document.getElementById('nf_barra').value.trim();
       var obs = document.getElementById('nf_obs').value.trim();
@@ -7090,9 +7088,24 @@ document.getElementById('adm_padr_btn').addEventListener('click', function(){
       var mudancas = partes.map(function(p){
         if (!p.base) return null;
         var novo = formatarTextoDigitado(formaPadrao(grupos[chaveTexto(p.base)])) + p.sufixo;
-        return novo !== p.full ? { index: p.index, de: p.full, para: novo } : null;
+        return novo !== p.full ? { index: p.index, col: 7, de: p.full, para: novo } : null;
       }).filter(Boolean);
-      if (!mudancas.length){ estado.textContent = 'Nada para corrigir: as descrições já estão padronizadas.'; return; }
+      // Tipo de Despesa: mesma regra ("Parcelamento " com espaco -> "Parcelamento").
+      var gTipo = {};
+      linhas.forEach(function(r){
+        var t = String(r.values[0][8] || '');
+        if (!t.trim()) return;
+        var k = chaveTexto(t);
+        gTipo[k] = gTipo[k] || {};
+        gTipo[k][t] = (gTipo[k][t] || 0) + 1;
+      });
+      linhas.forEach(function(r){
+        var t = String(r.values[0][8] || '');
+        if (!t.trim()) return;
+        var novo = formatarTextoDigitado(formaPadrao(gTipo[chaveTexto(t)]));
+        if (novo !== t) mudancas.push({ index: r.index, col: 8, de: 'Tipo "' + t + '"', para: '"' + novo + '"', valor: novo });
+      });
+      if (!mudancas.length){ estado.textContent = 'Nada para corrigir: descrições e tipos já estão padronizados.'; return; }
       var resumo = {};
       mudancas.forEach(function(m){ var k = m.de + '  →  ' + m.para; resumo[k] = (resumo[k] || 0) + 1; });
       var texto = Object.keys(resumo).map(function(k){ return '• ' + k + (resumo[k] > 1 ? '  (' + resumo[k] + 'x)' : ''); });
@@ -7106,17 +7119,17 @@ document.getElementById('adm_padr_btn').addEventListener('click', function(){
       var mEnd = end.match(/^(.*)!\$?([A-Z]+)\$?(\d+):/);
       if (!mEnd) throw new Error('Endereço da tabela inesperado: ' + end);
       var aba = mEnd[1].replace(/^'|'$/g, '').replace(/''/g, "'");
-      var colDesc = letraColuna(numeroColuna(mEnd[2]) + 7), linha1 = Number(mEnd[3]);
+      var col0 = numeroColuna(mEnd[2]), linha1 = Number(mEnd[3]);
       var hJson = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
       for (var i = 0; i < mudancas.length; i++){
         estado.textContent = 'Corrigindo ' + (i + 1) + ' de ' + mudancas.length + '…';
-        var cel = colDesc + (linha1 + 1 + mudancas[i].index);
+        var cel = letraColuna(col0 + mudancas[i].col) + (linha1 + 1 + mudancas[i].index);
         var url = GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/worksheets('" + encodeURIComponent(aba.replace(/'/g, "''")) + "')/range(address='" + cel + "')";
-        var r = await fetch(url, { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [[mudancas[i].para]] }) });
+        var r = await fetch(url, { method: 'PATCH', headers: hJson, body: JSON.stringify({ values: [[mudancas[i].valor != null ? mudancas[i].valor : mudancas[i].para]] }) });
         if (!r.ok) throw new Error('Falha na célula ' + cel + ' (' + r.status + '): ' + (await r.text()).slice(0, 200));
       }
       estado.textContent = mudancas.length + ' lançamento(s) corrigido(s).';
-      showToast('Descrições padronizadas.');
+      showToast('Descrições e tipos padronizados.');
       await carregarDados();
     } catch (err) {
       estado.textContent = '';
