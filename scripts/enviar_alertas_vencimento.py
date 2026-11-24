@@ -132,7 +132,8 @@ def carregar_lancamentos(headers):
         desc = str(v[7] or "")
         valor = v[11] if len(v) > 11 else 0
         anexo = str(v[13] or "") if len(v) > 13 else ""
-        itens.append({"nome": nome, "venc": venc, "desc": desc, "valor": valor, "anexo": anexo})
+        barra = str(v[10] or "").strip() if len(v) > 10 else ""
+        itens.append({"nome": nome, "venc": venc, "desc": desc, "valor": valor, "anexo": anexo, "barra": barra})
     return itens
 
 
@@ -321,11 +322,69 @@ def enviar_whatsapp_blocos(numero, apikey, blocos):
     return falhas
 
 
+def ler_tabela_opcional(headers, nome_tabela):
+    try:
+        return ler_tabela(headers, nome_tabela)
+    except requests.HTTPError as exc:
+        if exc.response is not None and exc.response.status_code == 404:
+            return []
+        raise
+
+
+def enviar_avisos_whatsapp(headers, itens):
+    """Tela "Avisos por WhatsApp" do CAP (aba Avisos, TabelaAvisos):
+    [Id, Ativo, Nome, WhatsApp, Chave CallMeBot, Contas de, Dias antes, Atualizado em].
+    Cada número ativo recebe as contas NÃO pagas que vencem daqui a 'Dias antes'
+    dias (só daquela pessoa, se 'Contas de' estiver preenchido), com valor e
+    código de barras. Sem conta para vencer, não manda nada."""
+    for v in ler_tabela_opcional(headers, "TabelaAvisos"):
+        v = list(v) + [""] * 8
+        nome, numero, chave, pessoa = (str(x or "").strip() for x in (v[2], v[3], v[4], v[5]))
+        if str(v[1] or "").strip().lower() in ("não", "nao") or not numero or not chave:
+            continue
+        try:
+            dias = int(float(v[6])) if str(v[6]).strip() != "" else 1
+        except ValueError:
+            dias = 1
+        alvo = HOJE_BR + timedelta(days=dias)
+        contas = [it for it in itens if it["venc"] == alvo and (not pessoa or it["nome"].lower() == pessoa.lower())]
+        if not contas:
+            print(f"Aviso {nome}: nada vencendo em {alvo:%d/%m}.")
+            continue
+        quando = "VENCE HOJE" if dias == 0 else "VENCE AMANHÃ" if dias == 1 else f"VENCE EM {dias} DIAS"
+        blocos, atual = [], [f"🔔 *CAP - {quando}* ({alvo:%d/%m}) - {DIAS_SEMANA[alvo.weekday()]}"]
+        total = 0.0
+        for nome_conta in sorted({c["nome"] for c in contas}):
+            linhas = [f"\n👤 *{nome_conta}*"]
+            for c in sorted([c for c in contas if c["nome"] == nome_conta], key=lambda c: c["desc"]):
+                total += parse_valor(c["valor"])
+                linhas.append(f"• {c['desc']}: {brl(c['valor'])}")
+                if c["barra"]:
+                    linhas.append(f"  Código: {c['barra']}")
+            # CallMeBot corta mensagem grande: quebra em várias de até ~900 caracteres.
+            if len("\n".join(atual + linhas)) > 900 and len(atual) > 1:
+                blocos.append("\n".join(atual))
+                atual = []
+            atual += linhas
+        atual.append(f"\nTotal: {brl(total)}")
+        blocos.append("\n".join(atual))
+        digitos = "".join(ch for ch in numero if ch.isdigit())
+        if len(digitos) in (10, 11):  # DDD + número, sem o 55 do Brasil
+            digitos = "55" + digitos
+        num = "+" + digitos
+        falhas = enviar_whatsapp_blocos(num, chave, blocos)
+        print(f"Aviso {nome}: {len(contas)} conta(s) de {alvo:%d/%m}, {len(blocos) - falhas}/{len(blocos)} mensagem(ns) enviada(s).")
+
+
 def main():
     token = get_token()
     headers = {"Authorization": f"Bearer {token}"}
 
     itens = carregar_lancamentos(headers)
+    try:
+        enviar_avisos_whatsapp(headers, itens)
+    except Exception as exc:
+        print(f"ERRO nos avisos por WhatsApp: {exc}")
     contatos = carregar_contatos(headers)
     agrupado = montar_mensagens(itens)
     agrupado = {
