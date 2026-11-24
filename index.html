@@ -8049,8 +8049,31 @@ document.addEventListener('click', function(ev){
   var r = DATA.filter(function(x){ return String(x.id) === p[0] && String(x._rowIndex) === p[1]; })[0] ||
           DATA.filter(function(x){ return String(x.id) === p[0]; })[0];
   if (!r){ showToast('Lançamento não encontrado — atualize a lista.'); return; }
-  window.open('https://wa.me/?text=' + encodeURIComponent(textoWhatsLancamento(r)), '_blank', 'noopener');
+  abrirWhatsComTexto(textoWhatsLancamento(r));
 }, true);
+/* Abre o WhatsApp que a pessoa JA usa: o aplicativo (whatsapp://, no celular e no
+   WhatsApp Desktop do Windows/Mac). Se no computador o app nao abrir em ~1,5s
+   (a janela nao perde o foco), cai no WhatsApp Web sempre na MESMA aba
+   ("cap_whatsapp"), em vez de criar uma aba nova a cada envio. */
+function abrirWhatsComTexto(texto){
+  var t = encodeURIComponent(texto);
+  var celular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (celular){ window.location.href = 'whatsapp://send?text=' + t; return; }
+  var abriuApp = false;
+  var marcar = function(){ abriuApp = true; };
+  window.addEventListener('blur', marcar, { once: true });
+  document.addEventListener('visibilitychange', marcar, { once: true });
+  var ifr = document.createElement('iframe');
+  ifr.style.display = 'none';
+  ifr.src = 'whatsapp://send?text=' + t;
+  document.body.appendChild(ifr);
+  setTimeout(function(){
+    ifr.remove();
+    window.removeEventListener('blur', marcar);
+    document.removeEventListener('visibilitychange', marcar);
+    if (!abriuApp) window.open('https://web.whatsapp.com/send?text=' + t, 'cap_whatsapp');
+  }, 1500);
+}
 
 /* ---- Avisos por WhatsApp ----
    Numeros que recebem, todo dia as 08:00, as contas nao pagas que vencem daqui
