@@ -3293,9 +3293,44 @@ async function getToken(){
 // código). Quando isso acontece, cai para uma cópia estática sincronizada
 // (lancamentos.json) — modo só leitura, já que escrita continua exigindo
 // permissão real da Microsoft.
+/* Ultima lista carregada fica guardada NESTE aparelho: na proxima abertura a tela
+   aparece na hora com ela e e atualizada assim que os dados ao vivo chegam. */
+var CACHE_LISTA_CHAVE = 'cap_lista_cache_v1';
+var ultimoBruto = null;
+function salvarCacheLista(bruto){
+  try {
+    var conta = currentAccount ? (currentAccount.username || '').toLowerCase() : '';
+    if (!conta) return;
+    // Anexo embutido (data:...) pesa demais para guardar; o link volta na carga ao vivo.
+    var leve = bruto.map(function(r){
+      return { index: r.index, values: [r.values[0].map(function(x){ return (typeof x === 'string' && x.indexOf('data:') === 0) ? '' : x; })] };
+    });
+    localStorage.setItem(CACHE_LISTA_CHAVE, JSON.stringify({ conta: conta, quando: Date.now(), value: leve }));
+  } catch (e) {}
+}
+function lerCacheLista(){
+  try {
+    var c = JSON.parse(localStorage.getItem(CACHE_LISTA_CHAVE) || 'null');
+    var conta = currentAccount ? (currentAccount.username || '').toLowerCase() : '';
+    if (!c || !conta || c.conta !== conta || !Array.isArray(c.value)) return null;
+    return c.value;
+  } catch (e) { return null; }
+}
+
 async function carregarDadosAoVivo(){
   var token = await getToken();
   var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
+  // Leitura direta, sem abrir sessao no workbook (a sessao custa 1-3s e so faz
+  // diferenca para gravar). Se falhar, cai no caminho antigo com sessao.
+  try {
+    var urlDireta = GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/tables('" + TABLE_NAME + "')/rows";
+    var rDireta = await fetch(urlDireta, { headers: { Authorization: 'Bearer ' + token } });
+    if (rDireta.ok){
+      var jDireta = await rDireta.json();
+      ultimoBruto = jDireta.value;
+      return jDireta.value.map(function(row){ return graphRowToRow(row.values[0], row.index); });
+    }
+  } catch (eDireta) {}
   try {
     var sessionId = await criarSessaoWorkbook(token, alvo.driveId, alvo.itemId);
     var url = GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/tables('" + TABLE_NAME + "')/rows";
@@ -3306,6 +3341,7 @@ async function carregarDadosAoVivo(){
       throw new Error('HTTP ' + resp.status + (corpoErro ? ' — ' + corpoErro.slice(0, 300) : ''));
     }
     var json = await resp.json();
+    ultimoBruto = json.value;
     return json.value.map(function(row){ return graphRowToRow(row.values[0], row.index); });
   } catch (eSessao) {
     var wb = await baixarEParsearWorkbook(token, alvo.driveId, alvo.itemId);
@@ -3329,9 +3365,24 @@ function forcarSomenteLeitura(){
 }
 
 async function carregarDados(){
+  // Primeira abertura: mostra a ultima lista guardada enquanto a ao vivo carrega.
+  if (!DATA.length){
+    var cache = lerCacheLista();
+    if (cache && cache.length){
+      DATA = cache.map(function(row){ return graphRowToRow(row.values[0], row.index); });
+      DATA.forEach(normalizeRow);
+      if (currentUserFiltroNome) DATA = DATA.filter(function(r){ return currentUserFiltroNome.indexOf(r.nome) !== -1; });
+      atualizarTipoList();
+      buildFilters(); updateClearButton(); render();
+      showToast('Atualizando os dados…');
+    }
+  }
   try {
+    ultimoBruto = null;
+    var pSenha = carregarSenhaConfig();   // em paralelo, nao segura a tela
     DATA = await carregarDadosAoVivo();
-    await carregarSenhaConfig();
+    if (ultimoBruto) salvarCacheLista(ultimoBruto);
+    pSenha.catch(function(){});
   } catch (eAoVivo) {
     try {
       DATA = await carregarDadosEstatico();
