@@ -903,6 +903,13 @@
   }
   .row-copy:hover{background:var(--surface-3);color:var(--chart-soft);}
   .row-copy svg{width:13px;height:13px;}
+  /* Enviar o lancamento pelo WhatsApp (abre o app com a mensagem pronta). */
+  .row-wa{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;
+    color:#25d366;background:transparent;border:none;cursor:pointer;margin-right:2px;padding:0;}
+  .row-wa:hover{background:rgba(37,211,102,.14);}
+  .row-wa svg{width:14px;height:14px;}
+  .m-anexos .row-wa{width:30px;height:30px;}
+  .m-anexos .row-wa svg{width:17px;height:17px;}
   /* Selecao para excluir varios de uma vez. */
   .row-sel, #selTodos{width:14px;height:14px;margin:0 6px 0 0;vertical-align:middle;accent-color:var(--critical);cursor:pointer;}
   table.cap tbody tr.selecionado td{background:var(--critical-dim);}
@@ -4345,13 +4352,14 @@ var COLUMNS = {
     return anexoIcon(r, r.anexoComprovante, r.anexoComprovanteNome, 'comp', 'Abrir comprovante');
   }},
   acao:    {label:'', cellCls:'', render:function(r){
-    if (currentUserRole !== 'Editor') return '';
+    var waBtn = '<button class="row-wa" data-wa-lanc="'+r.id+'|'+r._rowIndex+'" title="Enviar pelo WhatsApp"><svg viewBox="0 0 24 24" fill="none"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.2 8.8c.2 2.4 2.6 5 5.4 5.5l.9-1.2-1.6-.9-.7.7c-1-.4-1.9-1.3-2.3-2.3l.7-.7-.8-1.6-1.6.5Z" fill="currentColor"/></svg></button>';
+    if (currentUserRole !== 'Editor') return waBtn;
     var editBtn = '<button class="row-edit" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Editar lançamento"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     var delBtn = '<button class="row-del" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Remover lançamento"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>';
     var copyBtn = '<button class="row-copy" data-rawid="'+r.id+'" data-rowidx="'+r._rowIndex+'" title="Copiar e projetar para os próximos meses"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>';
     var chave = r.id + '|' + r._rowIndex;
     var selBox = '<input type="checkbox" class="row-sel" data-sel="'+chave+'"'+(selecionados[chave] ? ' checked' : '')+' aria-label="Selecionar para excluir">';
-    return selBox+copyBtn+editBtn+delBtn;
+    return selBox+waBtn+copyBtn+editBtn+delBtn;
   }}
 };
 var DEFAULT_COL_ORDER = ['dcto','doc','empresa','desc','tipo','parcela','venc','mesano','status','valor','juros','pago','obs','comp','acao'];
@@ -5760,6 +5768,7 @@ function renderMobile(rows, rowsSemStatus){
     return '<div class="m-item ' + cls + '">' + abrir +
       '<div class="m-dir"><span class="m-val">' + brl(r.valor) + '</span>' +
         '<span class="m-anexos">' + anexoMobile(r.anexo, 'Abrir boleto') + anexoMobile(r.anexoComprovante, 'Abrir comprovante') +
+          '<button type="button" class="row-wa" data-wa-lanc="' + r.id + '|' + r._rowIndex + '" aria-label="Enviar ' + escHtml(r.desc || 'lançamento') + ' pelo WhatsApp"><svg viewBox="0 0 24 24" fill="none"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.2 8.8c.2 2.4 2.6 5 5.4 5.5l.9-1.2-1.6-.9-.7.7c-1-.4-1.9-1.3-2.3-2.3l.7-.7-.8-1.6-1.6.5Z" fill="currentColor"/></svg></button>' +
           (editor ? '<button type="button" class="row-copy" data-rawid="' + r.id + '" data-rowidx="' + r._rowIndex + '" aria-label="Copiar e projetar ' + escHtml(r.desc || 'lançamento') + '"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>' : '') +
         '</span></div>' +
       '</div>';
@@ -5996,7 +6005,7 @@ document.getElementById('descRankGroupSel').addEventListener('change', function(
 });
 
 document.getElementById('tableBody').addEventListener('click', function(ev){
-  if (ev.target.closest('.row-edit, .row-del, .row-copy, .row-sel, .attach-file, .attach')) return;
+  if (ev.target.closest('.row-edit, .row-del, .row-copy, .row-wa, .row-sel, .attach-file, .attach')) return;
   var trEl = ev.target.closest('tr[data-nome]');
   if (!trEl) return;
   var nomeTbl = trEl.getAttribute('data-nome');
@@ -8011,6 +8020,37 @@ document.getElementById('bol_lista').addEventListener('click', function(ev){
     if (alvo && window.confirm('Excluir o cadastro "' + alvo.desc + '" (' + alvo.remetente + ')?\n\nO robô deixa de importar os boletos desse remetente.')) excluirImportacao(id);
   }
 });
+
+/* ---- Enviar um lancamento pelo WhatsApp ----
+   Abre o WhatsApp (app no celular, WhatsApp Web no computador) com a mensagem
+   pronta; a pessoa escolhe o contato. Nada passa pelo CallMeBot. */
+var DIAS_SEMANA_WA = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+function textoWhatsLancamento(r){
+  var l = ['*CAP - Contas a Pagar*', '', '📄 *' + (r.desc || '(sem descrição)') + '*' + (r.parcela ? ' - Parcela ' + r.parcela : '')];
+  if (r.nome) l.push('👤 ' + r.nome);
+  if (r.vencDate) l.push('📅 Vencimento: ' + fmtDate(r.vencDate) + ' (' + DIAS_SEMANA_WA[r.vencDate.getDay()] + ')');
+  l.push('💰 Valor: ' + brl(r.valor));
+  if (r.status === 'pago') l.push('✅ Pago' + (r.pag ? ' em ' + fmtDate(parseISO(r.pag)) : '') + (r.cobrado != null ? ' · ' + brl(r.cobrado) : ''));
+  else if (r.status === 'vencido') l.push('⛔ Vencido há ' + r.dias + (r.dias === 1 ? ' dia' : ' dias'));
+  else if (r.status === 'hoje') l.push('🔴 Vence hoje');
+  else if (r.dias === 1) l.push('🟠 Vence amanhã');
+  var barra = String(r.barra || '').trim();
+  if (/\d{20,}/.test(barra.replace(/\D/g, ''))) l.push('', '🔢 Código de barras:', barra);
+  var obs = String(r.obs || '').trim();
+  if (obs && obs.indexOf('Aguardando boleto') === -1 && obs.indexOf('Importado do e-mail') === -1) l.push('', '📝 ' + obs);
+  return l.join('\n');
+}
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest('[data-wa-lanc]');
+  if (!b) return;
+  ev.preventDefault();
+  ev.stopPropagation();
+  var p = b.getAttribute('data-wa-lanc').split('|');
+  var r = DATA.filter(function(x){ return String(x.id) === p[0] && String(x._rowIndex) === p[1]; })[0] ||
+          DATA.filter(function(x){ return String(x.id) === p[0]; })[0];
+  if (!r){ showToast('Lançamento não encontrado — atualize a lista.'); return; }
+  window.open('https://wa.me/?text=' + encodeURIComponent(textoWhatsLancamento(r)), '_blank', 'noopener');
+}, true);
 
 /* ---- Avisos por WhatsApp ----
    Numeros que recebem, todo dia as 08:00, as contas nao pagas que vencem daqui
