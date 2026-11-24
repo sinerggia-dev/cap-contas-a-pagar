@@ -655,6 +655,14 @@ def main():
             problemas.append(f"⚠ {regra['desc']}: valor do código de barras ({brl(b['valor_barra'])}) diferente "
                              f"do escrito ({brl(b['valor_texto'])}) — usei o do código de barras.")
         barra = b.get("barra", "")
+        # O e-mail do banco diz o total da fatura ("Valor total: R$ 50,40"). Quando o
+        # PDF dá outro número (total impresso/código de barras com outro valor), vale o
+        # do e-mail, que é o que o banco cobra — e o resumo avisa a diferença.
+        if conteudo and corpo:
+            valor_corpo = ler_boleto(corpo).get("valor_texto")
+            if valor_corpo and abs(valor_corpo - valor) > 0.01:
+                problemas.append(f"⚠ {regra['desc']}: o e-mail diz {brl(valor_corpo)} e o PDF {brl(valor)} — usei o do e-mail.")
+                valor = valor_corpo
 
         da_conta = [l for l in lancamentos
                     if nome_da_linha(l["values"]).strip().lower() == regra["nome"].strip().lower()
