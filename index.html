@@ -3335,12 +3335,23 @@ async function adicionarLinhaGraph(token, linha){
 async function atualizarLinhaGraph(token, rowIndex, linha){
   var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
   var url = GRAPH_BASE + '/drives/' + alvo.driveId + '/items/' + alvo.itemId + "/workbook/tables('" + TABLE_NAME + "')/rows/itemAt(index=" + rowIndex + ')';
-  var resp = await fetch(url, {
-    method: 'PATCH',
-    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [linha] })
-  });
-  if (!resp.ok) { var t = await resp.text(); throw new Error('Falha ao atualizar a planilha (' + resp.status + '): ' + t); }
+  // Muitas gravacoes seguidas (alterar em lote): o Graph responde 429/503/504
+  // por alguns segundos. Espera (o que ele pedir em Retry-After) e tenta de novo.
+  for (var tentativa = 0; ; tentativa++){
+    var resp = await fetch(url, {
+      method: 'PATCH',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: [linha] })
+    });
+    if (resp.ok) return;
+    var temporario = resp.status === 429 || resp.status === 409 || resp.status >= 500;
+    if (!temporario || tentativa >= 5){
+      var t = await resp.text();
+      throw new Error('Falha ao atualizar a planilha (' + resp.status + '): ' + t.slice(0, 200));
+    }
+    var espera = Number(resp.headers.get('Retry-After')) * 1000 || Math.min(16000, 1000 * Math.pow(2, tentativa));
+    await new Promise(function(ok){ setTimeout(ok, espera); });
+  }
 }
 async function removerLinhaGraph(token, rowIndex){
   var alvo = await obterArquivoAlvo(token, DRIVE_ID, ITEM_ID);
@@ -5460,19 +5471,32 @@ async function alterarSelecionados(){
       return cand[0];
     }).filter(function(x){ return x !== null; });
 
-    for (var i = 0; i < alvos.length; i++){
-      var atual = alvos[i];
-      var r = graphRowToRow(atual.values[0], atual.index);
-      await atualizarLinhaGraph(token, atual.index, loteAplicarCampo(atual.values[0], r, campo, valor));
-      alterados++;
+    var feitos = {};
+    try {
+      for (var i = 0; i < alvos.length; i++){
+        var atual = alvos[i];
+        var r = graphRowToRow(atual.values[0], atual.index);
+        var nova = loteAplicarCampo(atual.values[0], r, campo, valor);
+        btn.textContent = 'Gravando ' + (i + 1) + ' de ' + alvos.length + '…';
+        if (JSON.stringify(nova) !== JSON.stringify(atual.values[0])){
+          await atualizarLinhaGraph(token, atual.index, nova);
+          alterados++;
+        }
+        feitos[String(atual.values[0][0])] = true;
+      }
+    } catch (errLote) {
+      // Ficam marcados so os que faltaram: e so clicar em Aplicar de novo.
+      Object.keys(selecionados).forEach(function(k){ if (feitos[k.split('|')[0]]) delete selecionados[k]; });
+      throw errLote;
     }
     selecionados = {};
     document.getElementById('loteBox').hidden = true;
     showToast(alterados + (alterados === 1 ? ' lançamento alterado.' : ' lançamentos alterados.'));
   } catch (err) {
-    showToast((alterados ? alterados + ' alterado(s); depois parou: ' : 'Erro ao alterar: ') + (err && err.message ? err.message : err));
+    showToast((alterados ? alterados + ' alterado(s); depois parou. Os que faltam continuam marcados — clique em Aplicar de novo. ' : 'Erro ao alterar: ') + (err && err.message ? err.message : err));
   } finally {
     btn.disabled = false;
+    btn.textContent = 'Aplicar';
     await carregarDados();
   }
 }
