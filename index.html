@@ -2656,7 +2656,7 @@
       <label>Reajuste (%)
         <input type="number" id="copiaReajuste" step="0.01" inputmode="decimal" placeholder="0">
       </label>
-      <span class="copia-dica">Mudar o valor de um mês na tabela vale para ele e para os meses seguintes — útil para o reajuste anual. A data de vencimento de cada mês também pode ser trocada na tabela.</span>
+      <span class="copia-dica">Mudar o valor de um mês na tabela vale para ele e para os meses seguintes — útil para o reajuste anual. O mesmo vale para o vencimento: trocar a data de um mês muda o dia dele e de todos os seguintes.</span>
     </div>
     <div class="copia-lista" id="copiaLista"></div>
     <div class="copia-rodape">
@@ -5046,6 +5046,7 @@ var copiaAlvo = null;
 var copiaValorBase = 0;      // valor das copias (campo "Valor das copias" / reajuste)
 var copiaValoresMes = {};    // valor mudado na tabela, por mes ('fev/2027' -> 140.5)
 var copiaDatasMes = {};      // vencimento mudado na tabela, so daquele mes ('fev/2027' -> Date)
+var copiaDiaDesde = {};      // dia novo a partir de um mes (ano*12+mes -> dia), vale dali para frente
 function dataParaIso(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
 function chaveMes(ano, mes){ return MESES_ABREV[mes] + '/' + ano; }
@@ -5082,6 +5083,10 @@ function planoCopia(){
     if (parc.passou){ plano.push({ chave: ch, d: d, motivo: 'Parcelas acabaram' }); break; }
     // Dia escolhido no campo (padrao: o do original); mes curto usa o ultimo dia.
     var dia = Math.max(1, Math.min(31, Number(document.getElementById('copiaDia').value) || r.vencDate.getDate()));
+    // Data trocada numa linha da tabela muda o dia daquele mes em diante.
+    var tMes = d.ano * 12 + d.mes, tRegra = -1;
+    Object.keys(copiaDiaDesde).forEach(function(t){ t = Number(t); if (t <= tMes && t > tRegra) tRegra = t; });
+    if (tRegra >= 0) dia = copiaDiaDesde[tRegra];
     var ultimoDia = new Date(d.ano, d.mes + 1, 0).getDate();
     var venc = copiaDatasMes[ch] || new Date(d.ano, d.mes, Math.min(dia, ultimoDia));
     var jaExiste = DATA.some(function(x){
@@ -5144,6 +5149,7 @@ function abrirCopia(rawId, rowIndex){
   copiaValorBase = r.valor || 0;
   copiaValoresMes = {};
   copiaDatasMes = {};
+  copiaDiaDesde = {};
   document.getElementById('copiaDia').value = r.vencDate.getDate();
   document.getElementById('copiaValor').value = valorParaCampo(copiaValorBase);
   document.getElementById('copiaReajuste').value = '';
@@ -5209,14 +5215,26 @@ document.getElementById('copiaOverlay').addEventListener('click', function(ev){ 
 document.getElementById('copiaInicio').addEventListener('change', desenharCopia);
 document.getElementById('copiaQtd').addEventListener('input', desenharCopia);
 /* Dia do vencimento vale para todos os meses e desfaz datas trocadas na tabela. */
-document.getElementById('copiaDia').addEventListener('input', function(){ copiaDatasMes = {}; desenharCopia(); });
-/* Data trocada na tabela vale so para aquele mes. */
+document.getElementById('copiaDia').addEventListener('input', function(){ copiaDatasMes = {}; copiaDiaDesde = {}; desenharCopia(); });
+/* Data trocada na tabela: aquele mes fica com a data exata e o DIA novo passa a
+   valer para todos os meses seguintes (ex.: a partir da parcela 10 vence dia 15).
+   Datas trocadas antes nos meses seguintes sao refeitas pelo dia novo. */
 document.getElementById('copiaLista').addEventListener('change', function(ev){
   var campo = ev.target;
   if (!campo.classList || !campo.classList.contains('copia-data') || !campo.value) return;
   var p = campo.value.split('-');
-  copiaDatasMes[campo.getAttribute('data-copia-data')] = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  var nova = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  var ch = campo.getAttribute('data-copia-data');
+  var m = ch.split('/'), tMes = Number(m[1]) * 12 + MESES_ABREV.indexOf(m[0]);
+  Object.keys(copiaDatasMes).forEach(function(k){
+    var q = k.split('/');
+    if (Number(q[1]) * 12 + MESES_ABREV.indexOf(q[0]) > tMes) delete copiaDatasMes[k];
+  });
+  Object.keys(copiaDiaDesde).forEach(function(t){ if (Number(t) > tMes) delete copiaDiaDesde[t]; });
+  copiaDatasMes[ch] = nova;
+  copiaDiaDesde[tMes] = nova.getDate();
   desenharCopia();
+  showToast('Vencimento dia ' + nova.getDate() + ' aplicado deste mês em diante.');
 });
 /* Valor das copias e reajuste andam juntos: mudar um recalcula o outro. Os dois
    refazem todos os meses, desfazendo o que foi mudado linha a linha. */
