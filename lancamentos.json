@@ -6705,7 +6705,7 @@
 "",
 "Natanael Silva",
 "Envio de Boleto",
-46351,
+46381,
 "",
 "Cartão Hiper 2242",
 "Cartão de Crédito",
@@ -10365,6 +10365,30 @@
 "",
 "",
 "PGFN-SISPAR:016748920.UTILIZAR CODIGO DE BARRAS PA\nRA PAGAMENTO"
+]
+]
+},
+{
+"index": 432,
+"values": [
+[
+457,
+"",
+"",
+"Natanael Silva",
+"Envio de Boleto",
+46351,
+"",
+"Cartão Hiper 2242",
+"Cartão de Crédito",
+"A Vencer",
+"",
+0,
+"",
+"",
+"",
+"",
+"⏳ Aguardando boleto — previsto pelo histórico (vence todo dia 25)"
 ]
 ]
 }
