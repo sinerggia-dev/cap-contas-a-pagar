@@ -4428,7 +4428,10 @@ var SORT_ACCESSORS = {
   valor:   function(r){ return r.valor||0; },
   juros:   function(r){ return juros(r); },
   pago:    function(r){ return r.cobrado!=null ? r.cobrado : -1; },
-  obs:     function(r){ return r.obs||''; }
+  obs:     function(r){ return r.obs||''; },
+  /* Proximos vencimentos: vencidos primeiro (o mais antigo no topo), depois
+     hoje, amanha, depois de amanha...; pagos no fim. */
+  prox:    function(r){ var g = r.status==='vencido' ? 0 : r.status==='pago' ? 2 : 1; return g*1e14 + r.vencDate.getTime(); }
 };
 var sortState = { key: 'venc', dir: 1 };
 function compareValues(va, vb){
@@ -5737,19 +5740,22 @@ function ajustarValoresResumo(){
   els.forEach(function(el){ el.style.fontSize = menor + 'px'; });
 }
 window.addEventListener('resize', ajustarValoresResumo);
-/* Botao de ordem da lista do celular: alterna data mais antiga / mais recente
-   (usa a mesma ordem da tabela do computador). */
+/* Botao de ordem da lista do celular: alterna data mais antiga -> mais recente
+   -> proximos vencimentos (usa a mesma ordem da tabela do computador). */
 function desenharOrdemMobile(qtd){
   var porData = sortState.key === 'venc';
   var asc = porData && sortState.dir === 1;
+  var prox = sortState.key === 'prox';
   document.getElementById('mOrdemQtd').textContent = qtd + (qtd === 1 ? ' lançamento' : ' lançamentos');
   document.getElementById('mOrdemBtn').innerHTML =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
     (asc ? '<path d="M7 4v16M3 8l4-4 4 4M14 8h7M14 12h5M14 16h3"/>' : '<path d="M7 4v16M3 16l4 4 4-4M14 8h3M14 12h5M14 16h7"/>') +
-    '</svg>' + (!porData ? 'Ordenar por data' : asc ? 'Data: mais antigas' : 'Data: mais recentes');
+    '</svg>' + (prox ? 'Vencimento: mais próximos' : !porData ? 'Ordenar por data' : asc ? 'Data: mais antigas' : 'Data: mais recentes');
 }
 document.getElementById('mOrdemBtn').addEventListener('click', function(){
-  if (sortState.key === 'venc') sortState.dir *= -1;
+  // Ciclo: mais antigas -> mais recentes -> proximos vencimentos -> mais antigas
+  if (sortState.key === 'venc' && sortState.dir === 1) sortState.dir = -1;
+  else if (sortState.key === 'venc') { sortState.key = 'prox'; sortState.dir = 1; }
   else { sortState.key = 'venc'; sortState.dir = 1; }
   renderTableHead();
   render();
